@@ -1,0 +1,41 @@
+
+
+export  async function findJobPostings(query){
+    return await (
+        await fetch(`http://localhost:8081/job-postings${query||""}`)
+    ).json()
+}
+
+export  async function category(){
+    return await (
+        await fetch(`http://localhost:8081/category`)
+    ).json()
+}
+
+export  async function getSkill(name){
+    if(!name)
+        return new Promise((resolve,_)=>resolve([]))
+
+    return await (
+        await fetch(`http://localhost:8081/skill?name=${name}`)
+    ).json()
+}
+
+export function createQuery(req){
+    const parts = []
+
+    if(isNotEmpty(req.categoryIds))
+        parts.push(`category=${req.categoryIds.join(",")}`)
+    if(isNotEmpty(req.skillIds))
+        parts.push(`skill=${req.skillIds.join(",")}`)
+    if(isNotEmpty(req.tagIds))
+        parts.push(`tag=${req.tagIds.join(",")}`)
+
+    const query = parts.join("&")
+
+    return query? `?${query}`:""
+}
+
+function isNotEmpty(list){
+    return list && list.length>0
+}
