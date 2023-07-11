@@ -1,30 +1,32 @@
 <script>
 	import JobPostingList from "../comp/list/JobPostingList.svelte";
     import SearchQuery from "../comp/list/SearchQuery.svelte";
-    import { findJobPostings, createQuery } from "../comp/list/api";
+	import { onMount, onDestroy } from "svelte";    
     import { request } from "../comp/list/store";
 
-    const query = location.search
-    let jobPostings = findJobPostings(query);
-    $:jobPostings = callListApi($request)
-
-    function callListApi(request){
-        const query = createQuery(request)
-        return findJobPostings(query)
-    }
+    let listElement;
+    onMount(() => {
+			console.log("listElm is defined");
+			listElement.addEventListener("scroll",  ()=>{
+				console.log("scrolling...")
+				if (
+					listElement.scrollTop + listElement.clientHeight >=
+					listElement.scrollHeight
+				) {
+					request.nextPage();
+				}
+			});
+	});
+	onDestroy(() => {
+		listElement.removeEventListener("scroll");
+	});
 </script>
 
-<div class="hdErFU">
+<div class="hdErFU" bind:this={listElement}>
 
     <SearchQuery></SearchQuery>
+    <JobPostingList/>
 
-    {#await jobPostings}
-        <span>...Loading</span>
-    {:then jobPostings} 
-        <JobPostingList {jobPostings}/>
-    {:catch error}
-        <span>Failed!</span>
-    {/await}
 </div>
 <style>
 :global(.hdErFU){
@@ -32,5 +34,7 @@
     font-size: 16px;
     padding-top: 120px;
     padding-bottom: 0.1px;
+    overflow-y: scroll;
+    height: 100%;
 }
 </style>

@@ -9,6 +9,7 @@
 
     function addSkill(skill) {
         selectedSkills = [...selectedSkills,skill];
+        skills = []
         request.addSkill(skill.id);
     }
 
@@ -114,11 +115,13 @@
                             >
                         </div>
                         <div>
-                            <ul class="sc-igXgud fkcmCF">
                                 {#await skills}
                                     <span>Finding...</span>
                                 {:then skills}
+                                <ul class="sc-igXgud fkcmCF">
+
                                     {#each skills as skill}
+                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <li
                                             class="sc-JEhMO hWoVqF"
                                             on:click={() => addSkill(skill)}
@@ -126,16 +129,17 @@
                                             <span>{skill.defaultName}</span>
                                         </li>
                                     {/each}
+                                </ul>
                                 {:catch error}
                                     <span>Fail!</span>
                                 {/await}
-                            </ul>
                         </div>
                         {#if selectedSkills.length!==0 }
                             <div class="bpaCoL">
                                 <h4 class="title">선택한 기술 스택</h4>
                                 <div class="lists">
                                     {#each selectedSkills as skill}
+                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     <div class="btn_stack cursor_default" on:click={()=>removeSkill(skill)}>
                                         <span class="text">{skill.defaultName}</span><button
                                             class="delete_btn"

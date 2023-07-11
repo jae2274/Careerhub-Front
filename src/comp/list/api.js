@@ -1,8 +1,9 @@
 
 
-export  async function findJobPostings(query){
+export  async function findJobPostings(request){
+
     return await (
-        await fetch(`http://localhost:8081/job-postings${query||""}`)
+        await fetch(`http://localhost:8081/job-postings${createQuery(request)||""}`)
     ).json()
 }
 
@@ -30,6 +31,10 @@ export function createQuery(req){
         parts.push(`skill=${req.skillIds.join(",")}`)
     if(isNotEmpty(req.tagIds))
         parts.push(`tag=${req.tagIds.join(",")}`)
+
+    if(req.page && req.size){
+        parts.push(`page=${req.page}&size=${req.size}`)
+    }
 
     const query = parts.join("&")
 

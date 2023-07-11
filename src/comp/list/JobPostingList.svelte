@@ -1,11 +1,31 @@
 <script>
 	import JobPostingItem from "./JobPostingItem.svelte"
+    import { findJobPostings, createQuery } from "./api";
+    import { request } from "./store";
 
-	export let jobPostings
+	
+	let promises = []
+
+	$: {
+		if($request.page == 1){
+			promises = []
+		}
+		promises = [...promises,callListApi($request)]
+	}
+
+    function callListApi(request){
+        return findJobPostings(request)
+    }
 </script>
 <section class="sc-hgKiOD bPkSMN">
-	{#each jobPostings as jobPosting}
-	<JobPostingItem {jobPosting}></JobPostingItem>
+	{#each promises as promiseJobPostings}
+		{#await promiseJobPostings}
+			<div>Loading...</div>
+		{:then jobPostings}
+			{#each jobPostings as jobPosting, index}
+			<JobPostingItem {jobPosting} delay={index*100}></JobPostingItem>
+			{/each}	
+		{/await}
 	{/each}
 </section>
 <style>

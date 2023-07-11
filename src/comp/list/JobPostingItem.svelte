@@ -1,4 +1,6 @@
 <script>
+   	import {fade} from 'svelte/transition'
+    export let delay
     export let jobPosting;
 
     $: companyName = jobPosting.company.defaultName;
@@ -38,7 +40,7 @@
     }
 </script>
 
-<div class="sc-bQtKYq dblCQy">
+<div class="sc-bQtKYq dblCQy" transition:fade={{delay, duration:500}}>
     <a target="_self" href="/position/1583"
         ><div class="img_filter" />
         <div class="img_box">
