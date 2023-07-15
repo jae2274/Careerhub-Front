@@ -3,7 +3,7 @@
 export  async function findJobPostings(request){
 
     return await (
-        await fetch(`http://localhost:8081/job-postings${createQuery(request)||""}`)
+        await fetch(`http://localhost:8081/job_posting${createQuery(request)||""}`)
     ).json()
 }
 

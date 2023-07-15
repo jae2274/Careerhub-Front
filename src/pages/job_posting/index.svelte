@@ -1,8 +1,8 @@
 <script>
-	import JobPostingList from "../comp/list/JobPostingList.svelte";
-    import SearchQuery from "../comp/list/SearchQuery.svelte";
+	import JobPostingList from "../../job_posting/index/JobPostingList.svelte";
+    import SearchQuery from "../../job_posting/index/SearchQuery.svelte";
 	import { onMount, onDestroy } from "svelte";    
-    import { request } from "../comp/list/store";
+    import { request } from "../../job_posting/index/store";
 
     let listElement;
     onMount(() => {

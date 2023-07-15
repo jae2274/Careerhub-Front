@@ -1,10 +1,12 @@
 <script>
    	import {fade} from 'svelte/transition'
+    import {url} from '@sveltech/routify'
     export let delay
     export let jobPosting;
 
     $: companyName = jobPosting.company.defaultName;
     $: imageUrl = jobPosting.imageUrl;
+    $: postingId = jobPosting.id;
     $: title = jobPosting.title;
     $: skills = jobPosting.skills;
     $: site = jobPosting.jobPostingSite.defaultName;
@@ -41,7 +43,7 @@
 </script>
 
 <div class="sc-bQtKYq dblCQy" transition:fade={{delay, duration:500}}>
-    <a target="_self" href="/position/1583"
+    <a target="_self" href="{$url(`/job_posting/${postingId}`)}"
         ><div class="img_filter" />
         <div class="img_box">
             <img

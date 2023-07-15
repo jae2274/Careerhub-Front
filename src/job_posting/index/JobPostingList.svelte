@@ -23,7 +23,7 @@
 			<div>Loading...</div>
 		{:then jobPostings}
 			{#each jobPostings as jobPosting, index}
-			<JobPostingItem {jobPosting} delay={index*100}></JobPostingItem>
+			<JobPostingItem {jobPosting} delay={index*200}></JobPostingItem>
 			{/each}	
 		{/await}
 	{/each}
