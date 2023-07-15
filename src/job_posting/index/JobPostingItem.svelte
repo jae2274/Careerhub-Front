@@ -42,7 +42,7 @@
     }
 </script>
 
-<div class="sc-bQtKYq dblCQy" transition:fade={{delay, duration:500}}>
+<div class="sc-bQtKYq dblCQy" in:fade={{delay, duration:500}}>
     <a target="_self" href="{$url(`/job_posting/${postingId}`)}"
         ><div class="img_filter" />
         <div class="img_box">

@@ -162,7 +162,17 @@
         </div>
     {/if}
 
-    <div role="presentation" class="sc-ksHpcM jsSzDN" />
+    <div role="presentation" class="sc-ksHpcM jsSzDN" >
+        {#each selectedSkills as skill}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="btn_stack cursor_default" on:click={()=>removeSkill(skill)}>
+            <span class="text">{skill.defaultName}</span><button
+                class="delete_btn"
+                ><span class="blind" >삭제</span></button
+            >
+        </div>                                     
+        {/each}
+    </div>
 </div>
 
 <style>
