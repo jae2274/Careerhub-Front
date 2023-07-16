@@ -5,21 +5,29 @@
     import { request } from "../../job_posting/index/store";
 
     let listElement;
+	let isWaitingTimeout = false
     onMount(() => {
 			console.log("listElm is defined");
 			listElement.addEventListener("scroll",  ()=>{
 				console.log("scrolling...")
-				if (
-					listElement.scrollTop + listElement.clientHeight >=
-					listElement.scrollHeight
-				) {
-					request.nextPage();
+				if (isScrollEnded() && !isWaitingTimeout) {
+					isWaitingTimeout = true;
+
+					setTimeout(()=> {
+						isWaitingTimeout = false;
+						if(isScrollEnded()) request.nextPage();
+					},250);
 				}
 			});
 	});
 	onDestroy(() => {
 		listElement.removeEventListener("scroll");
 	});
+
+	function isScrollEnded(){
+		return listElement.scrollTop + listElement.clientHeight + 1>=
+					listElement.scrollHeight;
+	}
 </script>
 
 <div class="hdErFU" bind:this={listElement}>
