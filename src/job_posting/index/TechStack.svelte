@@ -2,29 +2,32 @@
     import { getSkill } from "./api";
     import { request } from "./store";
 
-    let name = "";
+    let skillKeyword = "";
     let selectedSkills = [];
     let isSkillHided = true;
-    $: skills = getSkill(name);
+
+    $: skills = getSkill(skillKeyword);
 
     function addSkill(skill) {
-        selectedSkills = [...selectedSkills,skill];
-        skills = []
+        selectedSkills = [...selectedSkills, skill];
+        skills = [];
         request.addSkill(skill.id);
     }
 
     function removeSkill(skill) {
-        selectedSkills = selectedSkills.filter(selected=>selected.id!==skill.id);
+        selectedSkills = selectedSkills.filter(
+            (selected) => selected.id !== skill.id
+        );
         request.removeSkill(skill.id);
     }
 
-    function switchHided() {
+    function switchHidedSkill() {
         isSkillHided = !isSkillHided;
     }
 </script>
 
-<div class="sc-dkqQuH eYcCbP">
-    <button type="button" class="outlined btn_hover" on:click={switchHided}
+<div class="sc-dkqQuH eYcCqs">
+    <button type="button" class="outlined btn_hover" on:click={switchHidedSkill}
         ><span>기술스택 <mark /></span><svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -90,7 +93,7 @@
                             <input
                                 type="text"
                                 placeholder="ex) javascript"
-                                bind:value={name}
+                                bind:value={skillKeyword}
                             /><button type="button" class="sc-gnnDb dizmKV"
                                 ><svg
                                     width="24"
@@ -115,11 +118,10 @@
                             >
                         </div>
                         <div>
-                                {#await skills}
-                                    <span>Finding...</span>
-                                {:then skills}
+                            {#await skills}
+                                <span>Finding...</span>
+                            {:then skills}
                                 <ul class="sc-igXgud fkcmCF">
-
                                     {#each skills as skill}
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <li
@@ -130,22 +132,27 @@
                                         </li>
                                     {/each}
                                 </ul>
-                                {:catch error}
-                                    <span>Fail!</span>
-                                {/await}
+                            {:catch error}
+                                <span>Fail!</span>
+                            {/await}
                         </div>
-                        {#if selectedSkills.length!==0 }
+                        {#if selectedSkills.length !== 0}
                             <div class="bpaCoL">
                                 <h4 class="title">선택한 기술 스택</h4>
                                 <div class="lists">
                                     {#each selectedSkills as skill}
-                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                    <div class="btn_stack cursor_default" on:click={()=>removeSkill(skill)}>
-                                        <span class="text">{skill.defaultName}</span><button
-                                            class="delete_btn"
-                                            ><span class="blind" >삭제</span></button
+                                        <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                        <div
+                                            class="btn_stack cursor_default"
+                                            on:click={() => removeSkill(skill)}
                                         >
-                                    </div>                                     
+                                            <span class="text"
+                                                >{skill.defaultName}</span
+                                            ><button class="delete_btn"
+                                                ><span class="blind">삭제</span
+                                                ></button
+                                            >
+                                        </div>
                                     {/each}
                                 </div>
                             </div>
@@ -162,31 +169,33 @@
         </div>
     {/if}
 
-    <div role="presentation" class="sc-ksHpcM jsSzDN" >
+    <div role="presentation" class="sc-ksHpcM jsSzDN">
         {#each selectedSkills as skill}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="btn_stack cursor_default" on:click={()=>removeSkill(skill)}>
-            <span class="text">{skill.defaultName}</span><button
-                class="delete_btn"
-                ><span class="blind" >삭제</span></button
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div
+                class="btn_stack cursor_default"
+                on:click={() => removeSkill(skill)}
             >
-        </div>                                     
+                <span class="text">{skill.defaultName}</span>
+            </div>
         {/each}
     </div>
 </div>
+
 
 <style>
     .hfYXAq {
         display: none;
     }
-    .eYcCbP {
+    .eYcCqs {
         position: relative;
         margin: 0px 0px 1px;
+        width: 360px;
     }
-    .eYcCbP .btn_hover {
+    .eYcCqs .btn_hover {
         border: 1px solid rgb(0, 0, 0);
     }
-    .eYcCbP .outlined {
+    .eYcCqs .outlined {
         position: relative;
         background-color: rgb(255, 255, 255);
         padding: 6px 30px 7px 12px;
@@ -197,21 +206,21 @@
         box-sizing: border-box;
         z-index: 4;
     }
-    .eYcCbP .btn_hover span {
+    .eYcCqs .btn_hover span {
         color: rgb(0, 0, 0);
     }
-    .eYcCbP .outlined span {
+    .eYcCqs .outlined span {
         font-size: 15px;
         line-height: 24px;
         letter-spacing: -0.5px;
         color: rgb(34, 34, 34);
     }
-    .eYcCbP .arrow_up {
+    .eYcCqs .arrow_up {
         transform: rotate(-180deg);
         transition: transform 0.2s ease-in-out 0s,
             -webkit-transform 0.2s ease-in-out 0s;
     }
-    .eYcCbP .arrow {
+    .eYcCqs .arrow {
         position: absolute;
         top: 11px;
         right: 12px;
@@ -256,7 +265,7 @@
         border: 1px solid rgb(0, 221, 109);
     }
 
-    .jTMKtk > input {
+    .jTMKtk > input[type="text"] {
         height: 100%;
         width: 240px;
         margin: 0px 0px 0px 16px;
@@ -311,7 +320,6 @@
         text-decoration: underline;
     }
 
-
     .bpaCoL {
         margin: 0px 24px 23px;
         max-height: 240px;
@@ -329,45 +337,46 @@
         border-radius: 100px;
         margin: 0px 8px 8px 0px;
         font-size: 14px;
-        font-family: Montserrat, "Noto Sans KR", -apple-system, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", "Nanum Gothic", sans-serif;
+        font-family: Montserrat, "Noto Sans KR", -apple-system, system-ui,
+            "Apple SD Gothic Neo", "Malgun Gothic", "Nanum Gothic", sans-serif;
         color: rgb(34, 34, 34);
         line-height: 16px;
         font-weight: 500;
     }
     .delete_btn {
-    position: relative;
-    top: -4px;
-    width: 20px;
-    height: 12px;
-    color: rgb(255, 255, 255);
-    background-color: transparent;
-    padding: 0px;
-    border: none;
-}
-.delete_btn::before {
-    position: absolute;
-    left: 7px;
-    width: 12px;
-    height: 1.3px;
-    background-color: rgb(196, 196, 196);
-    transform: rotate(45deg);
-    content: "";
-}
-.delete_btn::after {
-    position: absolute;
-    left: 7px;
-    width: 12px;
-    height: 1.3px;
-    background-color: rgb(196, 196, 196);
-    transform: rotate(-45deg);
-    content: "";
-}
+        position: relative;
+        top: -4px;
+        width: 20px;
+        height: 12px;
+        color: rgb(255, 255, 255);
+        background-color: transparent;
+        padding: 0px;
+        border: none;
+    }
+    .delete_btn::before {
+        position: absolute;
+        left: 7px;
+        width: 12px;
+        height: 1.3px;
+        background-color: rgb(196, 196, 196);
+        transform: rotate(45deg);
+        content: "";
+    }
+    .delete_btn::after {
+        position: absolute;
+        left: 7px;
+        width: 12px;
+        height: 1.3px;
+        background-color: rgb(196, 196, 196);
+        transform: rotate(-45deg);
+        content: "";
+    }
 
     .blind {
-    overflow: hidden;
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    clip: rect(1px, 1px, 1px, 1px);
-}
+        overflow: hidden;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
 </style>

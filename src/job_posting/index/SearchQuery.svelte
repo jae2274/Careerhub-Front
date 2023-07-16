@@ -1,6 +1,7 @@
 <script>
     import CategoryList from "./CategoryList.svelte";
     import TechStack from './TechStack.svelte';
+    import CareerQuery from './CareerQuery.svelte';
     import { category } from "./api";
 
     let categories = category()
@@ -16,12 +17,19 @@
         <span>Fail!</span>
         {/await}
     </section>
-    <TechStack/>
+    <div class="queryBox">
+        <TechStack/>
+        <CareerQuery/>
+    </div>
 </div>
 
 <style>
 .cCZWVz {
     max-width: 1060px;
     margin: 32px auto 50px;
+}
+
+.queryBox{
+    display: flex;
 }
 </style>

@@ -32,6 +32,11 @@ export function createQuery(req){
     if(isNotEmpty(req.tagIds))
         parts.push(`tag=${req.tagIds.join(",")}`)
 
+    if(req.minCareer)
+        parts.push(`minCareer=${req.minCareer}`)
+    if(req.maxCareer)
+        parts.push(`maxCareer=${req.maxCareer}`)
+
     if(req.page && req.size){
         parts.push(`page=${req.page}&size=${req.size}`)
     }

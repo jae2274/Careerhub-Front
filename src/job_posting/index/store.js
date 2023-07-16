@@ -8,6 +8,8 @@ function setRequest(){
         categoryIds: [],
         skillIds: [],
         tagIds: [],
+        minCareer: null,
+        maxCareer: null,
     }
 
     const {subscribe, set, update} = writable(request)
@@ -51,6 +53,22 @@ function setRequest(){
             return request
         })
     }
+
+    const setMinCareer = (career)=>{
+        update(request=>{
+            request.minCareer = career
+            request.page=1
+            return request
+        })
+    }    
+    const setMaxCareer = (career)=>{
+        update(request=>{
+            request.maxCareer = career
+            request.page=1
+            return request
+        })
+    }
+
     const setTag = (tags)=>{
         update(request=>{
             request.tagIds = tags
@@ -61,7 +79,7 @@ function setRequest(){
 
 
     return {
-        nextPage, subscribe, removeCategory, addCategory, addSkill, removeSkill, setTag
+        nextPage, subscribe, setMinCareer, setMaxCareer, removeCategory, addCategory, addSkill, removeSkill, setTag
     }
 }
 
