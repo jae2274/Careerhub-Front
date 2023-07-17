@@ -1,5 +1,5 @@
 <script>
-    import {url} from '@sveltech/routify';
+    import { link } from 'svelte-spa-router';
 
     export let postingDetail;
     $: title = postingDetail.title;
@@ -17,7 +17,7 @@
         <section class="sc-cvlWTT difxia">
             <h1>{title}</h1>
             <div class="position_title_box_desc">
-                <a href="{$url(`/company/${companyInfo.companyId}`)}">{companyInfo.companyName}</a>
+                <a use:link href="{`/company/${companyInfo.companyId}`}">{companyInfo.companyName}</a>
             </div>
             <ul class="position_tags">
                 {#each tags as tag}

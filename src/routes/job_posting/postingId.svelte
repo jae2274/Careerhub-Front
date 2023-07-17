@@ -1,9 +1,9 @@
 <script>
-    import { params } from "@sveltech/routify";
+    export let params = {}
     import { getPostingDetail } from "~/job_posting/postingId/api";
     import  Detail  from "~/job_posting/postingId/Detail.svelte"
 
-    const promisePostingDetail = getPostingDetail($params.postingId)
+    const promisePostingDetail = getPostingDetail(params.postingId)
 
 </script>
 

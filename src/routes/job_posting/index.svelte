@@ -20,9 +20,6 @@
 				}
 			});
 	});
-	onDestroy(() => {
-		listElement.removeEventListener("scroll");
-	});
 
 	function isScrollEnded(){
 		return listElement.scrollTop + listElement.clientHeight + 1>=
