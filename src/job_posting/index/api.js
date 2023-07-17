@@ -1,9 +1,9 @@
 
 
-export  async function findJobPostings(request){
+export  async function findJobPostings(requestStr){
 
     return await (
-        await fetch(`http://localhost:8081/job_posting${createQuery(request)||""}`)
+        await fetch(`http://localhost:8081/job_posting${requestStr||""}`)
     ).json()
 }
 
@@ -44,6 +44,21 @@ export function createQuery(req){
     const query = parts.join("&")
 
     return query? `?${query}`:""
+}
+
+export function createRequest(queryString){
+    const queryObj = parseQuery(queryString);
+    
+}
+
+function parseQuery(queryString) {
+    var query = {};
+    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
 }
 
 function isNotEmpty(list){

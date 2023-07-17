@@ -2,7 +2,6 @@
 	import JobPostingItem from "./JobPostingItem.svelte"
     import { findJobPostings, createQuery } from "./api";
     import { request } from "./store";
-
 	
 	let promises = []
 
@@ -14,7 +13,7 @@
 	}
 
     function callListApi(request){
-        return findJobPostings(request)
+        return findJobPostings(createQuery(request));
     }
 </script>
 <section class="sc-hgKiOD bPkSMN">
