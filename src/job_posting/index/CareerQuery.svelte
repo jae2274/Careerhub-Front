@@ -9,6 +9,7 @@
     $: if(maxCareer<=0) maxCareer = null;
     $: setMinCareer(minCareer);
     $: setMaxCareer(maxCareer);
+    $: setCareer($request);
 
     function switchHidedCareer() {
         isCareerHided = !isCareerHided;
@@ -21,7 +22,10 @@
         request.setMaxCareer(career);
     }
 
-
+    function setCareer(request){
+        minCareer = request.minCareer;
+        maxCareer = request.maxCareer;
+    }
 </script>
 
 <div class="sc-dkqQuH eYcCbP">

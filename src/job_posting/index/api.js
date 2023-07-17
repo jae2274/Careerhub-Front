@@ -22,7 +22,7 @@ export  async function getSkill(name){
     ).json()
 }
 
-export function createQuery(req){
+export function createQuery(req, isPaging){
     const parts = []
 
     if(isNotEmpty(req.categoryIds))
@@ -37,7 +37,7 @@ export function createQuery(req){
     if(req.maxCareer)
         parts.push(`maxCareer=${req.maxCareer}`)
 
-    if(req.page && req.size){
+    if(req.page && req.size && isPaging){
         parts.push(`page=${req.page}&size=${req.size}`)
     }
 
@@ -46,21 +46,24 @@ export function createQuery(req){
     return query? `?${query}`:""
 }
 
-export function createRequest(queryString){
-    const queryObj = parseQuery(queryString);
-    
-}
 
-function parseQuery(queryString) {
-    var query = {};
-    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-    for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i].split('=');
-        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+export function parseQuery(queryString) {
+    const queryParams = new URLSearchParams(queryString);
+
+    return {
+        page:1,
+        size: 16,
+        categoryIds: queryParams.getAll('category').flatMap(split),
+        skillIds: queryParams.getAll('skill').flatMap(split),
+        tagIds: queryParams.getAll('tag').flatMap(split),
+        minCareer: Number(queryParams.get('minCareer')),
+        maxCareer: Number(queryParams.get('maxCareer')),
     }
-    return query;
 }
 
+function split(listStr){
+    return listStr.split(',').map(Number);
+}
 function isNotEmpty(list){
     return list && list.length>0
 }

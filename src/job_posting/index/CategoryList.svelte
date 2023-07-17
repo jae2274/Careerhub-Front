@@ -3,17 +3,21 @@
 
     export let categories
 
-    $: categories = categories.map(category => {
-        if( $request.categoryIds.includes(category.id) ) {
-            category.selected=true;
-        }else{
-            category.selected=false;
-        }
-        
-        return category;
-    })
+    $: categories = adjustSelected($request)
 
     $: isSelectAnyone = categories.map(it=>it.selected).reduce((prev, next) =>prev||next)
+
+    function adjustSelected(request){
+        return categories.map(category => {
+            if( request.categoryIds.includes(category.id) ) {
+                category.selected=true;
+            }else{
+                category.selected=false;
+            }
+            
+            return category;
+        });
+    }
 
     function switchSelected(categoryId, selected){
         if(selected)

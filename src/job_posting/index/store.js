@@ -77,9 +77,11 @@ function setRequest(){
         })
     }
 
+    const initRequest = (request)=>set(request);
+
 
     return {
-        nextPage, subscribe, setMinCareer, setMaxCareer, removeCategory, addCategory, addSkill, removeSkill, setTag
+        initRequest, nextPage, subscribe, setMinCareer, setMaxCareer, removeCategory, addCategory, addSkill, removeSkill, setTag
     }
 }
 
