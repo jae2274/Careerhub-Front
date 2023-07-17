@@ -1,6 +1,6 @@
 <script>
-    import { request } from "./store";
-    import { category } from "./api";
+    import { request } from "~/job_posting/index/store";
+    import { category } from "~/job_posting/index/api";
 
     let categories = category()
 </script>

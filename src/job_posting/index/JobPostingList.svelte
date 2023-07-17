@@ -1,7 +1,7 @@
 <script>
-	import JobPostingItem from "./JobPostingItem.svelte"
-    import { findJobPostings, createQuery } from "./api";
-    import { request } from "./store";
+	import JobPostingItem from "~/job_posting/index/JobPostingItem.svelte"
+    import { findJobPostings, createQuery } from "~/job_posting/index/api";
+    import { request } from "~/job_posting/index/store";
 	
 	let promises = []
 

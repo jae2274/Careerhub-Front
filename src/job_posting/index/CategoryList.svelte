@@ -1,5 +1,5 @@
 <script>
-    import { request } from "./store";
+    import { request } from "~/job_posting/index/store";
 
     export let categories
 

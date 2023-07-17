@@ -6,6 +6,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
 
+import alias from '@rollup/plugin-alias';
+import path from 'path';
+
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -70,7 +73,15 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		production && terser()
+		production && terser(),
+		alias({
+            entries: [
+                {
+                    find: '~',
+                    replacement: path.resolve(__dirname, 'src/'), // __dirmname: 해당 파일의 경로, "해당 파일의 경로/src"에 해당하는 경로를 ~로 alias
+                }
+            ]
+        }),
 	],
 	watch: {
 		clearScreen: false

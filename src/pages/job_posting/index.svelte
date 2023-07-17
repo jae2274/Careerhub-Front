@@ -1,8 +1,8 @@
 <script>
-	import JobPostingList from "../../job_posting/index/JobPostingList.svelte";
-    import SearchQuery from "../../job_posting/index/SearchQuery.svelte";
+	import JobPostingList from "~/job_posting/index/JobPostingList.svelte";
+    import SearchQuery from "~/job_posting/index/SearchQuery.svelte";
 	import { onMount, onDestroy } from "svelte";    
-    import { request } from "../../job_posting/index/store";
+    import { request } from "~/job_posting/index/store";
 
     let listElement;
 	let isWaitingTimeout = false

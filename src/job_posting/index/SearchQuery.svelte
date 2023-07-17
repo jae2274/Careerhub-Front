@@ -1,8 +1,8 @@
 <script>
-    import CategoryList from "./CategoryList.svelte";
-    import TechStack from './TechStack.svelte';
-    import CareerQuery from './CareerQuery.svelte';
-    import { category } from "./api";
+    import CategoryList from "~/job_posting/index/CategoryList.svelte";
+    import TechStack from '~/job_posting/index/TechStack.svelte';
+    import CareerQuery from '~/job_posting/index/CareerQuery.svelte';
+    import { category } from "~/job_posting/index/api";
 
     let categories = category()
 </script>

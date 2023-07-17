@@ -1,6 +1,6 @@
 <script>
-    import { getSkill } from "./api";
-    import { request } from "./store";
+    import { getSkill } from "~/job_posting/index/api";
+    import { request } from "~/job_posting/index/store";
 
     let skillKeyword = "";
     let selectedSkills = [];
