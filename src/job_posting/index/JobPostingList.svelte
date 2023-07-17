@@ -1,19 +1,27 @@
 <script>
 	import JobPostingItem from "~/job_posting/index/JobPostingItem.svelte"
-    import { findJobPostings, createQuery } from "~/job_posting/index/api";
+    import { findJobPostings, createQuery, parseQuery } from "~/job_posting/index/api";
     import { request } from "~/job_posting/index/store";
-	
-	let promises = []
+	import { querystring, push, location } from "svelte-spa-router";
 
-	$: {
-		if($request.page == 1){
-			promises = []
+	let promises = [];
+	request.initRequest(
+		parseQuery($querystring)
+	)
+	
+	$: callList($request)
+	
+	function callList(request){
+		if(request.page == 1){
+			const url = `${$location}${createQuery(request, false)}`;
+			push(url);
+			promises = [];
 		}
-		promises = [...promises,callListApi($request)]
+		promises = [...promises,callListApi(request)]
 	}
 
     function callListApi(request){
-        return findJobPostings(createQuery(request));
+        return findJobPostings(createQuery(request, true));
     }
 </script>
 <section class="sc-hgKiOD bPkSMN">
