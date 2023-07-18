@@ -3,22 +3,17 @@
     import { request } from "~/job_posting/index/store";
 
     let skillKeyword = "";
-    let selectedSkills = [];
     let isSkillHided = true;
 
-    $: skills = getSkill(skillKeyword);
+    $: searchedSkills = getSkill(skillKeyword);
 
-    function addSkill(skill) {
-        selectedSkills = [...selectedSkills, skill];
-        skills = [];
-        request.addSkill(skill.id);
+    function addSkill(skillName) {
+        searchedSkills = [];
+        request.addSkill(skillName);
     }
 
-    function removeSkill(skill) {
-        selectedSkills = selectedSkills.filter(
-            (selected) => selected.id !== skill.id
-        );
-        request.removeSkill(skill.id);
+    function removeSkill(skillName) {
+        request.removeSkill(skillName);
     }
 
     function switchHidedSkill() {
@@ -118,17 +113,17 @@
                             >
                         </div>
                         <div>
-                            {#await skills}
+                            {#await searchedSkills}
                                 <span>Finding...</span>
                             {:then skills}
                                 <ul class="sc-igXgud fkcmCF">
-                                    {#each skills as skill}
+                                    {#each skills as {defaultName}}
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <li
                                             class="sc-JEhMO hWoVqF"
-                                            on:click={() => addSkill(skill)}
+                                            on:click={() => addSkill(defaultName)}
                                         >
-                                            <span>{skill.defaultName}</span>
+                                            <span>{defaultName}</span>
                                         </li>
                                     {/each}
                                 </ul>
@@ -136,18 +131,18 @@
                                 <span>Fail!</span>
                             {/await}
                         </div>
-                        {#if selectedSkills.length !== 0}
+                        {#if $request.skillNames.length !== 0}
                             <div class="bpaCoL">
                                 <h4 class="title">선택한 기술 스택</h4>
                                 <div class="lists">
-                                    {#each selectedSkills as skill}
+                                    {#each $request.skillNames as skillName}
                                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                                         <div
                                             class="btn_stack cursor_default"
-                                            on:click={() => removeSkill(skill)}
+                                            on:click={() => removeSkill(skillName)}
                                         >
                                             <span class="text"
-                                                >{skill.defaultName}</span
+                                                >{skillName}</span
                                             ><button class="delete_btn"
                                                 ><span class="blind">삭제</span
                                                 ></button
@@ -170,13 +165,13 @@
     {/if}
 
     <div role="presentation" class="sc-ksHpcM jsSzDN">
-        {#each selectedSkills as skill}
+        {#each $request.skillNames as skillName}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div
                 class="btn_stack cursor_default"
-                on:click={() => removeSkill(skill)}
+                on:click={() => removeSkill(skillName)}
             >
-                <span class="text">{skill.defaultName}</span>
+                <span class="text">{skillName}</span>
             </div>
         {/each}
     </div>

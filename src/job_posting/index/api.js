@@ -27,8 +27,8 @@ export function createQuery(req, isPaging){
 
     if(isNotEmpty(req.categoryIds))
         parts.push(`category=${req.categoryIds.join(",")}`)
-    if(isNotEmpty(req.skillIds))
-        parts.push(`skill=${req.skillIds.join(",")}`)
+    if(isNotEmpty(req.skillNames))
+        parts.push(`skill=${req.skillNames.join(",")}`)
     if(isNotEmpty(req.tagIds))
         parts.push(`tag=${req.tagIds.join(",")}`)
 
@@ -53,16 +53,16 @@ export function parseQuery(queryString) {
     return {
         page:1,
         size: 16,
-        categoryIds: queryParams.getAll('category').flatMap(split),
-        skillIds: queryParams.getAll('skill').flatMap(split),
-        tagIds: queryParams.getAll('tag').flatMap(split),
+        categoryIds: queryParams.getAll('category').flatMap(split).map(Number),
+        skillNames: queryParams.getAll('skill').flatMap(split),
+        tagIds: queryParams.getAll('tag').flatMap(split).map(Number),
         minCareer: Number(queryParams.get('minCareer')),
         maxCareer: Number(queryParams.get('maxCareer')),
     }
 }
 
 function split(listStr){
-    return listStr.split(',').map(Number);
+    return listStr.split(',');
 }
 function isNotEmpty(list){
     return list && list.length>0

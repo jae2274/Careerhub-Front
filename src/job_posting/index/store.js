@@ -6,7 +6,7 @@ function setRequest(){
         page:1,
         size: 16,
         categoryIds: [],
-        skillIds: [],
+        skillNames: [],
         tagIds: [],
         minCareer: null,
         maxCareer: null,
@@ -39,8 +39,8 @@ function setRequest(){
 
     const addSkill = (skillId)=>{
         update(request=>{
-            if(!request.skillIds.includes(skillId)){
-                request.skillIds.push(skillId)
+            if(!request.skillNames.includes(skillId)){
+                request.skillNames.push(skillId)
                 request.page=1
             }
             return request
@@ -48,7 +48,7 @@ function setRequest(){
     }
     const removeSkill = (skillId)=>{
         update(request=>{
-            request.skillIds = request.skillIds.filter(id=>skillId!==id)
+            request.skillNames = request.skillNames.filter(id=>skillId!==id)
             request.page=1
             return request
         })
