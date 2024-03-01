@@ -1,6 +1,6 @@
 <script>
   import {fade} from "svelte/transition";
-  import {link} from "svelte-spa-router";
+  // import {link} from "svelte-spa-router";
   export let delay;
   export let jobPosting;
 
@@ -46,7 +46,7 @@
 </script>
 
 <div class="sc-bQtKYq dblCQy" in:fade={{delay, duration: 500}}>
-  <a target="_self" use:link href={`/job_posting/${postingId}`}
+  <a target="_self" href={`/job_posting/${postingId}`}
     ><div class="img_filter" />
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />

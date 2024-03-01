@@ -6,17 +6,17 @@
     parseQuery,
   } from "~/job_posting/index/api";
   import {request} from "~/job_posting/index/store";
-  import {querystring, push, location} from "svelte-spa-router";
+  // import {querystring, push, location} from "svelte-spa-router";
 
   let promises = [];
-  request.initRequest(parseQuery($querystring));
+  // request.initRequest(parseQuery($querystring));
 
   $: callList($request);
 
   function callList(request) {
     if (request.page == 1) {
-      const url = `${$location}${createQuery(request, false)}`;
-      push(url);
+      // const url = `${$location}${createQuery(request, false)}`;
+      // push(url);
       promises = [];
     }
     promises = [...promises, callListApi(request)];

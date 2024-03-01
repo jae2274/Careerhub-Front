@@ -1,12 +1,9 @@
 <script>
-  import Router from 'svelte-spa-router'
-  import { onMount, onDestroy } from "svelte";    
-
-  import routes from '~/routes'
+  import {Router} from "@sveltech/routify";
+  import {routes} from "@sveltech/routify/tmp/routes";
 </script>
 
-<Router {routes} restoreScrollState={true}></Router>
+<Router {routes} />
 
 <style>
-
-  </style>
+</style>
