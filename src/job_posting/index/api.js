@@ -1,17 +1,19 @@
+import {backend_url} from "~/const";
+
 export async function findJobPostings(requestStr) {
   return await (
-    await fetch(`http://localhost:8081/job_postings${requestStr || ""}`)
+    await fetch(`${backend_url}/job_postings${requestStr || ""}`)
   ).json();
 }
 
 export async function category() {
-  return await (await fetch(`http://localhost:8081/category`)).json();
+  return await (await fetch(`${backend_url}/category`)).json();
 }
 
 export async function getSkill(name) {
   if (!name) return new Promise((resolve, _) => resolve([]));
 
-  return await (await fetch(`http://localhost:8081/skill?name=${name}`)).json();
+  return await (await fetch(`${backend_url}/skill?name=${name}`)).json();
 }
 
 export function createQuery(req, isPaging) {
