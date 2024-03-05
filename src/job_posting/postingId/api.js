@@ -1,7 +1,5 @@
+import {backendUrl} from "~/const";
 
-export  async function getPostingDetail(postingId){
-
-    return await (
-        await fetch(`http://localhost:8081/job_posting/${postingId}`)
-    ).json()
+export async function getPostingDetail(postingId) {
+  return await (await fetch(`${backendUrl}/job_posting/${postingId}`)).json();
 }
