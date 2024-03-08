@@ -46,7 +46,7 @@
 </script>
 
 <div class="sc-bQtKYq dblCQy" in:fade={{delay, duration: 500}}>
-  <a target="_self" use:link href={`/job_posting/${postingId}`}
+  <a target="_self" use:link href={`/job_posting/${site}/${postingId}`}
     ><div class="img_filter" />
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />
@@ -71,8 +71,12 @@
       <div class="sc-xiLah jCplrW"><span>{companyName}</span></div>
       <h2 class="position_card_info_title">{title}</h2>
       <ul class="sc-jHkVzv cYCPrU">
-        {#each skills as { defaultName: skillName }}
-          <li>· {skillName}</li>
+        {#each skills as skillName, index}
+          <li>
+            {#if index !== 0}
+              &nbsp·&nbsp
+            {/if}{skillName}
+          </li>
         {/each}
       </ul>
       <ul class="sc-jHkVzv jAbqnL">
