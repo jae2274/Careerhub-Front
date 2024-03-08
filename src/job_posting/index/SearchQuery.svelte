@@ -1,22 +1,24 @@
 <script>
-  //   import CategoryList from "~/job_posting/index/CategoryList.svelte";
+  import CategoryList from "~/job_posting/index/CategoryList.svelte";
   import TechStack from "~/job_posting/index/TechStack.svelte";
   import CareerQuery from "~/job_posting/index/CareerQuery.svelte";
-  //   import {category} from "~/job_posting/index/api";
+  import {category} from "~/job_posting/index/api";
 
-  //   let categories = category();
+  $: promiseCategories = category();
 </script>
 
 <div class="cCZWVz">
-  <!-- <section class="sc-JkixQ cCZWVz">
-    {#await categories}
+  <section class="sc-JkixQ cCZWVz">
+    {#await promiseCategories}
       <span>Loading...</span>
     {:then categories}
-      <CategoryList {categories}></CategoryList>
+      {#each categories.categoriesBySite as categoryBySite}
+        <CategoryList {categoryBySite}></CategoryList>
+      {/each}
     {:catch error}
       <span>Fail!</span>
     {/await}
-  </section> -->
+  </section>
   <div class="queryBox">
     <TechStack />
     <CareerQuery />

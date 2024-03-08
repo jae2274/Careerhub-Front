@@ -7,7 +7,7 @@ export async function findJobPostings(requestStr) {
 }
 
 export async function category() {
-  return await (await fetch(`${backendUrl}/category`)).json();
+  return await (await fetch(`${backendUrl}/categories`)).json();
 }
 
 export async function getSkill(name) {
@@ -43,7 +43,7 @@ export function parseQuery(queryString) {
   return {
     page: 1,
     size: 16,
-    categoryIds: queryParams.getAll("category").flatMap(split).map(Number),
+    categories: queryParams.getAll("category").flatMap(split).map(Number),
     skillNames: queryParams.getAll("skill").flatMap(split),
     tagIds: queryParams.getAll("tag").flatMap(split).map(Number),
     minCareer: Number(queryParams.get("minCareer")),

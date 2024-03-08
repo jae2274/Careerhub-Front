@@ -11,10 +11,7 @@
   $: skills = jobPosting.skills;
   $: site = jobPosting.site;
   $: viewAddress = createViewAddress(jobPosting.addresses);
-  $: viewCareer = createViewCareer(
-    jobPosting.min_carrier,
-    jobPosting.max_carrier
-  );
+  $: viewCareer = createViewCareer(jobPosting.minCareer, jobPosting.maxCareer);
 
   function createViewAddress(addresses) {
     const address = addresses[0];
