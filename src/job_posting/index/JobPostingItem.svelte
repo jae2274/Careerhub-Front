@@ -9,6 +9,7 @@
   $: postingId = jobPosting.postingId;
   $: title = jobPosting.title;
   $: skills = jobPosting.skills;
+  $: categories = jobPosting.categories;
   $: site = jobPosting.site;
   $: viewAddress = createViewAddress(jobPosting.addresses);
   $: viewCareer = createViewCareer(jobPosting.minCareer, jobPosting.maxCareer);
@@ -67,18 +68,29 @@
     <div class="sc-dVNjXY kJoWbe">
       <div class="sc-xiLah jCplrW"><span>{companyName}</span></div>
       <h2 class="position_card_info_title">{title}</h2>
-      <ul class="sc-jHkVzv cYCPrU">
-        {#each skills as skillName, index}
+      {#if skills.length > 0}
+        <ul class="sc-jHkVzv cYCPrU" style="color: brown;">
+          {#each skills as skillName, index}
+            <li>
+              {#if index !== 0}
+                &nbsp·&nbsp
+              {/if}{skillName}
+            </li>
+          {/each}
+        </ul>
+      {/if}
+      <ul class="sc-jHkVzv cYCPrU" style="color: yellowgreen;">
+        {#each categories as category, index}
           <li>
             {#if index !== 0}
               &nbsp·&nbsp
-            {/if}{skillName}
+            {/if}{category}
           </li>
         {/each}
       </ul>
       <ul class="sc-jHkVzv jAbqnL">
-        <li>{viewAddress}</li>
-        <li>{viewCareer}</li>
+        <li style="color: blueviolet">{viewAddress}</li>
+        <li style="color:teal">{viewCareer}</li>
       </ul>
       <ul class="sc-jHkVzv jAbqnL">
         <li>from {site}</li>
