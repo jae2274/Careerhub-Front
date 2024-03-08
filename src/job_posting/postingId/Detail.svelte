@@ -4,7 +4,7 @@
   export let postingDetail;
   $: site = postingDetail.site;
   $: title = postingDetail.title;
-  $: skills = postingDetail.skills;
+  $: skills = postingDetail.skills || [];
   $: mainTask = postingDetail.mainTask;
   $: qualifications = postingDetail.qualifications;
   $: preferred = postingDetail.preferred;
@@ -13,9 +13,10 @@
   $: intro = postingDetail.intro;
   $: careerMin = postingDetail.careerMin;
   $: careerMax = postingDetail.careerMax;
-  //   $: tags = postingDetail.tags;
+  $: tags = postingDetail.tags || [];
   $: companyId = postingDetail.companyId;
-  //   $: companyImages = [""]; //TODO: postingDetail.companyImages;
+  $: companyImages = postingDetail.companyImages || [];
+  $: addresses = postingDetail.addresses || [];
   $: companyName = postingDetail.companyName;
 </script>
 
@@ -29,7 +30,7 @@
         >
       </div>
       <ul class="position_tags">
-        {#each postingDetail.tags as tag}
+        {#each tags as tag}
           <li>
             {tag}
           </li>
@@ -105,7 +106,7 @@
         <dt>근무지역</dt>
         <dd>
           <ul>
-            {#each postingDetail.addresses as address}
+            {#each addresses as address}
               <li>
                 {address}
               </li>
@@ -119,7 +120,7 @@
       <div class="sc-eJRTFu iWGriZ">
         <button class="sc-iqseJM kSjzbt" /><button class="sc-crHmcD cbXCAw" />
         <div class="sc-fGoOlv hIzUNT">
-          {#each postingDetail.companyImages as image}
+          {#each companyImages as image}
             <div>
               <img alt="{companyName}_{title}" src={image} />
             </div>

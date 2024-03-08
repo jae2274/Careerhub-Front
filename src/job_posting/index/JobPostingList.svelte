@@ -5,7 +5,7 @@
     createQuery,
     parseQuery,
   } from "~/job_posting/index/api";
-  import {request} from "~/job_posting/index/store";
+  import {initPage, request} from "~/job_posting/index/store";
   import {querystring, push, location} from "svelte-spa-router";
 
   let promises = [];
@@ -14,7 +14,7 @@
   $: callList($request);
 
   function callList(request) {
-    if (request.page == 1) {
+    if (request.page == initPage) {
       const url = `${$location}${createQuery(request, false)}`;
       push(url);
       promises = [];

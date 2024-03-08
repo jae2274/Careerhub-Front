@@ -1,9 +1,11 @@
 import {writable} from "svelte/store";
 
+export const initPage = 0;
 export const request = setRequest();
+
 function setRequest() {
   const request = {
-    page: 1,
+    page: initPage,
     size: 16,
     categories: [],
     skillNames: [],
@@ -24,7 +26,7 @@ function setRequest() {
     update((request) => {
       if (!request.categories.includes({site, categoryName})) {
         request.categories.push({site, categoryName});
-        request.page = 1;
+        request.page = initPage;
       }
       return request;
     });
@@ -32,9 +34,9 @@ function setRequest() {
   const removeCategory = (site, categoryName) => {
     update((request) => {
       request.categories = request.categories.filter(
-        (cate) => cate.site !== site && cate.categoryName !== categoryName
+        (cate) => cate.site != site || cate.categoryName != categoryName
       );
-      request.page = 1;
+      request.page = initPage;
       return request;
     });
   };
@@ -43,7 +45,7 @@ function setRequest() {
     update((request) => {
       if (!request.skillNames.includes(skillId)) {
         request.skillNames.push(skillId);
-        request.page = 1;
+        request.page = initPage;
       }
       return request;
     });
@@ -51,7 +53,7 @@ function setRequest() {
   const removeSkill = (skillId) => {
     update((request) => {
       request.skillNames = request.skillNames.filter((id) => skillId !== id);
-      request.page = 1;
+      request.page = initPage;
       return request;
     });
   };
@@ -59,14 +61,14 @@ function setRequest() {
   const setMinCareer = (career) => {
     update((request) => {
       request.minCareer = career;
-      request.page = 1;
+      request.page = initPage;
       return request;
     });
   };
   const setMaxCareer = (career) => {
     update((request) => {
       request.maxCareer = career;
-      request.page = 1;
+      request.page = initPage;
       return request;
     });
   };
@@ -74,7 +76,7 @@ function setRequest() {
   const setTag = (tags) => {
     update((request) => {
       request.tagIds = tags;
-      request.page = 1;
+      request.page = initPage;
       return request;
     });
   };
@@ -96,8 +98,7 @@ function setRequest() {
 }
 
 function setPage() {
-  const page = 1;
-  const {subscribe, update} = writable(page);
+  const {subscribe, update} = writable(initPage);
 
   const nextPage = (page) => update((page) => page + 1);
 

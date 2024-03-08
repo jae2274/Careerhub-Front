@@ -1,4 +1,5 @@
 import {backendUrl} from "~/const";
+import {initPage} from "./store";
 
 export async function findJobPostings(requestStr) {
   return await (
@@ -18,18 +19,14 @@ export async function getSkill(name) {
 
 export function createQuery(req, isPaging) {
   const parts = [];
-
-  if (isNotEmpty(req.categoryIds))
-    parts.push(`category=${req.categoryIds.join(",")}`);
-  if (isNotEmpty(req.skillNames))
-    parts.push(`skill=${req.skillNames.join(",")}`);
-  if (isNotEmpty(req.tagIds)) parts.push(`tag=${req.tagIds.join(",")}`);
-
-  if (req.minCareer) parts.push(`minCareer=${req.minCareer}`);
-  if (req.maxCareer) parts.push(`maxCareer=${req.maxCareer}`);
-
-  if (req.page && req.size && isPaging) {
+  if (isPaging) {
     parts.push(`page=${req.page}&size=${req.size}`);
+  }
+
+  if (req) {
+    parts.push(
+      `encoded_query=${btoa(unescape(encodeURIComponent(JSON.stringify(req))))}`
+    );
   }
 
   const query = parts.join("&");
@@ -41,7 +38,7 @@ export function parseQuery(queryString) {
   const queryParams = new URLSearchParams(queryString);
 
   return {
-    page: 1,
+    page: initPage,
     size: 16,
     categories: queryParams.getAll("category").flatMap(split).map(Number),
     skillNames: queryParams.getAll("skill").flatMap(split),

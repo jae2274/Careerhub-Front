@@ -13,6 +13,7 @@
       <span>Loading...</span>
     {:then categories}
       {#each categories.categoriesBySite as categoryBySite}
+        <span>From {categoryBySite.site}</span>
         <CategoryList {categoryBySite}></CategoryList>
       {/each}
     {:catch error}
