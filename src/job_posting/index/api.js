@@ -11,10 +11,8 @@ export async function category() {
   return await (await fetch(`${backendUrl}/categories`)).json();
 }
 
-export async function getSkill(name) {
-  if (!name) return new Promise((resolve, _) => resolve([]));
-
-  return await (await fetch(`${backendUrl}/skill?name=${name}`)).json();
+export async function getSkills() {
+  return await (await fetch(`${backendUrl}/skills`)).json();
 }
 
 export function createQuery(req, isPaging) {
