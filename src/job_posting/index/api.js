@@ -41,8 +41,8 @@ export function parseQuery(queryString) {
     categories: queryParams.getAll("category").flatMap(split).map(Number),
     skillNames: queryParams.getAll("skill").flatMap(split),
     tagIds: queryParams.getAll("tag").flatMap(split).map(Number),
-    minCareer: Number(queryParams.get("minCareer")),
-    maxCareer: Number(queryParams.get("maxCareer")),
+    minCareer: null,
+    maxCareer: null,
   };
 }
 
