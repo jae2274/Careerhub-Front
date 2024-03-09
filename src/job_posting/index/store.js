@@ -41,6 +41,14 @@ function setRequest() {
     });
   };
 
+  const clearCategory = () => {
+    update((request) => {
+      request.categories = [];
+      request.page = initPage;
+      return request;
+    });
+  };
+
   const addSkill = (skillId) => {
     update((request) => {
       if (!request.skillNames.includes(skillId)) {
@@ -91,6 +99,7 @@ function setRequest() {
     setMaxCareer,
     removeCategory,
     addCategory,
+    clearCategory,
     addSkill,
     removeSkill,
     setTag,
