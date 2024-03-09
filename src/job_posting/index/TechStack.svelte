@@ -142,7 +142,7 @@
                 <span>Fail!</span>
               {/await}
             </div>
-            {#if $request.skillNames.length !== 0}
+            {#if $request.skillNames && $request.skillNames.length !== 0}
               <div class="bpaCoL">
                 <h4 class="title">선택한 기술 스택</h4>
                 <div class="lists">
@@ -174,15 +174,17 @@
   {/if}
 
   <div role="presentation" class="sc-ksHpcM jsSzDN">
-    {#each $request.skillNames as skillName}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
-        class="btn_stack cursor_default"
-        on:click={() => removeSkill(skillName)}
-      >
-        <span class="text">{skillName}</span>
-      </div>
-    {/each}
+    {#if $request.skillNames}
+      {#each $request.skillNames as skillName}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div
+          class="btn_stack cursor_default"
+          on:click={() => removeSkill(skillName)}
+        >
+          <span class="text">{skillName}</span>
+        </div>
+      {/each}
+    {/if}
   </div>
 </div>
 

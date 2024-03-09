@@ -5,7 +5,7 @@
   import {category} from "~/job_posting/index/api";
   import {request} from "~/job_posting/index/store";
 
-  $: isSelectAnyone = $request.categories.length > 0;
+  $: isSelectAnyone = $request.categories && $request.categories.length > 0;
   $: promiseCategories = category();
 
   function clearCategoryQuery() {

@@ -12,13 +12,15 @@
     return categoryObjects.map((category) => {
       category.selected = false;
 
-      for (const reqCategory of request.categories) {
-        if (
-          reqCategory.site == category.site &&
-          reqCategory.categoryName == category.categoryName
-        ) {
-          category.selected = true;
-          return category;
+      if (request.categories) {
+        for (const reqCategory of request.categories) {
+          if (
+            reqCategory.site == category.site &&
+            reqCategory.categoryName == category.categoryName
+          ) {
+            category.selected = true;
+            return category;
+          }
         }
       }
 

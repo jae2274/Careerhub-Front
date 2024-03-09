@@ -22,11 +22,7 @@ export function createQuery(req, isPaging) {
   }
 
   if (req) {
-    parts.push(
-      `encoded_query=${encodeURIComponent(
-        btoa(unescape(encodeURIComponent(JSON.stringify(req))))
-      )}`
-    );
+    parts.push(`encoded_query=${encodeURIComponent(base64Encode(req))}`);
   }
 
   const query = parts.join("&");
@@ -37,15 +33,25 @@ export function createQuery(req, isPaging) {
 export function parseQuery(queryString) {
   const queryParams = new URLSearchParams(queryString);
 
-  return {
-    page: initPage,
-    size: 16,
-    categories: queryParams.getAll("category").flatMap(split).map(Number),
-    skillNames: queryParams.getAll("skill").flatMap(split),
-    tagIds: queryParams.getAll("tag").flatMap(split).map(Number),
-    minCareer: null,
-    maxCareer: null,
-  };
+  const encodedQuery = queryParams.get("encoded_query");
+  const req =
+    encodedQuery && encodedQuery.length > 0 ? base64Decode(encodedQuery) : {};
+
+  req.page = initPage;
+  req.size = 16;
+  req.categories = req.categories || [];
+  req.skillNames = req.skillNames || [];
+  req.tagIds = req.tagIds || [];
+
+  return req;
+}
+
+function base64Encode(obj) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+}
+
+function base64Decode(str) {
+  return JSON.parse(decodeURIComponent(escape(atob(str))));
 }
 
 function split(listStr) {
