@@ -23,7 +23,9 @@ export function createQuery(req, isPaging) {
 
   if (req) {
     parts.push(
-      `encoded_query=${btoa(unescape(encodeURIComponent(JSON.stringify(req))))}`
+      `encoded_query=${encodeURIComponent(
+        btoa(unescape(encodeURIComponent(JSON.stringify(req))))
+      )}`
     );
   }
 
