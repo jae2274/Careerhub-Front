@@ -1,6 +1,6 @@
 <script>
   import {link} from "svelte-spa-router";
-  import {getCookie} from "~/cookie.js";
+  import {getCookie, deleteAllCookies} from "~/cookie.js";
 
   $: grantType = getCookie("grant_type");
   $: accessToken = getCookie("access_token");
@@ -11,6 +11,13 @@
   function switchProfileList(isShow) {
     isHidedProfile = !isShow;
     console.log("switchProfileList" + isShow);
+  }
+
+  function logout() {
+    deleteAllCookies();
+    grantType = null;
+    accessToken = null;
+    refreshToken = null;
   }
 </script>
 
@@ -54,7 +61,9 @@
                 <li>
                   <a href="/applications-status/applied">취업축하금 신청</a>
                 </li>
-                <li><button type="button">로그아웃</button></li>
+                <li>
+                  <button type="button" on:click={logout}>로그아웃</button>
+                </li>
               </ul>
             </div>
           </li>
