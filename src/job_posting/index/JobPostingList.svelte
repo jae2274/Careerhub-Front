@@ -32,7 +32,7 @@
     {#await promiseJobPostings}
       <div class="loading">Loading...</div>
     {:then jobPostings}
-      {#each jobPostings.job_postings as jobPosting, index}
+      {#each jobPostings.jobPostings as jobPosting, index}
         <JobPostingItem {jobPosting} delay={index * 200}></JobPostingItem>
       {/each}
     {/await}

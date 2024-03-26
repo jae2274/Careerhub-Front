@@ -8,8 +8,8 @@
   $: imageUrl = jobPosting.imageUrl;
   $: postingId = jobPosting.postingId;
   $: title = jobPosting.title;
-  $: skills = jobPosting.skills;
-  $: categories = jobPosting.categories;
+  $: skills = jobPosting.skills || [];
+  $: categories = jobPosting.categories || [];
   $: site = jobPosting.site;
   $: viewAddress = createViewAddress(jobPosting.addresses);
   $: viewCareer = createViewCareer(jobPosting.minCareer, jobPosting.maxCareer);

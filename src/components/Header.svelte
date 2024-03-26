@@ -1,4 +1,5 @@
 <script>
+  import {authUrl} from "~/const";
   import {link} from "svelte-spa-router";
   import {getCookie, deleteAllCookies} from "~/cookie.js";
 
@@ -69,7 +70,7 @@
           </li>
         {:else}
           <li>
-            <a href="/auth/login" rel="referrer">회원가입/로그인</a>
+            <a href="{authUrl}/auth/login" rel="referrer">회원가입/로그인</a>
           </li>
         {/if}
       </ul>

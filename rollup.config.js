@@ -49,7 +49,8 @@ export default {
   plugins: [
     replace({
       // stringify the object
-      __BACKEND_URL_VARIABLE__: process.env.BACKEND_URL,
+      __BACKEND_URL_VARIABLE__: process.env.BACKEND_URL || "",
+      __AUTH_URL_VARIABLE__: process.env.AUTH_URL || "",
     }),
     svelte({
       compilerOptions: {
