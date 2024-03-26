@@ -1,18 +1,46 @@
-import {backendUrl} from "~/const";
+import {loginUrl, backendUrl} from "~/const";
 import {initPage} from "./store";
+import {getGrantType, getAccessToken} from "~/jwt";
+
+function setAccessToken(header = {}) {
+  const grantType = getGrantType();
+  const accessToken = getAccessToken();
+  if (grantType && accessToken) {
+    header.Authorization = `${grantType} ${accessToken}`;
+  }
+  return header;
+}
+
+function checkHttpStatus(res) {
+  if (res.status === 401) {
+    window.location.href = loginUrl;
+  }
+}
 
 export async function findJobPostings(requestStr) {
-  return await (
-    await fetch(`${backendUrl}/job_postings${requestStr || ""}`)
-  ).json();
+  const headers = setAccessToken();
+  const res = await fetch(`${backendUrl}/job_postings${requestStr || ""}`, {
+    headers,
+  });
+  checkHttpStatus(res);
+
+  return await res.json();
 }
 
 export async function category() {
-  return await (await fetch(`${backendUrl}/categories`)).json();
+  const headers = setAccessToken();
+  const res = await fetch(`${backendUrl}/categories`, {headers});
+  checkHttpStatus(res);
+
+  return await res.json();
 }
 
 export async function getSkills() {
-  return await (await fetch(`${backendUrl}/skills`)).json();
+  const headers = setAccessToken();
+  const res = await fetch(`${backendUrl}/skills`, {headers});
+  checkHttpStatus(res);
+
+  return await res.json();
 }
 
 export function createQuery(req, isPaging) {
