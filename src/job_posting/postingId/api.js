@@ -1,4 +1,4 @@
-import {backendUrl} from "~/const";
+import {loginUrl, backendUrl} from "~/const";
 import {getGrantType, getAccessToken} from "~/jwt";
 
 function setAccessToken(header = {}) {
@@ -18,7 +18,9 @@ function checkHttpStatus(res) {
 
 export async function getPostingDetail(site, postingId) {
   const headers = setAccessToken();
-  return await (
-    await fetch(`${backendUrl}/job_postings/${site}/${postingId}`, {headers})
-  ).json();
+  const res = await fetch(`${backendUrl}/job_postings/${site}/${postingId}`, {
+    headers,
+  });
+  checkHttpStatus(res);
+  return await res.json();
 }
