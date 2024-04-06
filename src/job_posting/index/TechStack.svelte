@@ -17,13 +17,18 @@
     }
 
     return skills.filter((skill) => {
-      return skill.includes(keywork);
+      for (const skillName of skill.skillNames) {
+        if (skillName.includes(keywork)) {
+          return true;
+        }
+      }
+      return false;
     });
   }
 
-  function addSkill(skillName) {
+  function addSkill(skillNames) {
     searchedSkills = [];
-    request.addSkill(skillName);
+    request.addSkill(skillNames);
   }
 
   function removeSkill(skillName) {
@@ -128,13 +133,17 @@
                 <span>Finding...</span>
               {:then skills}
                 <ul class="sc-igXgud fkcmCF">
-                  {#each skills as skillName}
+                  {#each skills as skill}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <li
                       class="sc-JEhMO hWoVqF"
-                      on:click={() => addSkill(skillName)}
+                      on:click={() => addSkill(skill.skillNames)}
                     >
-                      <span>{skillName}</span>
+                      <span>
+                        {#each skill.skillNames as skillName, i}
+                          {i !== 0 ? " / " : ""}{skillName}
+                        {/each}
+                      </span>
                     </li>
                   {/each}
                 </ul>
@@ -146,14 +155,17 @@
               <div class="bpaCoL">
                 <h4 class="title">선택한 기술 스택</h4>
                 <div class="lists">
-                  {#each $request.skillNames as skillName}
+                  {#each $request.skillNames as skillNames}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div
                       class="btn_stack cursor_default"
-                      on:click={() => removeSkill(skillName)}
+                      on:click={() => removeSkill(skillNames)}
                     >
-                      <span class="text">{skillName}</span><button
-                        class="delete_btn"
+                      <span class="text">
+                        {#each skillNames as skillName, i}
+                          {i !== 0 ? " / " : ""}{skillName}
+                        {/each}
+                      </span><button class="delete_btn"
                         ><span class="blind">삭제</span></button
                       >
                     </div>
@@ -175,13 +187,17 @@
 
   <div role="presentation" class="sc-ksHpcM jsSzDN">
     {#if $request.skillNames}
-      {#each $request.skillNames as skillName}
+      {#each $request.skillNames as skillNames}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="btn_stack cursor_default"
-          on:click={() => removeSkill(skillName)}
+          on:click={() => removeSkill(skillNames)}
         >
-          <span class="text">{skillName}</span>
+          <span class="text">
+            {#each skillNames as skillName, i}
+              {i !== 0 ? " / " : ""}{skillName}
+            {/each}
+          </span>
         </div>
       {/each}
     {/if}

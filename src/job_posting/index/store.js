@@ -49,12 +49,13 @@ function setRequest() {
     });
   };
 
-  const addSkill = (skillId) => {
+  const addSkill = (skillNames) => {
     update((request) => {
-      if (!request.skillNames.includes(skillId)) {
-        request.skillNames.push(skillId);
-        request.page = initPage;
+      for (const requestSkill of request.skillNames) {
+        if (requestSkill == skillNames) return request;
       }
+      request.skillNames.push(skillNames);
+      request.page = initPage;
       return request;
     });
   };
