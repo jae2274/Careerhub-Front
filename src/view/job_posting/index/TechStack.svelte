@@ -1,6 +1,6 @@
 <script>
-  import {getSkills} from "~/job_posting/index/api";
-  import {request} from "~/job_posting/index/store";
+  import {getSkills} from "~/view/job_posting/index/api";
+  import {request} from "~/view/job_posting/index/store";
 
   let skillKeyword = "";
   let isSkillHided = true;

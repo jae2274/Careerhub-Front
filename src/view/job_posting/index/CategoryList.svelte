@@ -1,5 +1,5 @@
 <script>
-  import {request} from "~/job_posting/index/store";
+  import {request} from "~/view/job_posting/index/store";
 
   export let categoryBySite;
 

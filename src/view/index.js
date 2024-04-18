@@ -1,5 +1,5 @@
-import JobPostingDetail from "~/routes/job_posting/postingId.svelte";
-import JobPostingList from "~/routes/job_posting/index.svelte";
+import JobPostingDetail from "~/view/job_posting/postingId.svelte";
+import JobPostingList from "~/view/job_posting/index.svelte";
 
 export default {
   "/job_posting": JobPostingList,

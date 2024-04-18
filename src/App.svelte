@@ -3,11 +3,11 @@
   import {onMount, onDestroy} from "svelte";
   import Header from "~/components/Header.svelte";
 
-  import routes from "~/routes";
+  import view from "~/view";
 </script>
 
 <Header></Header>
-<Router {routes} restoreScrollState={true}></Router>
+<Router routes={view} restoreScrollState={true}></Router>
 
 <style>
 </style>

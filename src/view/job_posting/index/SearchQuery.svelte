@@ -1,9 +1,9 @@
 <script>
-  import CategoryList from "~/job_posting/index/CategoryList.svelte";
-  import TechStack from "~/job_posting/index/TechStack.svelte";
-  import CareerQuery from "~/job_posting/index/CareerQuery.svelte";
-  import {category} from "~/job_posting/index/api";
-  import {request} from "~/job_posting/index/store";
+  import CategoryList from "~/view/job_posting/index/CategoryList.svelte";
+  import TechStack from "~/view/job_posting/index/TechStack.svelte";
+  import CareerQuery from "~/view/job_posting/index/CareerQuery.svelte";
+  import {category} from "~/view/job_posting/index/api";
+  import {request} from "~/view/job_posting/index/store";
 
   $: isSelectAnyone = $request.categories && $request.categories.length > 0;
   $: promiseCategories = category();
