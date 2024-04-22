@@ -1,6 +1,7 @@
 <script>
   import {link} from "svelte-spa-router";
   import {getCookie, deleteAllCookies} from "~/cookie.js";
+  import {getUsernameFromCookie} from "~/httputils.js";
 
   $: grantType = getCookie("grant_type");
   $: accessToken = getCookie("access_token");
@@ -41,7 +42,9 @@
             on:mouseleave={() => switchProfileList(false)}
           >
             <div class="sc-e0579984-7 cXmSGh">
-              <button type="button">TODO USER</button><span>님</span><svg
+              <button type="button">{getUsernameFromCookie()}</button><span
+                >님</span
+              ><svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -239,5 +242,30 @@
   a {
     color: rgb(0, 0, 0);
     text-decoration: none;
+  }
+  .iEFHAz li > a,
+  .iEFHAz li button {
+    display: inline-block;
+    position: relative;
+    padding: 10px 0px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: -0.5px;
+    color: rgb(34, 34, 34);
+  }
+  .cXmSGh button {
+    width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  button {
+    border: none;
+    border-radius: 0px;
+    background: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-family: inherit;
   }
 </style>

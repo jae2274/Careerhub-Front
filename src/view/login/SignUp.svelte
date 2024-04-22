@@ -1,10 +1,5 @@
 <script>
   import {signUp, signIn} from "~/view/login/api";
-  import {
-    setGrantTypeToCookie,
-    setAccessTokenToCookie,
-    setRefreshTokenToCookie,
-  } from "~/httputils";
   export let authToken;
   export let email;
   export let agreements;
@@ -14,12 +9,11 @@
   $: totalAgree = agreements.reduce((acc, cur) => {
     return acc && cur.isAgree;
   }, true);
-  $: totalRequired = agreements.reduce((acc, cur) => {
-    if (cur.required) {
-      return acc && cur.isAgree;
-    }
-    return acc;
+  $: reqiredAgreements = agreements.filter((agreement) => agreement.required);
+  $: totalRequired = reqiredAgreements.reduce((acc, cur) => {
+    return acc && cur.isAgree;
   }, true);
+  $: isValid = totalRequired && username;
 
   function switchTotalAgree() {
     if (totalAgree) {
@@ -38,23 +32,20 @@
   async function signUpAction() {
     if (checkValid()) {
       await signUp(authToken, username, agreements);
-      const res = await signIn(authToken);
-
-      if (res.signInStatus == "success") {
-        setGrantTypeToCookie(res.successRes.grantType);
-        setAccessTokenToCookie(res.successRes.accessToken);
-        setRefreshTokenToCookie(res.successRes.refreshToken);
-
-        window.location.href = backUrl;
-      } else if (res.signInStatus == "new_user") {
-        email = res.newUserRes.email;
-        agreements = res.newUserRes.agreements;
-        isNewUser = true;
-      }
+      window.postMessage(authToken);
     }
   }
 
   function checkValid() {
+    if (!username) {
+      alert("이름을 입력해주세요.");
+      return false;
+    }
+
+    if (!totalRequired) {
+      alert("필수 항목에 동의해주세요.");
+      return false;
+    }
     return true;
   }
 </script>
@@ -132,8 +123,8 @@
         {/each}
       </div>
       <button
-        aria-disabled={totalRequired ? "false" : "true"}
-        type="submit"
+        aria-disabled={isValid ? "false" : "true"}
+        type="button"
         class="sc-4581d57a-0 REWlo"
         on:click={signUpAction}>회원가입</button
       >
@@ -255,6 +246,7 @@
   .REWlo[aria-disabled="true"] {
     color: rgb(255, 255, 255);
     background-color: rgb(196, 196, 196);
+    cursor: not-allowed;
   }
   .eUPBEx > button {
     width: 100%;
@@ -270,6 +262,7 @@
     border-radius: 8px;
     color: rgb(255, 255, 255);
     background-color: rgb(0, 0, 0);
+    cursor: pointer;
   }
   .hZseKN .required {
     color: rgb(240, 68, 82);

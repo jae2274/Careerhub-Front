@@ -4,6 +4,8 @@
     setGrantTypeToCookie,
     setAccessTokenToCookie,
     setRefreshTokenToCookie,
+    setUsernameToCookie,
+    setRolesToCookie,
   } from "~/httputils";
   import SignIn from "~/view/login/SignIn.svelte";
   import SignUp from "~/view/login/SignUp.svelte";
@@ -22,6 +24,8 @@
       setGrantTypeToCookie(res.successRes.grantType);
       setAccessTokenToCookie(res.successRes.accessToken);
       setRefreshTokenToCookie(res.successRes.refreshToken);
+      setUsernameToCookie(res.successRes.username);
+      setRolesToCookie(res.successRes.roles);
 
       window.location.href = backUrl;
     } else if (res.signInStatus == "new_user") {

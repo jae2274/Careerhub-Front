@@ -1,5 +1,22 @@
 import {getCookie, setCookie} from "~/cookie.js";
 
+//TODO: jwt token 및 유저정보 등의 정보 저장에 대한 다른 방법을 찾아보자.
+export function setUsernameToCookie(username) {
+  setCookie("username", username);
+}
+
+export function getUsernameFromCookie() {
+  return getCookie("username");
+}
+
+export function setRolesToCookie(roles) {
+  setCookie("roles", roles.join(","));
+}
+
+export function getRolesFromCookie() {
+  return getCookie("roles").split(",");
+}
+
 export function setGrantTypeToCookie(grantType) {
   setCookie("grant_type", grantType);
 }
