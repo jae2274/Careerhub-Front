@@ -1,4 +1,5 @@
 <script>
+  import Header from "~/components/Header.svelte";
   import JobPostingList from "~/view/job_posting/index/JobPostingList.svelte";
   import SearchQuery from "~/view/job_posting/index/SearchQuery.svelte";
   import {onMount, onDestroy} from "svelte";
@@ -29,6 +30,7 @@
   }
 </script>
 
+<Header />
 <div class="hdErFU" bind:this={listElement}>
   <SearchQuery></SearchQuery>
   <JobPostingList />

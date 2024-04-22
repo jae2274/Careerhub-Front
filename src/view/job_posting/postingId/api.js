@@ -1,23 +1,8 @@
-import {loginUrl, backendUrl} from "~/const";
-import {getGrantType, getAccessToken} from "~/jwt";
-
-function setAccessToken(header = {}) {
-  const grantType = getGrantType();
-  const accessToken = getAccessToken();
-  if (grantType && accessToken) {
-    header.Authorization = `${grantType} ${accessToken}`;
-  }
-  return header;
-}
-
-function checkHttpStatus(res) {
-  if (res.status === 401) {
-    window.location.href = loginUrl;
-  }
-}
+import {backendUrl} from "~/const";
+import {setAccessTokenToHeader, checkHttpStatus} from "~/httputils";
 
 export async function getPostingDetail(site, postingId) {
-  const headers = setAccessToken();
+  const headers = setAccessTokenToHeader();
   const res = await fetch(`${backendUrl}/job_postings/${site}/${postingId}`, {
     headers,
   });

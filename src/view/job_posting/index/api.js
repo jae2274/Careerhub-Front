@@ -1,24 +1,9 @@
-import {loginUrl, backendUrl} from "~/const";
+import {backendUrl} from "~/const";
 import {initPage} from "./store";
-import {getGrantType, getAccessToken} from "~/jwt";
-
-function setAccessToken(header = {}) {
-  const grantType = getGrantType();
-  const accessToken = getAccessToken();
-  if (grantType && accessToken) {
-    header.Authorization = `${grantType} ${accessToken}`;
-  }
-  return header;
-}
-
-function checkHttpStatus(res) {
-  if (res.status === 401) {
-    window.location.href = loginUrl;
-  }
-}
+import {setAccessTokenToHeader, checkHttpStatus} from "~/httputils";
 
 export async function findJobPostings(requestStr) {
-  const headers = setAccessToken();
+  const headers = setAccessTokenToHeader();
   const res = await fetch(`${backendUrl}/job_postings${requestStr || ""}`, {
     headers,
   });
@@ -28,7 +13,7 @@ export async function findJobPostings(requestStr) {
 }
 
 export async function category() {
-  const headers = setAccessToken();
+  const headers = setAccessTokenToHeader();
   const res = await fetch(`${backendUrl}/categories`, {headers});
   checkHttpStatus(res);
 
@@ -36,7 +21,7 @@ export async function category() {
 }
 
 export async function getSkills() {
-  const headers = setAccessToken();
+  const headers = setAccessTokenToHeader();
   const res = await fetch(`${backendUrl}/skills`, {headers});
   checkHttpStatus(res);
 
