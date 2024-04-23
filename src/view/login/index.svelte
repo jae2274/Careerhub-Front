@@ -9,13 +9,15 @@
   } from "~/httputils";
   import SignIn from "~/view/login/SignIn.svelte";
   import SignUp from "~/view/login/SignUp.svelte";
+  import RequireAgreement from "~/view/login/RequireAgreement.svelte";
 
   const backUrl = document.referrer | "/";
-  $: isNewUser = false;
+  $: status = "sign_in";
   $: authToken = "";
   $: agreements = [];
   $: email = "";
   const apiResProms = getAuthCodeUrls();
+
   window.addEventListener("message", async function (e) {
     authToken = e.data;
     const res = await signIn(e.data);
@@ -29,9 +31,12 @@
 
       window.location.href = backUrl;
     } else if (res.signInStatus == "new_user") {
-      email = res.newUserRes.email;
       agreements = res.newUserRes.agreements;
-      isNewUser = true;
+
+      status = "new_user";
+    } else if (res.signInStatus == "require_agreement") {
+      agreements = res.requireAgreementRes.agreements;
+      status = "require_agreement";
     }
 
     console.log(res);
@@ -41,9 +46,11 @@
 {#await apiResProms}
   <p>Loading...</p>
 {:then apiRes}
-  {#if isNewUser}
+  {#if status == "new_user"}
     <SignUp {authToken} {email} {agreements} />
-  {:else}
+  {:else if status == "sign_in"}
     <SignIn authCodeUrls={apiRes.authCodeUrls} />
+  {:else if status == "require_agreement"}
+    <RequireAgreement {authToken} {agreements} />
   {/if}
 {/await}

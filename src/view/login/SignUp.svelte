@@ -1,10 +1,10 @@
 <script>
-  import {signUp, signIn} from "~/view/login/api";
+  import {signUp, getUserInfo} from "~/view/login/api";
   export let authToken;
-  export let email;
   export let agreements;
 
   const backUrl = document.referrer | "/";
+  $: email = "";
   $: username = "";
   $: totalAgree = agreements.reduce((acc, cur) => {
     return acc && cur.isAgree;
@@ -14,6 +14,11 @@
     return acc && cur.isAgree;
   }, true);
   $: isValid = totalRequired && username;
+
+  const userInfoProms = getUserInfo(authToken).then((res) => {
+    email = res.email;
+    username = res.username;
+  });
 
   function switchTotalAgree() {
     if (totalAgree) {
@@ -50,87 +55,91 @@
   }
 </script>
 
-<div class="sc-449546b7-0 fNoeJZ">
-  <h1><strong>회원가입</strong></h1>
-  <form>
-    <div class="sc-449546b7-8 eUPBEx">
-      <div class="sc-7ed7b6f6-0 gljHiu sc-449546b7-2 fltwWN">
-        <label for="email"
-          >이메일<em class="sc-1f8961c5-1 kkTTBk"
-            ><span class="blind">필수</span></em
-          ></label
-        ><input
-          aria-disabled="false"
-          aria-invalid="true"
-          id="email"
-          placeholder="이메일을 입력해 주세요."
-          type="text"
-          name="email"
-          value={email}
-          disabled
-        />
-      </div>
-      <div class="sc-7ed7b6f6-0 gljHiu sc-449546b7-3 laohHo">
-        <label for="username"
-          >이름<em class="sc-1f8961c5-1 kkTTBk"
-            ><span class="blind">필수</span></em
-          ></label
-        ><input
-          aria-disabled="false"
-          aria-invalid="true"
-          id="username"
-          maxlength="15"
-          placeholder="이름을 입력해주세요."
-          type="text"
-          name="username"
-          bind:value={username}
-        />
-      </div>
-      <div class="sc-449546b7-5 hZseKN">
-        <div class="sc-7ed7b6f6-0 gljHiu">
-          <input
-            id="totalAgree"
-            class="sc-bcPKhP icoaXV"
-            type="checkbox"
-            name="totalAgree"
-            bind:checked={totalAgree}
-            on:click={switchTotalAgree}
-          /><label for="totalAgree"
-            ><strong>전체 동의</strong><em class="optional">
-              (선택 항목에 대한 동의 포함)</em
+{#await userInfoProms}
+  <p>Loading...</p>
+{:then userInfo}
+  <div class="sc-449546b7-0 fNoeJZ">
+    <h1><strong>회원가입</strong></h1>
+    <form>
+      <div class="sc-449546b7-8 eUPBEx">
+        <div class="sc-7ed7b6f6-0 gljHiu sc-449546b7-2 fltwWN">
+          <label for="email"
+            >이메일<em class="sc-1f8961c5-1 kkTTBk"
+              ><span class="blind">필수</span></em
             ></label
-          >
+          ><input
+            aria-disabled="false"
+            aria-invalid="true"
+            id="email"
+            placeholder="이메일을 입력해 주세요."
+            type="text"
+            name="email"
+            value={email}
+            disabled
+          />
         </div>
-        <hr class="sc-449546b7-7 gDQzLl" />
-        {#each agreements as agreement}
-          <div class="sc-449546b7-6 cIWAOJ">
-            <div class="sc-7ed7b6f6-0 gljHiu">
-              <input
-                id="fifteenYearOver"
-                class="sc-bcPKhP icoaXV"
-                type="checkbox"
-                name="fifteenYearOver"
-                bind:checked={agreement.isAgree}
-              /><label for="fifteenYearOver"
-                >{agreement.summary}<em class="required">
-                  {#if agreement.required}
-                    &nbsp;(필수)
-                  {/if}
-                </em></label
-              >
-            </div>
+        <div class="sc-7ed7b6f6-0 gljHiu sc-449546b7-3 laohHo">
+          <label for="username"
+            >이름<em class="sc-1f8961c5-1 kkTTBk"
+              ><span class="blind">필수</span></em
+            ></label
+          ><input
+            aria-disabled="false"
+            aria-invalid="true"
+            id="username"
+            maxlength="15"
+            placeholder="이름을 입력해주세요."
+            type="text"
+            name="username"
+            bind:value={username}
+          />
+        </div>
+        <div class="sc-449546b7-5 hZseKN">
+          <div class="sc-7ed7b6f6-0 gljHiu">
+            <input
+              id="totalAgree"
+              class="sc-bcPKhP icoaXV"
+              type="checkbox"
+              name="totalAgree"
+              bind:checked={totalAgree}
+              on:click={switchTotalAgree}
+            /><label for="totalAgree"
+              ><strong>전체 동의</strong><em class="optional">
+                (선택 항목에 대한 동의 포함)</em
+              ></label
+            >
           </div>
-        {/each}
+          <hr class="sc-449546b7-7 gDQzLl" />
+          {#each agreements as agreement}
+            <div class="sc-449546b7-6 cIWAOJ">
+              <div class="sc-7ed7b6f6-0 gljHiu">
+                <input
+                  id="fifteenYearOver"
+                  class="sc-bcPKhP icoaXV"
+                  type="checkbox"
+                  name="fifteenYearOver"
+                  bind:checked={agreement.isAgree}
+                /><label for="fifteenYearOver"
+                  >{agreement.summary}<em class="required">
+                    {#if agreement.required}
+                      &nbsp;(필수)
+                    {/if}
+                  </em></label
+                >
+              </div>
+            </div>
+          {/each}
+        </div>
+        <button
+          aria-disabled={isValid ? "false" : "true"}
+          type="button"
+          class="sc-4581d57a-0 REWlo"
+          on:click={signUpAction}>회원가입</button
+        >
       </div>
-      <button
-        aria-disabled={isValid ? "false" : "true"}
-        type="button"
-        class="sc-4581d57a-0 REWlo"
-        on:click={signUpAction}>회원가입</button
-      >
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+{/await}
 
 <style>
   div {
