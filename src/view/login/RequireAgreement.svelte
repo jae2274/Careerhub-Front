@@ -1,27 +1,20 @@
 <script>
   export let authToken;
-  export let requiredAgreements;
+  export let additionalAgreements;
 
-  $: totalAgree = requiredAgreements.reduce((acc, cur) => {
+  $: totalAgree = additionalAgreements.reduce((acc, cur) => {
     return acc && cur.isAgree;
   }, true);
 
   function signInAction() {
-    window.postMessage(authToken);
+    window.postMessage({authToken, additionalAgreements});
   }
 
   function switchTotalAgree() {
-    if (totalAgree) {
-      requiredAgreements = requiredAgreements.map((agreement) => {
-        agreement.isAgree = false;
-        return agreement;
-      });
-    } else {
-      requiredAgreements = requiredAgreements.map((agreement) => {
-        agreement.isAgree = true;
-        return agreement;
-      });
-    }
+    additionalAgreements = additionalAgreements.map((agreement) => {
+      agreement.isAgree = !totalAgree;
+      return agreement;
+    });
   }
 </script>
 
@@ -41,7 +34,7 @@
     >
   </div>
   <hr class="sc-449546b7-7 gDQzLl" />
-  {#each requiredAgreements as agreement}
+  {#each additionalAgreements as agreement}
     <div class="sc-449546b7-6 cIWAOJ">
       <div class="sc-7ed7b6f6-0 gljHiu">
         <input

@@ -11,13 +11,13 @@ export async function getAuthCodeUrls() {
   return await res.json();
 }
 
-export async function signIn(authToken) {
+export async function signIn(authToken, additionalAgreements = []) {
   const res = await fetch(`${authUrl}/auth/sign-in`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({authToken}),
+    body: JSON.stringify({authToken, additionalAgreements}),
     mode: "cors",
     credentials: "include",
   });

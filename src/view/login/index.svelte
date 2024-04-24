@@ -15,12 +15,16 @@
   $: status = "sign_in";
   $: authToken = "";
   $: agreements = [];
+  $: additionalAgreements = [];
   $: email = "";
+  $: username = "";
+
   const apiResProms = getAuthCodeUrls();
 
   window.addEventListener("message", async function (e) {
-    authToken = e.data;
-    const res = await signIn(e.data);
+    authToken = e.data.authToken;
+    additionalAgreements = e.data.additionalAgreements || [];
+    const res = await signIn(authToken, additionalAgreements);
 
     if (res.signInStatus == "success") {
       setGrantTypeToCookie(res.successRes.grantType);
@@ -32,11 +36,13 @@
       window.location.href = backUrl;
     } else if (res.signInStatus == "new_user") {
       agreements = res.newUserRes.agreements;
+      email = res.newUserRes.email;
+      username = res.newUserRes.username;
 
       status = "new_user";
-    } else if (res.signInStatus == "require_agreement") {
-      agreements = res.requireAgreementRes.agreements;
-      status = "require_agreement";
+    } else if (res.signInStatus == "necessary_agreements") {
+      additionalAgreements = res.necessaryAgreementsRes.agreements;
+      status = "necessary_agreements";
     }
 
     console.log(res);
@@ -47,10 +53,10 @@
   <p>Loading...</p>
 {:then apiRes}
   {#if status == "new_user"}
-    <SignUp {authToken} {email} {agreements} />
+    <SignUp {authToken} {email} {agreements} {username} />
   {:else if status == "sign_in"}
     <SignIn authCodeUrls={apiRes.authCodeUrls} />
-  {:else if status == "require_agreement"}
-    <RequireAgreement {authToken} {agreements} />
+  {:else if status == "necessary_agreements"}
+    <RequireAgreement {authToken} {additionalAgreements} />
   {/if}
 {/await}
