@@ -1,20 +1,13 @@
 <script>
+  import {agreements} from "~/view/login/store";
   export let authToken;
-  export let additionalAgreements;
 
-  $: totalAgree = additionalAgreements.reduce((acc, cur) => {
+  $: totalAgree = $agreements.reduce((acc, cur) => {
     return acc && cur.isAgree;
   }, true);
 
   function signInAction() {
-    window.postMessage({authToken, additionalAgreements});
-  }
-
-  function switchTotalAgree() {
-    additionalAgreements = additionalAgreements.map((agreement) => {
-      agreement.isAgree = !totalAgree;
-      return agreement;
-    });
+    window.postMessage({authToken, additionalAgreements: $agreements});
   }
 </script>
 
@@ -26,7 +19,7 @@
       type="checkbox"
       name="totalAgree"
       bind:checked={totalAgree}
-      on:click={switchTotalAgree}
+      on:click={() => agreements.switchTotalAgreements(!totalAgree)}
     /><label for="totalAgree"
       ><strong>전체 동의</strong><em class="optional">
         (선택 항목에 대한 동의 포함)</em
@@ -34,7 +27,7 @@
     >
   </div>
   <hr class="sc-449546b7-7 gDQzLl" />
-  {#each additionalAgreements as agreement}
+  {#each $agreements as agreement}
     <div class="sc-449546b7-6 cIWAOJ">
       <div class="sc-7ed7b6f6-0 gljHiu">
         <input
@@ -43,6 +36,7 @@
           type="checkbox"
           name="fifteenYearOver"
           bind:checked={agreement.isAgree}
+          on:click={() => agreements.switchAgreement(agreement.agreementId)}
         /><label for="fifteenYearOver"
           >{agreement.summary}<em class="required">
             {#if agreement.required}

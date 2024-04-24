@@ -10,12 +10,11 @@
   import SignIn from "~/view/login/SignIn.svelte";
   import SignUp from "~/view/login/SignUp.svelte";
   import RequireAgreement from "~/view/login/RequireAgreement.svelte";
+  import {agreements} from "~/view/login/store";
 
   const backUrl = document.referrer | "/";
   $: status = "sign_in";
   $: authToken = "";
-  $: agreements = [];
-  $: additionalAgreements = [];
   $: email = "";
   $: username = "";
 
@@ -23,7 +22,7 @@
 
   window.addEventListener("message", async function (e) {
     authToken = e.data.authToken;
-    additionalAgreements = e.data.additionalAgreements || [];
+    const additionalAgreements = e.data.additionalAgreements || [];
     const res = await signIn(authToken, additionalAgreements);
 
     if (res.signInStatus == "success") {
@@ -35,13 +34,13 @@
 
       window.location.href = backUrl;
     } else if (res.signInStatus == "new_user") {
-      agreements = res.newUserRes.agreements;
       email = res.newUserRes.email;
       username = res.newUserRes.username;
 
+      agreements.set(res.newUserRes.agreements);
       status = "new_user";
     } else if (res.signInStatus == "necessary_agreements") {
-      additionalAgreements = res.necessaryAgreementsRes.agreements;
+      agreements.set(res.necessaryAgreementsRes.agreements);
       status = "necessary_agreements";
     }
 
@@ -57,6 +56,6 @@
   {:else if status == "sign_in"}
     <SignIn authCodeUrls={apiRes.authCodeUrls} />
   {:else if status == "necessary_agreements"}
-    <RequireAgreement {authToken} {additionalAgreements} />
+    <RequireAgreement {authToken} />
   {/if}
 {/await}

@@ -1,37 +1,25 @@
 <script>
   import {signUp} from "~/view/login/api";
+  import {agreements} from "~/view/login/store";
+
   export let authToken;
-  export let agreements;
 
   const backUrl = document.referrer | "/";
   export let email;
   export let username;
-  $: totalAgree = agreements.reduce((acc, cur) => {
+  $: totalAgree = $agreements.reduce((acc, cur) => {
     return acc && cur.isAgree;
   }, true);
-  $: reqiredAgreements = agreements.filter((agreement) => agreement.required);
-  $: totalRequired = reqiredAgreements.reduce((acc, cur) => {
-    return acc && cur.isAgree;
-  }, true);
+  $: totalRequired = $agreements
+    .filter((agreement) => agreement.required)
+    .reduce((acc, cur) => {
+      return acc && cur.isAgree;
+    }, true);
   $: isValid = totalRequired && username;
-
-  function switchTotalAgree() {
-    if (totalAgree) {
-      agreements = agreements.map((agreement) => {
-        agreement.isAgree = false;
-        return agreement;
-      });
-    } else {
-      agreements = agreements.map((agreement) => {
-        agreement.isAgree = true;
-        return agreement;
-      });
-    }
-  }
 
   async function signUpAction() {
     if (checkValid()) {
-      await signUp(authToken, username, agreements);
+      await signUp(authToken, username, $agreements);
       window.postMessage({authToken});
     }
   }
@@ -94,7 +82,7 @@
             type="checkbox"
             name="totalAgree"
             bind:checked={totalAgree}
-            on:click={switchTotalAgree}
+            on:click={() => agreements.switchTotalAgreements(!totalAgree)}
           /><label for="totalAgree"
             ><strong>전체 동의</strong><em class="optional">
               (선택 항목에 대한 동의 포함)</em
@@ -102,7 +90,7 @@
           >
         </div>
         <hr class="sc-449546b7-7 gDQzLl" />
-        {#each agreements as agreement}
+        {#each $agreements as agreement}
           <div class="sc-449546b7-6 cIWAOJ">
             <div class="sc-7ed7b6f6-0 gljHiu">
               <input
@@ -111,6 +99,8 @@
                 type="checkbox"
                 name="fifteenYearOver"
                 bind:checked={agreement.isAgree}
+                on:click={() =>
+                  agreements.switchAgreement(agreement.agreementId)}
               /><label for="fifteenYearOver"
                 >{agreement.summary}<em class="required">
                   {#if agreement.required}
