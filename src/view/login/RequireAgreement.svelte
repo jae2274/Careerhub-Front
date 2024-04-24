@@ -1,56 +1,60 @@
 <script>
+  import Agreements from "~/view/login/Agreements.svelte";
+
   import {agreements} from "~/view/login/store";
   export let authToken;
 
-  $: totalAgree = $agreements.reduce((acc, cur) => {
-    return acc && cur.isAgree;
-  }, true);
+  $: totalRequired = $agreements
+    .filter((agreement) => agreement.required)
+    .reduce((acc, cur) => {
+      return acc && cur.isAgree;
+    }, true);
 
   function signInAction() {
-    window.postMessage({authToken, additionalAgreements: $agreements});
+    if (checkValid()) {
+      window.postMessage({authToken, additionalAgreements: $agreements});
+    }
+  }
+
+  function checkValid() {
+    if (!totalRequired) {
+      alert("필수 항목에 동의해주세요.");
+      return false;
+    }
+    return true;
   }
 </script>
 
-<div class="sc-449546b7-5 hZseKN">
-  <div class="sc-7ed7b6f6-0 gljHiu">
-    <input
-      id="totalAgree"
-      class="sc-bcPKhP icoaXV"
-      type="checkbox"
-      name="totalAgree"
-      bind:checked={totalAgree}
-      on:click={() => agreements.switchTotalAgreements(!totalAgree)}
-    /><label for="totalAgree"
-      ><strong>전체 동의</strong><em class="optional">
-        (선택 항목에 대한 동의 포함)</em
-      ></label
-    >
-  </div>
-  <hr class="sc-449546b7-7 gDQzLl" />
-  {#each $agreements as agreement}
-    <div class="sc-449546b7-6 cIWAOJ">
-      <div class="sc-7ed7b6f6-0 gljHiu">
-        <input
-          id="fifteenYearOver"
-          class="sc-bcPKhP icoaXV"
-          type="checkbox"
-          name="fifteenYearOver"
-          bind:checked={agreement.isAgree}
-          on:click={() => agreements.switchAgreement(agreement.agreementId)}
-        /><label for="fifteenYearOver"
-          >{agreement.summary}<em class="required">
-            {#if agreement.required}
-              &nbsp;(필수)
-            {/if}
-          </em></label
-        >
-      </div>
-    </div>
-  {/each}
-</div>
+<h2>아래 항목에 대한 추가 동의를 진행해주세요</h2>
+<Agreements />
 <button
-  aria-disabled={totalAgree ? "false" : "true"}
+  aria-disabled={totalRequired ? "false" : "true"}
   type="button"
   class="sc-4581d57a-0 REWlo"
   on:click={signInAction}>로그인</button
 >
+
+<style>
+  .REWlo:disabled,
+  .REWlo[aria-disabled="true"] {
+    color: rgb(255, 255, 255);
+    background-color: rgb(196, 196, 196);
+    cursor: not-allowed;
+  }
+  .eUPBEx > button {
+    width: 100%;
+  }
+
+  .REWlo {
+    padding: 0px 16px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    height: 56px;
+    min-width: 210px;
+    border-radius: 8px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    cursor: pointer;
+  }
+</style>
