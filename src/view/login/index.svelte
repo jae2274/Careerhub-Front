@@ -12,7 +12,8 @@
   import RequireAgreement from "~/view/login/RequireAgreement.svelte";
   import {agreements} from "~/view/login/store";
 
-  const backUrl = document.referrer ? document.referrer : "/";
+  import {pop} from "svelte-spa-router";
+
   $: status = "sign_in";
   $: authToken = "";
   $: email = "";
@@ -32,7 +33,7 @@
       setUsernameToCookie(res.successRes.username);
       setRolesToCookie(res.successRes.roles);
 
-      window.location.href = backUrl;
+      pop();
     } else if (res.signInStatus == "new_user") {
       email = res.newUserRes.email;
       username = res.newUserRes.username;
