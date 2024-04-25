@@ -12,7 +12,7 @@
   import RequireAgreement from "~/view/login/RequireAgreement.svelte";
   import {agreements} from "~/view/login/store";
 
-  const backUrl = document.referrer | "/";
+  const backUrl = document.referrer ? document.referrer : "/";
   $: status = "sign_in";
   $: authToken = "";
   $: email = "";
