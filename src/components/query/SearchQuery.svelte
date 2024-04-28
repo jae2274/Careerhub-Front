@@ -1,15 +1,15 @@
 <script>
-  import CategoryList from "~/view/job_posting/index/CategoryList.svelte";
-  import TechStack from "~/view/job_posting/index/TechStack.svelte";
-  import CareerQuery from "~/view/job_posting/index/CareerQuery.svelte";
-  import {category} from "~/view/job_posting/index/api";
-  import {request} from "~/view/job_posting/index/store";
+  import CategoryList from "~/components/query/CategoryList.svelte";
+  import TechStack from "~/components/query/TechStack.svelte";
+  import CareerQuery from "~/components/query/CareerQuery.svelte";
+  import {category} from "~/components/query/api";
+  import {query} from "~/components/query/store";
 
-  $: isSelectAnyone = $request.categories && $request.categories.length > 0;
+  $: isSelectAnyone = $query.categories && $query.categories.length > 0;
   $: promiseCategories = category();
 
   function clearCategoryQuery() {
-    request.clearCategory();
+    query.clearCategory();
   }
 </script>
 
@@ -18,12 +18,14 @@
     {#await promiseCategories}
       <span>Loading...</span>
     {:then categories}
-      <button
-        type="button"
-        class="sc-pVTFL"
-        class:selected={!isSelectAnyone}
-        on:click={clearCategoryQuery}>전체</button
-      >
+      <div class="list_job_btn_wrap">
+        <button
+          type="button"
+          class="sc-pVTFL"
+          class:selected={!isSelectAnyone}
+          on:click={clearCategoryQuery}>전체</button
+        >
+      </div>
       {#each categories.categoriesBySite as categoryBySite}
         <span>From {categoryBySite.site}</span>
         <CategoryList {categoryBySite}></CategoryList>

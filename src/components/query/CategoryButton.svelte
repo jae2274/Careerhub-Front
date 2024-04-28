@@ -1,5 +1,4 @@
 <script>
-  import {request} from "~/view/job_posting/index/store";
   import {category} from "~/view/job_posting/index/api";
 
   let categories = category();

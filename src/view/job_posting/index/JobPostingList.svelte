@@ -6,14 +6,16 @@
     parseQuery,
   } from "~/view/job_posting/index/api";
   import {initPage, request} from "~/view/job_posting/index/store";
+  import {query} from "~/components/query/store";
   import {querystring, replace, location} from "svelte-spa-router";
 
   let promises = [];
   request.initRequest(parseQuery($querystring));
 
-  $: callList($request);
+  $: callList($request, $query);
 
-  function callList(request) {
+  function callList(request, query) {
+    request.query = query;
     if (request.page == initPage) {
       const url = `${$location}${createQuery(request, false)}`;
       replace(url);

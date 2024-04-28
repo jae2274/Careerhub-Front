@@ -1,5 +1,5 @@
 <script>
-  import {request} from "~/view/job_posting/index/store";
+  import {query} from "~/components/query/store";
 
   let isCareerHided = true;
   let minCareer = null;
@@ -9,22 +9,22 @@
   $: if (maxCareer <= 0) maxCareer = null;
   $: setMinCareer(minCareer);
   $: setMaxCareer(maxCareer);
-  $: setCareer($request);
+  $: setCareer($query);
 
   function switchHidedCareer() {
     isCareerHided = !isCareerHided;
   }
 
   function setMinCareer(career) {
-    request.setMinCareer(career);
+    query.setMinCareer(career);
   }
   function setMaxCareer(career) {
-    request.setMaxCareer(career);
+    query.setMaxCareer(career);
   }
 
-  function setCareer(request) {
-    minCareer = request.minCareer;
-    maxCareer = request.maxCareer;
+  function setCareer(query) {
+    minCareer = query.minCareer;
+    maxCareer = query.maxCareer;
   }
 </script>
 

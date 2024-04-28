@@ -1,7 +1,7 @@
 <script>
   import Header from "~/components/Header.svelte";
   import JobPostingList from "~/view/job_posting/index/JobPostingList.svelte";
-  import SearchQuery from "~/view/job_posting/index/SearchQuery.svelte";
+  import SearchQuery from "~/components/query/SearchQuery.svelte";
   import {onMount, onDestroy} from "svelte";
   import {request} from "~/view/job_posting/index/store";
 

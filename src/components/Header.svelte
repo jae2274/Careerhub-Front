@@ -60,10 +60,7 @@
             </div>
             <div class="sc-e0579984-8 fUNPNd" class:hide={isHidedProfile}>
               <ul>
-                <li><a href="/myjumpit">마이점핏</a></li>
-                <li>
-                  <a href="/applications-status/applied">취업축하금 신청</a>
-                </li>
+                <li><a use:link href="/my/match-job">마이페이지</a></li>
                 <li>
                   <button type="button" on:click={logout}>로그아웃</button>
                 </li>

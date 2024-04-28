@@ -1,19 +1,19 @@
 <script>
-  import {request} from "~/view/job_posting/index/store";
+  import {query} from "~/components/query/store";
 
   export let categoryBySite;
 
   S: categoryObjects = categoryBySite.categories.map((category) => {
     return {selected: false, categoryName: category, site: categoryBySite.site};
   });
-  $: adjustSelectedCategories = adjustSelected($request);
+  $: adjustSelectedCategories = adjustSelected($query);
 
-  function adjustSelected(request) {
+  function adjustSelected(query) {
     return categoryObjects.map((category) => {
       category.selected = false;
 
-      if (request.categories) {
-        for (const reqCategory of request.categories) {
+      if (query.categories) {
+        for (const reqCategory of query.categories) {
           if (
             reqCategory.site == category.site &&
             reqCategory.categoryName == category.categoryName
@@ -29,8 +29,8 @@
   }
 
   function switchSelected(site, categoryName, selected) {
-    if (selected) request.removeCategory(site, categoryName);
-    else request.addCategory(site, categoryName);
+    if (selected) query.removeCategory(site, categoryName);
+    else query.addCategory(site, categoryName);
   }
 </script>
 

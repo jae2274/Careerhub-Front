@@ -1,6 +1,6 @@
 <script>
-  import {getSkills} from "~/view/job_posting/index/api";
-  import {request} from "~/view/job_posting/index/store";
+  import {getSkills} from "~/components/query/api";
+  import {query} from "~/components/query/store";
 
   let skillKeyword = "";
   let isSkillHided = true;
@@ -28,11 +28,11 @@
 
   function addSkill(skillNames) {
     searchedSkills = [];
-    request.addSkill(skillNames);
+    query.addSkill(skillNames);
   }
 
   function removeSkill(skillName) {
-    request.removeSkill(skillName);
+    query.removeSkill(skillName);
   }
 
   function switchHidedSkill() {
@@ -151,11 +151,11 @@
                 <span>Fail!</span>
               {/await}
             </div>
-            {#if $request.skillNames && $request.skillNames.length !== 0}
+            {#if $query.skillNames && $query.skillNames.length !== 0}
               <div class="bpaCoL">
                 <h4 class="title">선택한 기술 스택</h4>
                 <div class="lists">
-                  {#each $request.skillNames as skillNames}
+                  {#each $query.skillNames as skillNames}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div
                       class="btn_stack cursor_default"
@@ -186,8 +186,8 @@
   {/if}
 
   <div role="presentation" class="sc-ksHpcM jsSzDN">
-    {#if $request.skillNames}
-      {#each $request.skillNames as skillNames}
+    {#if $query.skillNames}
+      {#each $query.skillNames as skillNames}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
           class="btn_stack cursor_default"

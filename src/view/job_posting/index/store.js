@@ -7,11 +7,13 @@ function setRequest() {
   const request = {
     page: initPage,
     size: 16,
-    categories: [],
-    skillNames: [],
-    tagIds: [],
-    minCareer: null,
-    maxCareer: null,
+    query: {
+      categories: [],
+      skillNames: [],
+      tagIds: [],
+      minCareer: null,
+      maxCareer: null,
+    },
   };
 
   const {subscribe, set, update} = writable(request);
@@ -22,70 +24,10 @@ function setRequest() {
       return request;
     });
   };
-  const addCategory = (site, categoryName) => {
-    update((request) => {
-      if (!request.categories.includes({site, categoryName})) {
-        request.categories.push({site, categoryName});
-        request.page = initPage;
-      }
-      return request;
-    });
-  };
-  const removeCategory = (site, categoryName) => {
-    update((request) => {
-      request.categories = request.categories.filter(
-        (cate) => cate.site != site || cate.categoryName != categoryName
-      );
-      request.page = initPage;
-      return request;
-    });
-  };
 
-  const clearCategory = () => {
+  const setQuery = (query) => {
     update((request) => {
-      request.categories = [];
-      request.page = initPage;
-      return request;
-    });
-  };
-
-  const addSkill = (skillNames) => {
-    update((request) => {
-      for (const requestSkill of request.skillNames) {
-        if (requestSkill == skillNames) return request;
-      }
-      request.skillNames.push(skillNames);
-      request.page = initPage;
-      return request;
-    });
-  };
-  const removeSkill = (skillId) => {
-    update((request) => {
-      request.skillNames = request.skillNames.filter((id) => skillId !== id);
-      request.page = initPage;
-      return request;
-    });
-  };
-
-  const setMinCareer = (career) => {
-    update((request) => {
-      request.minCareer = career;
-      request.page = initPage;
-      return request;
-    });
-  };
-  const setMaxCareer = (career) => {
-    update((request) => {
-      request.maxCareer = career;
-      request.page = initPage;
-      return request;
-    });
-  };
-
-  const setTag = (tags) => {
-    update((request) => {
-      request.tagIds = tags;
-      request.page = initPage;
+      request.query = query;
       return request;
     });
   };
@@ -96,14 +38,7 @@ function setRequest() {
     initRequest,
     nextPage,
     subscribe,
-    setMinCareer,
-    setMaxCareer,
-    removeCategory,
-    addCategory,
-    clearCategory,
-    addSkill,
-    removeSkill,
-    setTag,
+    setQuery,
   };
 }
 

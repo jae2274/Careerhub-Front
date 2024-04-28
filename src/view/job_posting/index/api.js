@@ -12,30 +12,14 @@ export async function findJobPostings(requestStr) {
   return await res.json();
 }
 
-export async function category() {
-  const headers = setAccessTokenToHeader();
-  const res = await fetch(`${backendUrl}/categories`, {headers});
-  checkHttpStatus(res);
-
-  return await res.json();
-}
-
-export async function getSkills() {
-  const headers = setAccessTokenToHeader();
-  const res = await fetch(`${backendUrl}/skills`, {headers});
-  checkHttpStatus(res);
-
-  return await res.json();
-}
-
 export function createQuery(req, isPaging) {
   const parts = [];
   if (isPaging) {
     parts.push(`page=${req.page}&size=${req.size}`);
   }
 
-  if (req) {
-    parts.push(`encoded_query=${encodeURIComponent(base64Encode(req))}`);
+  if (req.query) {
+    parts.push(`encoded_query=${encodeURIComponent(base64Encode(req.query))}`);
   }
 
   const query = parts.join("&");
