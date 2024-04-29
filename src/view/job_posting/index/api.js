@@ -1,6 +1,7 @@
 import {backendUrl} from "~/const";
 import {initPage} from "./store";
 import {setAccessTokenToHeader, checkHttpStatus} from "~/httputils";
+import {encodeQuery, decodeQuery} from "~/components/query/utils";
 
 export async function findJobPostings(requestStr) {
   const headers = setAccessTokenToHeader();
@@ -19,7 +20,7 @@ export function createQuery(req, isPaging) {
   }
 
   if (req.query) {
-    parts.push(`encoded_query=${encodeURIComponent(base64Encode(req.query))}`);
+    parts.push(`encoded_query=${encodeQuery(req.query)}`);
   }
 
   const query = parts.join("&");
@@ -31,24 +32,10 @@ export function parseQuery(queryString) {
   const queryParams = new URLSearchParams(queryString);
 
   const encodedQuery = queryParams.get("encoded_query");
-  const req =
-    encodedQuery && encodedQuery.length > 0 ? base64Decode(encodedQuery) : {};
 
-  req.page = initPage;
-  req.size = 16;
-  req.categories = req.categories || [];
-  req.skillNames = req.skillNames || [];
-  req.tagIds = req.tagIds || [];
-
-  return req;
-}
-
-function base64Encode(obj) {
-  return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
-}
-
-function base64Decode(str) {
-  return JSON.parse(decodeURIComponent(escape(atob(str))));
+  return encodedQuery && encodedQuery.length > 0
+    ? decodeQuery(encodedQuery)
+    : {};
 }
 
 function split(listStr) {

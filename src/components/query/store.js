@@ -5,8 +5,6 @@ export const query = setQuery();
 
 function setQuery() {
   const query = {
-    page: initPage,
-    size: 16,
     categories: [],
     skillNames: [],
     tagIds: [],

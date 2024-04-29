@@ -28,11 +28,18 @@ function setRequest() {
   const setQuery = (query) => {
     update((request) => {
       request.query = query;
+      request.page = initPage;
       return request;
     });
   };
 
-  const initRequest = (request) => set(request);
+  const initRequest = (query) => {
+    update((request) => {
+      request.page = initPage;
+      request.query = query;
+      return request;
+    });
+  };
 
   return {
     initRequest,

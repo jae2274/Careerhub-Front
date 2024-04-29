@@ -10,12 +10,12 @@
   import {querystring, replace, location} from "svelte-spa-router";
 
   let promises = [];
-  request.initRequest(parseQuery($querystring));
+  query.initQuery(parseQuery($querystring));
 
-  $: callList($request, $query);
+  $: request.setQuery($query);
+  $: callList($request);
 
-  function callList(request, query) {
-    request.query = query;
+  function callList(request) {
     if (request.page == initPage) {
       const url = `${$location}${createQuery(request, false)}`;
       replace(url);
@@ -34,9 +34,11 @@
     {#await promiseJobPostings}
       <div class="loading">Loading...</div>
     {:then jobPostings}
-      {#each jobPostings.jobPostings as jobPosting, index}
-        <JobPostingItem {jobPosting} delay={index * 200}></JobPostingItem>
-      {/each}
+      {#if jobPostings.jobPostings && jobPostings.jobPostings.length !== 0}
+        {#each jobPostings.jobPostings as jobPosting, index}
+          <JobPostingItem {jobPosting} delay={index * 200}></JobPostingItem>
+        {/each}
+      {/if}
     {/await}
   {/each}
 </section>
