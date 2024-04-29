@@ -28,16 +28,6 @@ export function createQuery(req, isPaging) {
   return query ? `?${query}` : "";
 }
 
-export function parseQuery(queryString) {
-  const queryParams = new URLSearchParams(queryString);
-
-  const encodedQuery = queryParams.get("encoded_query");
-
-  return encodedQuery && encodedQuery.length > 0
-    ? decodeQuery(encodedQuery)
-    : {};
-}
-
 function split(listStr) {
   return listStr.split(",");
 }

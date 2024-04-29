@@ -1,5 +1,5 @@
 export function encodeQuery(query) {
-  return encodeURIComponent(base64Encode(query));
+  return base64Encode(query);
 }
 
 export function decodeQuery(encodedQuery) {
@@ -12,4 +12,14 @@ function base64Encode(obj) {
 
 function base64Decode(str) {
   return JSON.parse(decodeURIComponent(escape(atob(str))));
+}
+
+export function parseQuery(queryString) {
+  const queryParams = new URLSearchParams(queryString);
+
+  const encodedQuery = queryParams.get("encoded_query");
+
+  return encodedQuery && encodedQuery.length > 0
+    ? decodeQuery(encodedQuery)
+    : {};
 }

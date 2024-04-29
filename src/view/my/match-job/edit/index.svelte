@@ -3,18 +3,12 @@
   import {updateCondition} from "~/view/my/match-job/api";
   import {query} from "~/components/query/store";
   import {querystring, push} from "svelte-spa-router";
-  import {decodeQuery} from "~/components/query/utils";
+  import {parseQuery} from "~/components/query/utils";
 
   export let params = {};
 
   const conditionId = params.conditionId;
-
-  const queryParams = new URLSearchParams($querystring);
-
-  const encodedQuery = queryParams.get("encoded_query");
-
-  const q = decodeQuery(encodedQuery);
-  query.initQuery(q);
+  query.initQuery(parseQuery($querystring));
 
   async function updateMatchJob() {
     await updateCondition({

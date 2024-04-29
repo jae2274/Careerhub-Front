@@ -2,8 +2,8 @@
   import {query} from "~/components/query/store";
 
   let isCareerHided = true;
-  let minCareer = null;
-  let maxCareer = null;
+  let minCareer = $query.minCareer;
+  let maxCareer = $query.maxCareer;
 
   $: if (minCareer <= 0) minCareer = null;
   $: if (maxCareer <= 0) maxCareer = null;

@@ -4,11 +4,15 @@
   import {query} from "~/components/query/store";
   import {push} from "svelte-spa-router";
 
-  function addMatchJob() {
-    addCondition({
+  async function addMatchJob() {
+    const body = await addCondition({
       conditionName: "matchJob",
       query: $query,
     });
+
+    if (!body.isSuccess) {
+      alert("맞춤채용조건 추가에 실패하였습니다.");
+    }
     push("/my/match-job");
   }
 </script>

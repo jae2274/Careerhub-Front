@@ -1,12 +1,9 @@
 <script>
   import JobPostingItem from "~/view/job_posting/index/JobPostingItem.svelte";
-  import {
-    findJobPostings,
-    createQuery,
-    parseQuery,
-  } from "~/view/job_posting/index/api";
+  import {findJobPostings, createQuery} from "~/view/job_posting/index/api";
   import {initPage, request} from "~/view/job_posting/index/store";
   import {query} from "~/components/query/store";
+  import {parseQuery} from "~/components/query/utils";
   import {querystring, replace, location} from "svelte-spa-router";
 
   let promises = [];
