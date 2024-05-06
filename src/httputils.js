@@ -53,5 +53,7 @@ export function setAccessTokenToHeader(header = {}) {
 export function checkHttpStatus(res) {
   if (res.status === 401) {
     window.location.href = "/#/login";
+  } else if (res.status === 500) {
+    alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
   }
 }

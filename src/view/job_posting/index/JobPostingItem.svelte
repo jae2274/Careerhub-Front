@@ -1,6 +1,13 @@
 <script>
+  import {
+    scrap,
+    unscrap,
+    addTag,
+    removeTag,
+  } from "~/view/job_posting/index/api";
   import {fade} from "svelte/transition";
   import {link} from "svelte-spa-router";
+  import {init} from "svelte/internal";
   export let delay;
   export let jobPosting;
 
@@ -13,6 +20,8 @@
   $: site = jobPosting.site;
   $: viewAddress = createViewAddress(jobPosting.addresses);
   $: viewCareer = createViewCareer(jobPosting.minCareer, jobPosting.maxCareer);
+  $: isScrapped = jobPosting.isScrapped;
+  $: tags = jobPosting.tags || [];
 
   function createViewAddress(addresses) {
     const address = addresses[0];
@@ -28,6 +37,11 @@
     return viewAddress;
   }
 
+  $: isViewTagInput = false;
+  function viewTagInput() {
+    isViewTagInput = true;
+  }
+
   function createViewCareer(min, max) {
     let viewCareer = `경력무관`;
 
@@ -41,6 +55,34 @@
 
     return viewCareer;
   }
+
+  async function switchScrapped() {
+    if (isScrapped) {
+      await unscrap(site, postingId);
+      isScrapped = false;
+    } else {
+      await scrap(site, postingId);
+      isScrapped = true;
+    }
+  }
+
+  function focus(el) {
+    el.focus();
+  }
+
+  async function addNewTag(e) {
+    if (e.key === "Enter") {
+      console.log(e.target.value);
+      await addTag(site, postingId, e.target.value);
+      isViewTagInput = false;
+      tags = [...tags, e.target.value];
+    }
+  }
+
+  async function removeTagAction(tag) {
+    await removeTag(site, postingId, tag);
+    tags = tags.filter((t) => t !== tag);
+  }
 </script>
 
 <div class="sc-bQtKYq dblCQy" in:fade={{delay, duration: 500}}>
@@ -49,20 +91,75 @@
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />
       <div class="counts">
-        <div class="position_view_count">
-          <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"
-            ><g fill="none" fill-rule="evenodd"
-              ><path d="M0 0h16v16H0z" /><g stroke="#FFF" stroke-linecap="round"
-                ><path
-                  d="M8 10c.86 0 1.556-.672 1.556-1.5S8.859 7 8 7c-.86 0-1.556.672-1.556 1.5S7.141 10 8 10z"
-                /><path
-                  d="M15 8.5c-1.469 2.243-4.108 4.5-7 4.5-2.892 0-5.531-2.257-7-4.5C2.788 6.369 4.882 4 8 4s5.212 2.369 7 4.5z"
-                /></g
-              ></g
-            ></svg
-          ><span>1705</span>
-        </div>
-        <button type="button" class="sc-furwcr kTzMzQ" />
+        <button
+          aria-pressed="false"
+          type="button"
+          class="sc-6683f4b1-7 vpLCw"
+          on:click|stopPropagation|preventDefault={switchScrapped}
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            {#if isScrapped}
+              <path
+                fill="#00DD6D"
+                fill-rule="evenodd"
+                d="M6.403 20.825a1 1 0 0 1-1.653-.757V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.068a1 1 0 0 1-1.653.757L12 16l-5.597 4.825Z"
+                clip-rule="evenodd"
+              ></path>
+            {:else}
+              <path
+                fill="#222"
+                fill-rule="evenodd"
+                d="M10.725 14.71a2 2 0 0 1 2.55 0l3.975 3.289V5H6.75v12.999l3.975-3.29ZM4.75 20.123V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.124a1 1 0 0 1-1.638.77L12 16.25l-5.612 4.645a1 1 0 0 1-1.638-.77Z"
+                clip-rule="evenodd"
+              ></path>
+            {/if}
+          </svg></button
+        >
+      </div>
+      <div class="tags">
+        <button on:click|stopPropagation|preventDefault={viewTagInput}>
+          <svg width="20" height="20">
+            <!-- 원 그리기 -->
+            <circle
+              cx="10"
+              cy="10"
+              r="8"
+              stroke="red"
+              stroke-width="1"
+              fill="none"
+            ></circle>
+            <!-- 가운데 + 기호 그리기 -->
+            <line x1="6" y1="10" x2="14" y2="10" stroke="red" stroke-width="1"
+            ></line>
+            <line x1="10" y1="6" x2="10" y2="14" stroke="red" stroke-width="1"
+            ></line>
+          </svg>
+        </button>
+        {#if isViewTagInput}
+          <input
+            type="text"
+            placeholder="입력 후 엔터"
+            use:focus
+            on:click|stopPropagation|preventDefault
+            on:focusout={(_) => (isViewTagInput = false)}
+            on:keydown={addNewTag}
+          />
+        {/if}
+        <ul>
+          {#each tags as tag}
+            <li
+              on:click|stopPropagation|preventDefault={() =>
+                removeTagAction(tag)}
+            >
+              {tag}
+            </li>
+          {/each}
+        </ul>
       </div>
     </div>
     <div class="sc-dVNjXY kJoWbe">
@@ -232,5 +329,50 @@
   ul,
   ol {
     list-style: none;
+  }
+
+  .dblCQy .img_box .counts {
+    position: absolute;
+    margin-left: auto;
+    color: rgb(255, 255, 255);
+    font-size: 13px;
+    z-index: 1;
+  }
+  .dblCQy .counts {
+    top: 16px;
+    right: 16px;
+  }
+  button {
+    border: none;
+    border-radius: 0px;
+    background: none;
+    cursor: pointer;
+  }
+  .dblCQy .counts button {
+    padding: 0px;
+  }
+  .vpLCw > svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .vpLCw > svg path {
+    fill: rgb(255, 0, 0);
+  }
+  .dblCQy .tags {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 244px;
+    height: 160px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    padding: 3px;
+    color: red;
+  }
+
+  ul > li:hover {
+    opacity: 0.4;
   }
 </style>

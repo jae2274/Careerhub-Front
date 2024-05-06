@@ -17,11 +17,11 @@ input:disabled {
 	color: #ccc;
 }
 
-button {
+/* button {
 	color: #333;
 	background:none;
 	outline: none;
-}
+} */
 
 button:disabled {
 	color: #999;

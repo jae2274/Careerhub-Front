@@ -28,9 +28,38 @@ export function createQuery(req, isPaging) {
   return query ? `?${query}` : "";
 }
 
-function split(listStr) {
-  return listStr.split(",");
+export function scrap(site, postingId) {
+  const headers = setAccessTokenToHeader();
+  return fetch(`${backendUrl}/my/scrap-job`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({site, postingId}),
+  }).then(checkHttpStatus);
 }
-function isNotEmpty(list) {
-  return list && list.length > 0;
+
+export function unscrap(site, postingId) {
+  const headers = setAccessTokenToHeader();
+  return fetch(`${backendUrl}/my/scrap-job`, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({site, postingId}),
+  }).then(checkHttpStatus);
+}
+
+export function addTag(site, postingId, tag) {
+  const headers = setAccessTokenToHeader();
+  return fetch(`${backendUrl}/my/scrap-job/tags`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({site, postingId, tag}),
+  }).then(checkHttpStatus);
+}
+
+export function removeTag(site, postingId, tag) {
+  const headers = setAccessTokenToHeader();
+  return fetch(`${backendUrl}/my/scrap-job/tags`, {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({site, postingId, tag}),
+  }).then(checkHttpStatus);
 }
