@@ -1,6 +1,5 @@
 import {writable} from "svelte/store";
 
-export const initPage = 0;
 export const query = setQuery();
 
 function setQuery() {
@@ -14,17 +13,10 @@ function setQuery() {
 
   const {subscribe, set, update} = writable(query);
 
-  const nextPage = () => {
-    update((query) => {
-      query.page = query.page + 1;
-      return query;
-    });
-  };
   const addCategory = (site, categoryName) => {
     update((query) => {
       if (!query.categories.includes({site, categoryName})) {
         query.categories.push({site, categoryName});
-        query.page = initPage;
       }
       return query;
     });
@@ -34,7 +26,6 @@ function setQuery() {
       query.categories = query.categories.filter(
         (cate) => cate.site != site || cate.categoryName != categoryName
       );
-      query.page = initPage;
       return query;
     });
   };
@@ -42,7 +33,6 @@ function setQuery() {
   const clearCategory = () => {
     update((query) => {
       query.categories = [];
-      query.page = initPage;
       return query;
     });
   };
@@ -53,14 +43,12 @@ function setQuery() {
         if (querySkill == skillNames) return query;
       }
       query.skillNames.push(skillNames);
-      query.page = initPage;
       return query;
     });
   };
   const removeSkill = (skillId) => {
     update((query) => {
       query.skillNames = query.skillNames.filter((id) => skillId !== id);
-      query.page = initPage;
       return query;
     });
   };
@@ -68,14 +56,12 @@ function setQuery() {
   const setMinCareer = (career) => {
     update((query) => {
       query.minCareer = career;
-      query.page = initPage;
       return query;
     });
   };
   const setMaxCareer = (career) => {
     update((query) => {
       query.maxCareer = career;
-      query.page = initPage;
       return query;
     });
   };
@@ -83,16 +69,32 @@ function setQuery() {
   const setTag = (tags) => {
     update((query) => {
       query.tagIds = tags;
-      query.page = initPage;
       return query;
     });
   };
 
-  const initQuery = (query) => set(query);
+  const initQuery = (newQuery) => {
+    update((query) => {
+      query.categories = newQuery.categories || [];
+      query.skillNames = newQuery.skillNames || [];
+      query.tagIds = newQuery.tagIds || [];
+      query.minCareer = newQuery.minCareer || null;
+      query.maxCareer = newQuery.maxCareer || null;
+      return query;
+    });
+  };
 
+  const clearQuery = () =>
+    update((query) => {
+      query.categories = [];
+      query.skillNames = [];
+      query.tagIds = [];
+      query.minCareer = null;
+      query.maxCareer = null;
+      return query;
+    });
   return {
     initQuery,
-    nextPage,
     subscribe,
     setMinCareer,
     setMaxCareer,
@@ -102,13 +104,6 @@ function setQuery() {
     addSkill,
     removeSkill,
     setTag,
+    clearQuery,
   };
-}
-
-function setPage() {
-  const {subscribe, update} = writable(initPage);
-
-  const nextPage = (page) => update((page) => page + 1);
-
-  return {subscribe, nextPage};
 }

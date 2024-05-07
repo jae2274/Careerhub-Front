@@ -6,6 +6,8 @@ import MatchJob from "~/view/my/match-job/index.svelte";
 import AddMatchJob from "~/view/my/match-job/add/index.svelte";
 import EditCondition from "~/view/my/match-job/edit/index.svelte";
 
+import ScrapJob from "~/view/my/scrap-job/index.svelte";
+
 export default {
   "/": Home,
   "/job_posting": JobPostingList,
@@ -14,4 +16,5 @@ export default {
   "/my/match-job": MatchJob,
   "/my/match-job/add": AddMatchJob,
   "/my/match-job/edit/:conditionId": EditCondition,
+  "/my/scrap-job": ScrapJob,
 };

@@ -36,7 +36,6 @@
 
   let promises = [];
   query.initQuery(parseQuery($querystring));
-
   $: request.setQuery($query);
   $: callList($request);
 

@@ -1,30 +1,24 @@
 <script>
   import {query} from "~/components/query/store";
+  import {onMount, onDestroy} from "svelte";
 
   let isCareerHided = true;
   let minCareer = $query.minCareer;
   let maxCareer = $query.maxCareer;
 
-  $: if (minCareer <= 0) minCareer = null;
-  $: if (maxCareer <= 0) maxCareer = null;
-  $: setMinCareer(minCareer);
-  $: setMaxCareer(maxCareer);
-  $: setCareer($query);
+  let init = false;
+  $: !isInit() || query.setMinCareer(minCareer);
+  $: !isInit() || query.setMaxCareer(maxCareer);
+
+  function isInit() {
+    return init;
+  }
+  onMount(() => {
+    init = true;
+  });
 
   function switchHidedCareer() {
     isCareerHided = !isCareerHided;
-  }
-
-  function setMinCareer(career) {
-    query.setMinCareer(career);
-  }
-  function setMaxCareer(career) {
-    query.setMaxCareer(career);
-  }
-
-  function setCareer(query) {
-    minCareer = query.minCareer;
-    maxCareer = query.maxCareer;
   }
 </script>
 

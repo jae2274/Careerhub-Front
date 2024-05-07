@@ -3,7 +3,8 @@
   import {addCondition} from "~/view/my/match-job/api";
   import {query} from "~/components/query/store";
   import {push} from "svelte-spa-router";
-
+  import Layout from "~/components/my/Layout.svelte";
+  query.clearQuery();
   async function addMatchJob() {
     const body = await addCondition({
       conditionName: "matchJob",
@@ -17,5 +18,9 @@
   }
 </script>
 
-<button on:click={addMatchJob}>추가</button>
-<SearchQuery></SearchQuery>
+<Layout>
+  <div slot="content">
+    <button on:click={addMatchJob}>추가</button>
+    <SearchQuery></SearchQuery>
+  </div>
+</Layout>

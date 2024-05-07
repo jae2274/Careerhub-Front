@@ -1,3 +1,6 @@
+import {backendUrl} from "~/const";
+import {setAccessTokenToHeader, checkHttpStatus} from "~/httputils";
+
 export function scrap(site, postingId) {
   const headers = setAccessTokenToHeader();
   return fetch(`${backendUrl}/my/scrap-job`, {
