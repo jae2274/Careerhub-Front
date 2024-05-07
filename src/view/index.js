@@ -1,5 +1,5 @@
 import Home from "~/view/index.svelte";
-import JobPostingDetail from "~/view/job_posting/postingId.svelte";
+import JobPostingDetail from "~/view/job_posting/postingId/index.svelte";
 import JobPostingList from "~/view/job_posting/index.svelte";
 import Login from "~/view/login/index.svelte";
 import MatchJob from "~/view/my/match-job/index.svelte";

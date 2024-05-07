@@ -1,9 +1,14 @@
 <script>
   import Header from "~/components/Header.svelte";
-  import JobPostingList from "~/view/job_posting/index/JobPostingList.svelte";
+  import JobPostingList from "~/components/jobPostingList/JobPostingList.svelte";
   import SearchQuery from "~/components/query/SearchQuery.svelte";
   import {onMount, onDestroy} from "svelte";
-  import {request} from "~/view/job_posting/index/store";
+
+  import {findJobPostings, createQuery} from "~/view/job_posting/api";
+  import {initPage, request} from "~/view/job_posting/store";
+  import {query} from "~/components/query/store";
+  import {parseQuery} from "~/components/query/utils";
+  import {querystring, replace, location} from "svelte-spa-router";
 
   let listElement;
   let isWaitingTimeout = false;
@@ -28,12 +33,31 @@
       listElement.scrollHeight
     );
   }
+
+  let promises = [];
+  query.initQuery(parseQuery($querystring));
+
+  $: request.setQuery($query);
+  $: callList($request);
+
+  function callList(request) {
+    if (request.page == initPage) {
+      const url = `${$location}${createQuery(request, false)}`;
+      replace(url);
+      promises = [];
+    }
+    promises = [...promises, callListApi(request)];
+  }
+
+  function callListApi(request) {
+    return findJobPostings(createQuery(request, true));
+  }
 </script>
 
 <Header />
 <div class="hdErFU" bind:this={listElement}>
   <SearchQuery></SearchQuery>
-  <JobPostingList />
+  <JobPostingList {promises} />
 </div>
 
 <style>

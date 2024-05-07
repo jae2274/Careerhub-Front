@@ -4,10 +4,9 @@
     unscrap,
     addTag,
     removeTag,
-  } from "~/view/job_posting/index/api";
+  } from "~/components/jobPostingList/api";
   import {fade} from "svelte/transition";
   import {link} from "svelte-spa-router";
-  import {init} from "svelte/internal";
   export let delay;
   export let jobPosting;
 
