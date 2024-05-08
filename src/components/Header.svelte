@@ -1,13 +1,10 @@
 <script>
   import {link} from "svelte-spa-router";
   import {getCookie, deleteAllCookies} from "~/cookie.js";
-  import {getUsernameFromCookie} from "~/httputils.js";
+  import {isLogin, getUsernameFromCookie} from "~/httputils.js";
 
-  $: grantType = getCookie("grant_type");
-  $: accessToken = getCookie("access_token");
-  $: refreshToken = getCookie("refresh_token");
-  $: isLogin = grantType && accessToken && refreshToken;
-
+  let isLoginValue = isLogin();
+  let username = getUsernameFromCookie();
   let isHidedProfile = true;
   function switchProfileList(isShow) {
     isHidedProfile = !isShow;
@@ -36,15 +33,13 @@
         </li>
       </ul>
       <ul class="sc-e0579984-6 iEFHAz">
-        {#if isLogin}
+        {#if isLoginValue}
           <li
             on:mouseover={() => switchProfileList(true)}
             on:mouseleave={() => switchProfileList(false)}
           >
             <div class="sc-e0579984-7 cXmSGh">
-              <button type="button">{getUsernameFromCookie()}</button><span
-                >님</span
-              ><svg
+              <button type="button">{username}</button><span>님</span><svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"

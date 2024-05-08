@@ -7,8 +7,12 @@
   } from "~/components/jobPostingList/api";
   import {fade} from "svelte/transition";
   import {link} from "svelte-spa-router";
+  import {isLogin} from "~/httputils.js";
+
   export let delay;
   export let jobPosting;
+
+  $: isLoginValue = isLogin();
 
   $: companyName = jobPosting.companyName;
   $: imageUrl = jobPosting.imageUrl;
@@ -89,77 +93,93 @@
     ><div class="img_filter" />
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />
-      <div class="counts">
-        <button
-          aria-pressed="false"
-          type="button"
-          class="sc-6683f4b1-7 vpLCw"
-          on:click|stopPropagation|preventDefault={switchScrapped}
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            {#if isScrapped}
-              <path
-                fill="#00DD6D"
-                fill-rule="evenodd"
-                d="M6.403 20.825a1 1 0 0 1-1.653-.757V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.068a1 1 0 0 1-1.653.757L12 16l-5.597 4.825Z"
-                clip-rule="evenodd"
-              ></path>
-            {:else}
-              <path
-                fill="#222"
-                fill-rule="evenodd"
-                d="M10.725 14.71a2 2 0 0 1 2.55 0l3.975 3.289V5H6.75v12.999l3.975-3.29ZM4.75 20.123V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.124a1 1 0 0 1-1.638.77L12 16.25l-5.612 4.645a1 1 0 0 1-1.638-.77Z"
-                clip-rule="evenodd"
-              ></path>
-            {/if}
-          </svg></button
-        >
-      </div>
-      <div class="tags">
-        <button on:click|stopPropagation|preventDefault={viewTagInput}>
-          <svg width="20" height="20">
-            <!-- 원 그리기 -->
-            <circle
-              cx="10"
-              cy="10"
-              r="8"
-              stroke="red"
-              stroke-width="1"
+      {#if isLoginValue}
+        <div class="counts">
+          <button
+            aria-pressed="false"
+            type="button"
+            class="sc-6683f4b1-7 vpLCw"
+            on:click|stopPropagation|preventDefault={switchScrapped}
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
               fill="none"
-            ></circle>
-            <!-- 가운데 + 기호 그리기 -->
-            <line x1="6" y1="10" x2="14" y2="10" stroke="red" stroke-width="1"
-            ></line>
-            <line x1="10" y1="6" x2="10" y2="14" stroke="red" stroke-width="1"
-            ></line>
-          </svg>
-        </button>
-        {#if isViewTagInput}
-          <input
-            type="text"
-            placeholder="입력 후 엔터"
-            use:focus
-            on:click|stopPropagation|preventDefault
-            on:focusout={(_) => (isViewTagInput = false)}
-            on:keydown={addNewTag}
-          />
-        {/if}
-        <ul>
-          {#each tags as tag}
-            <li
-              on:click|stopPropagation|preventDefault={() =>
-                removeTagAction(tag)}
+              viewBox="0 0 24 24"
             >
-              {tag}
-            </li>
-          {/each}
-        </ul>
-      </div>
+              {#if isScrapped}
+                <path
+                  fill="#00DD6D"
+                  fill-rule="evenodd"
+                  d="M6.403 20.825a1 1 0 0 1-1.653-.757V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.068a1 1 0 0 1-1.653.757L12 16l-5.597 4.825Z"
+                  clip-rule="evenodd"
+                ></path>
+              {:else}
+                <path
+                  fill="#222"
+                  fill-rule="evenodd"
+                  d="M10.725 14.71a2 2 0 0 1 2.55 0l3.975 3.289V5H6.75v12.999l3.975-3.29ZM4.75 20.123V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.124a1 1 0 0 1-1.638.77L12 16.25l-5.612 4.645a1 1 0 0 1-1.638-.77Z"
+                  clip-rule="evenodd"
+                ></path>
+              {/if}
+            </svg></button
+          >
+        </div>
+        {#if isScrapped}
+          <div class="tags">
+            <button on:click|stopPropagation|preventDefault={viewTagInput}>
+              <svg width="20" height="20">
+                <!-- 원 그리기 -->
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  stroke="red"
+                  stroke-width="1"
+                  fill="none"
+                ></circle>
+                <!-- 가운데 + 기호 그리기 -->
+                <line
+                  x1="6"
+                  y1="10"
+                  x2="14"
+                  y2="10"
+                  stroke="red"
+                  stroke-width="1"
+                ></line>
+                <line
+                  x1="10"
+                  y1="6"
+                  x2="10"
+                  y2="14"
+                  stroke="red"
+                  stroke-width="1"
+                ></line>
+              </svg>
+            </button>
+            {#if isViewTagInput}
+              <input
+                type="text"
+                placeholder="입력 후 엔터"
+                use:focus
+                on:click|stopPropagation|preventDefault
+                on:focusout={(_) => (isViewTagInput = false)}
+                on:keydown={addNewTag}
+              />
+            {/if}
+            <ul>
+              {#each tags as tag}
+                <li
+                  on:click|stopPropagation|preventDefault={() =>
+                    removeTagAction(tag)}
+                >
+                  {tag}
+                </li>
+              {/each}
+            </ul>
+          </div>
+        {/if}
+      {/if}
     </div>
     <div class="sc-dVNjXY kJoWbe">
       <div class="sc-xiLah jCplrW"><span>{companyName}</span></div>
@@ -351,8 +371,8 @@
     padding: 0px;
   }
   .vpLCw > svg {
-    width: 16px;
-    height: 16px;
+    width: 21px;
+    height: 21px;
   }
 
   .vpLCw > svg path {

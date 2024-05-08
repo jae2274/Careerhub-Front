@@ -5,6 +5,10 @@ export function setUsernameToCookie(username) {
   setCookie("username", username);
 }
 
+export function isLogin() {
+  return getCookie("username") ? true : false;
+}
+
 export function getUsernameFromCookie() {
   return getCookie("username");
 }

@@ -1,8 +1,17 @@
 <script>
   import {link} from "svelte-spa-router";
+  import {isLogin} from "~/httputils.js";
+  import {
+    scrap,
+    unscrap,
+    addTag,
+    removeTag,
+  } from "~/components/jobPostingList/api";
 
+  const isLoginValue = isLogin();
   export let postingDetail;
   $: site = postingDetail.site;
+  $: postingId = postingDetail.postingId;
   $: title = postingDetail.title;
   $: skills = postingDetail.skills || [];
   $: mainTask = postingDetail.mainTask;
@@ -18,12 +27,129 @@
   $: companyImages = postingDetail.companyImages || [];
   $: addresses = postingDetail.addresses || [];
   $: companyName = postingDetail.companyName;
+  $: isScrapped = postingDetail.isScrapped;
+  $: scrapTags = postingDetail.scrapTags || [];
+  let isViewTagInput = false;
+
+  async function switchScrapped() {
+    if (isScrapped) {
+      await unscrap(site, postingId);
+      isScrapped = false;
+      scrapTags = [];
+    } else {
+      await scrap(site, postingId);
+      isScrapped = true;
+    }
+  }
+
+  async function addNewTag(e) {
+    if (e.key === "Enter") {
+      console.log(e.target.value);
+      await addTag(site, postingId, e.target.value);
+      isViewTagInput = false;
+      scrapTags = [...scrapTags, e.target.value];
+    }
+  }
+
+  async function removeTagAction(tag) {
+    await removeTag(site, postingId, tag);
+    scrapTags = scrapTags.filter((t) => t !== tag);
+  }
 </script>
 
 <div class="gzkEnW">
   <div class="sc-gVkuDy lkjbjv">
-    <section class="sc-cvlWTT difxia">
+    <section class="title">
       <h1>{title}</h1>
+    </section>
+    {#if isLoginValue}
+      <section class="scrapTags">
+        <button
+          aria-pressed="false"
+          type="button"
+          class="sc-6683f4b1-7 scrapBtn svelte-1tvf73y"
+          on:click={switchScrapped}
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="svelte-1tvf73y"
+          >
+            {#if isScrapped}
+              <path
+                fill="#00DD6D"
+                fill-rule="evenodd"
+                d="M6.403 20.825a1 1 0 0 1-1.653-.757V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.068a1 1 0 0 1-1.653.757L12 16l-5.597 4.825Z"
+                clip-rule="evenodd"
+                class="svelte-1jo1owu"
+              ></path>
+            {:else}
+              <path
+                fill="#222"
+                fill-rule="evenodd"
+                d="M10.725 14.71a2 2 0 0 1 2.55 0l3.975 3.289V5H6.75v12.999l3.975-3.29ZM4.75 20.123V5a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v15.124a1 1 0 0 1-1.638.77L12 16.25l-5.612 4.645a1 1 0 0 1-1.638-.77Z"
+                clip-rule="evenodd"
+                class="svelte-1tvf73y"
+              ></path>
+            {/if}
+          </svg></button
+        >
+        {#if isScrapped}
+          <button
+            class="svelte-1jo1owu scrapBtn svelte-ee8yuh"
+            on:click={() => {
+              isViewTagInput = true;
+            }}
+            ><svg width="36" height="36" class="svelte-ee8yuh">
+              <circle
+                cx="15"
+                cy="15"
+                r="12"
+                stroke="red"
+                stroke-width="1.5"
+                fill="none"
+              ></circle>
+              <line
+                x1="9"
+                y1="15"
+                x2="21"
+                y2="15"
+                stroke="red"
+                stroke-width="1.5"
+              ></line>
+              <line
+                x1="15"
+                y1="9"
+                x2="15"
+                y2="21"
+                stroke="red"
+                stroke-width="1.5"
+              ></line>
+            </svg>
+          </button>
+
+          {#if isViewTagInput}
+            <input
+              type="text"
+              placeholder="입력 후 엔터"
+              use:focus
+              on:focusout={(_) => (isViewTagInput = false)}
+              on:keydown={addNewTag}
+            />
+          {/if}
+          <ul>
+            {#each scrapTags as scrapTag}
+              <li on:click={() => removeTagAction(scrapTag)}>
+                {scrapTag}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      </section>
+    {/if}
+    <section class="sc-cvlWTT difxia">
       <div class="position_title_box_desc">
         <a use:link href={`/company/${companyId}`}
           >{companyName}<br /> from {site}</a
@@ -142,6 +268,12 @@
 </div>
 
 <style>
+  .title h1 {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.25;
+  }
+
   .gzkEnW {
     position: relative;
     padding: 60px 0px 24px;
@@ -155,12 +287,7 @@
   .difxia {
     border-bottom: 1px solid rgb(234, 234, 234);
   }
-  .difxia h1 {
-    font-weight: 700;
-    font-size: 40px;
-    margin-bottom: 16px;
-    line-height: 1.25;
-  }
+
   .hMPsbi {
     display: inline-block;
     position: relative;
@@ -389,5 +516,44 @@
     overflow-wrap: break-word;
     font-family: "Noto Sans KR", serif;
     text-size-adjust: 100%;
+  }
+
+  .scrapBtn {
+    cursor: pointer;
+  }
+  .scrapBtn > svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .scrapBtn > svg path {
+    fill: rgb(255, 0, 0);
+  }
+  .scrapTags {
+    color: red;
+    display: inline-flex;
+  }
+
+  .scrapTags input {
+    height: 23px;
+    margin: 0px 10px;
+  }
+
+  .scrapTags ul {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+  .scrapTags li {
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    height: 32px;
+    font-size: 20px;
+  }
+
+  .scrapTags ul > li:hover {
+    opacity: 0.4;
   }
 </style>
