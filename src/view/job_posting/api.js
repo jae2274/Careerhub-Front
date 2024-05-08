@@ -20,7 +20,7 @@ export function createQuery(req, isPaging) {
   }
 
   if (req.query) {
-    parts.push(`encoded_query=${encodeQuery(req.query)}`);
+    parts.push(`encoded_query=${encodeURIComponent(encodeQuery(req.query))}`);
   }
 
   const query = parts.join("&");
