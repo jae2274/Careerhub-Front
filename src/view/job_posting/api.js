@@ -1,7 +1,7 @@
 import {backendUrl} from "~/const";
 import {initPage} from "./store";
 import {setAccessTokenToHeader, checkHttpStatus} from "~/httputils";
-import {encodeQuery, decodeQuery} from "~/components/query/utils";
+import {createEncodedQueryParam, decodeQuery} from "~/components/query/utils";
 
 export async function findJobPostings(requestStr) {
   const headers = setAccessTokenToHeader();
@@ -20,7 +20,7 @@ export function createQuery(req, isPaging) {
   }
 
   if (req.query) {
-    parts.push(`encoded_query=${encodeURIComponent(encodeQuery(req.query))}`);
+    parts.push(`encoded_query=${createEncodedQueryParam(req.query)}`);
   }
 
   const query = parts.join("&");

@@ -1,7 +1,7 @@
 <script>
   import {link} from "svelte-spa-router";
   import {getMatchJob} from "~/view/my/match-job/api";
-  import {encodeQuery} from "~/components/query/utils";
+  import {createEncodedQueryParam} from "~/components/query/utils";
   import Layout from "~/components/my/Layout.svelte";
 
   const matchJobProms = getMatchJob().then((res) => {
@@ -151,7 +151,7 @@
                                             ><button
                                               ><a
                                                 use:link
-                                                href="/my/match-job/edit/{condition.conditionId}?encoded_query={encodeQuery(
+                                                href="/my/match-job/edit/{condition.conditionId}?encoded_query={createEncodedQueryParam(
                                                   condition.query
                                                 )}">변경</a
                                               ></button

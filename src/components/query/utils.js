@@ -1,4 +1,8 @@
-export function encodeQuery(query) {
+export function createEncodedQueryParam(query) {
+  return encodeURIComponent(encodeQuery(query));
+}
+
+function encodeQuery(query) {
   return base64Encode(query);
 }
 
