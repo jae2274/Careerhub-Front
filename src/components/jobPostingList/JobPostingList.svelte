@@ -9,8 +9,8 @@
     {#await promiseJobPostings}
       <div class="loading">Loading...</div>
     {:then jobPostings}
-      {#if jobPostings.jobPostings && jobPostings.jobPostings.length !== 0}
-        {#each jobPostings.jobPostings as jobPosting, index}
+      {#if jobPostings && jobPostings.length !== 0}
+        {#each jobPostings as jobPosting, index}
           <JobPostingItem {jobPosting} delay={index * 200}></JobPostingItem>
         {/each}
       {/if}
