@@ -8,7 +8,6 @@
     removeTag,
   } from "~/components/jobPostingList/api";
 
-  const isLoginValue = isLogin();
   export let postingDetail;
   $: site = postingDetail.site;
   $: postingId = postingDetail.postingId;
@@ -27,18 +26,18 @@
   $: companyImages = postingDetail.companyImages || [];
   $: addresses = postingDetail.addresses || [];
   $: companyName = postingDetail.companyName;
-  $: isScrapped = postingDetail.isScrapped;
-  $: scrapTags = postingDetail.scrapTags || [];
+  $: scrapInfo = postingDetail.scrapInfo;
+  $: reviewInfo = postingDetail.reviewInfo;
   let isViewTagInput = false;
 
   async function switchScrapped() {
-    if (isScrapped) {
+    if (scrapInfo.isScrapped) {
       await unscrap(site, postingId);
-      isScrapped = false;
-      scrapTags = [];
+      scrapInfo.isScrapped = false;
+      scrapInfo.tags = [];
     } else {
       await scrap(site, postingId);
-      isScrapped = true;
+      scrapInfo.isScrapped = true;
     }
   }
 
@@ -47,13 +46,20 @@
       console.log(e.target.value);
       await addTag(site, postingId, e.target.value);
       isViewTagInput = false;
-      scrapTags = [...scrapTags, e.target.value];
+      scrapInfo.tags = [...scrapInfo.tags, e.target.value];
     }
   }
 
   async function removeTagAction(tag) {
     await removeTag(site, postingId, tag);
-    scrapTags = scrapTags.filter((t) => t !== tag);
+    scrapInfo.tags = scrapInfo.tags.filter((t) => t !== tag);
+  }
+
+  function scoreString(score) {
+    const tenDecimal = Math.floor(score / 10);
+    const oneDecimal = score % 10;
+
+    return `${tenDecimal}.${oneDecimal}`;
   }
 </script>
 
@@ -62,7 +68,7 @@
     <section class="title">
       <h1>{title}</h1>
     </section>
-    {#if isLoginValue}
+    {#if scrapInfo}
       <section class="scrapTags">
         <button
           aria-pressed="false"
@@ -77,7 +83,7 @@
             viewBox="0 0 24 24"
             class="svelte-1tvf73y"
           >
-            {#if isScrapped}
+            {#if scrapInfo.isScrapped}
               <path
                 fill="#00DD6D"
                 fill-rule="evenodd"
@@ -96,7 +102,7 @@
             {/if}
           </svg></button
         >
-        {#if isScrapped}
+        {#if scrapInfo.isScrapped}
           <button
             class="svelte-1jo1owu scrapBtn svelte-ee8yuh"
             on:click={() => {
@@ -140,7 +146,7 @@
             />
           {/if}
           <ul>
-            {#each scrapTags as scrapTag}
+            {#each scrapInfo.tags as scrapTag}
               <li on:click={() => removeTagAction(scrapTag)}>
                 {scrapTag}
               </li>
@@ -155,6 +161,15 @@
           >{companyName}<br /> from {site}</a
         >
       </div>
+      {#if reviewInfo}
+        <div class="rating">
+          <span class="star"></span>
+          <span class="score"
+            >{scoreString(reviewInfo.score)}
+            <em class="num">({reviewInfo.reviewCount}개 리뷰)</em></span
+          >
+        </div>
+      {/if}
       <ul class="position_tags">
         {#each tags as tag}
           <li>
@@ -555,5 +570,39 @@
 
   .scrapTags ul > li:hover {
     opacity: 0.4;
+  }
+
+  .rating {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .rating .star {
+    font-size: 16px;
+    line-height: 1.3em;
+    background: url(https://static.teamblind.com/img/www/sp-cmp.png?time=oct2020)
+      no-repeat;
+    background-size: 522.24px 696.32px;
+    background-position: -136px -167.28px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    vertical-align: top;
+    content: "";
+  }
+
+  .rating .score {
+    font-size: 16px;
+    line-height: 1.3em;
+    display: inline-block;
+    height: 18px;
+    margin-right: 4px;
+    vertical-align: top;
+    content: "";
+  }
+  .rating .num {
+    font-size: 14px;
+    color: #94969b;
+    font-style: normal;
   }
 </style>

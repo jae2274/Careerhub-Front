@@ -12,8 +12,6 @@
   export let delay;
   export let jobPosting;
 
-  $: isLoginValue = isLogin();
-
   $: companyName = jobPosting.companyName;
   $: imageUrl = jobPosting.imageUrl;
   $: postingId = jobPosting.postingId;
@@ -23,8 +21,8 @@
   $: site = jobPosting.site;
   $: viewAddress = createViewAddress(jobPosting.addresses);
   $: viewCareer = createViewCareer(jobPosting.minCareer, jobPosting.maxCareer);
-  $: isScrapped = jobPosting.isScrapped;
-  $: tags = jobPosting.tags || [];
+  $: scrapInfo = jobPosting.scrapInfo;
+  $: reviewInfo = jobPosting.reviewInfo;
 
   function createViewAddress(addresses) {
     const address = addresses[0];
@@ -60,12 +58,13 @@
   }
 
   async function switchScrapped() {
-    if (isScrapped) {
+    if (scrapInfo.isScrapped) {
       await unscrap(site, postingId);
-      isScrapped = false;
+      scrapInfo.isScrapped = false;
+      scrapInfo.tags = [];
     } else {
       await scrap(site, postingId);
-      isScrapped = true;
+      scrapInfo.isScrapped = true;
     }
   }
 
@@ -78,13 +77,20 @@
       console.log(e.target.value);
       await addTag(site, postingId, e.target.value);
       isViewTagInput = false;
-      tags = [...tags, e.target.value];
+      scrapInfo.tags = [...scrapInfo.tags, e.target.value];
     }
   }
 
   async function removeTagAction(tag) {
     await removeTag(site, postingId, tag);
-    tags = tags.filter((t) => t !== tag);
+    scrapInfo.tags = scrapInfo.tags.filter((t) => t !== tag);
+  }
+
+  function scoreString(score) {
+    const tenDecimal = Math.floor(score / 10);
+    const oneDecimal = score % 10;
+
+    return `${tenDecimal}.${oneDecimal}`;
   }
 </script>
 
@@ -93,7 +99,7 @@
     ><div class="img_filter" />
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />
-      {#if isLoginValue}
+      {#if scrapInfo}
         <div class="counts">
           <button
             aria-pressed="false"
@@ -107,7 +113,7 @@
               fill="none"
               viewBox="0 0 24 24"
             >
-              {#if isScrapped}
+              {#if scrapInfo.isScrapped}
                 <path
                   fill="#00DD6D"
                   fill-rule="evenodd"
@@ -125,7 +131,7 @@
             </svg></button
           >
         </div>
-        {#if isScrapped}
+        {#if scrapInfo.isScrapped}
           <div class="tags">
             <button on:click|stopPropagation|preventDefault={viewTagInput}>
               <svg width="20" height="20">
@@ -168,7 +174,7 @@
               />
             {/if}
             <ul>
-              {#each tags as tag}
+              {#each scrapInfo.tags as tag}
                 <li
                   on:click|stopPropagation|preventDefault={() =>
                     removeTagAction(tag)}
@@ -184,6 +190,15 @@
     <div class="sc-dVNjXY kJoWbe">
       <div class="sc-xiLah jCplrW"><span>{companyName}</span></div>
       <h2 class="position_card_info_title">{title}</h2>
+      {#if reviewInfo}
+        <div class="rating">
+          <span class="star"></span>
+          <span class="score"
+            >{scoreString(reviewInfo.score)}
+            <em class="num">({reviewInfo.reviewCount}개 리뷰)</em></span
+          >
+        </div>
+      {/if}
       {#if skills.length > 0}
         <ul class="sc-jHkVzv cYCPrU" style="color: brown;">
           {#each skills as skillName, index}
@@ -393,5 +408,38 @@
 
   ul > li:hover {
     opacity: 0.4;
+  }
+
+  .rating {
+    margin-top: 7px;
+  }
+  .rating .star {
+    font-size: 16px;
+    line-height: 1.3em;
+    background: url(https://static.teamblind.com/img/www/sp-cmp.png?time=oct2020)
+      no-repeat;
+    background-size: 522.24px 696.32px;
+    background-position: -136px -167.28px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+    vertical-align: top;
+    content: "";
+  }
+
+  .rating .score {
+    font-size: 16px;
+    line-height: 1.3em;
+    display: inline-block;
+    height: 18px;
+    margin-right: 4px;
+    vertical-align: top;
+    content: "";
+  }
+  .rating .num {
+    font-size: 14px;
+    color: #94969b;
+    font-style: normal;
   }
 </style>

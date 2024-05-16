@@ -13,9 +13,7 @@
 
   function logout() {
     deleteAllCookies();
-    grantType = null;
-    accessToken = null;
-    refreshToken = null;
+    isLoginValue = false;
   }
 </script>
 
