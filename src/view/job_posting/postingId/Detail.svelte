@@ -195,7 +195,7 @@
           <div>
             {#each reviews as review}
               <div class="review_item_inr">
-                <div>
+                <div class="star_score">
                   <span class="star"></span>
                   <span class="score">{scoreString(review.score)} </span>
                 </div>
@@ -210,7 +210,7 @@
                     >
                     {#if review.employmentStatus}현직원{:else}전직원{/if}</strong
                   >
-                  · {review.reviewUserId} · {review.jobType} - {review.date.split(
+                  · {review.jobType} · {review.reviewUserId} - {review.date.split(
                     "T"
                   )[0]}
                 </div>
@@ -676,11 +676,15 @@
     width: 100%;
   }
 
+  .review_item_inr > .star_score {
+    display: inline-flex;
+  }
+
   .bold {
     font-weight: bold;
   }
 
   .paginate span {
-    margin-right: 3px;
+    margin-right: 5px;
   }
 </style>
