@@ -8,6 +8,9 @@
     removeTag,
   } from "~/components/jobPostingList/api";
 
+  import {getReviews} from "~/view/job_posting/postingId/api";
+  const pageSize = 10;
+
   export let postingDetail;
   $: site = postingDetail.site;
   $: postingId = postingDetail.postingId;
@@ -61,6 +64,21 @@
     const oneDecimal = score % 10;
 
     return `${tenDecimal}.${oneDecimal}`;
+  }
+
+  let selectedPageNum = 1;
+
+  async function getReviewsAction(pageNum) {
+    const res = await getReviews(companyName, pageNum, pageSize);
+    reviews = res;
+    selectedPageNum = pageNum;
+  }
+
+  function convertPageString(pageNum) {
+    if (pageNum < 10) {
+      return `0${pageNum}`;
+    }
+    return `${pageNum}`;
   }
 </script>
 
@@ -170,6 +188,9 @@
               >{scoreString(reviewInfo.score)}
               <em class="num">({reviewInfo.reviewCount}개 리뷰)</em></span
             >
+            {#if !reviewInfo.isCompleteCrawl}
+              <span>리뷰 수집 진행중</span>
+            {/if}
           </div>
           <div>
             {#each reviews as review}
@@ -196,6 +217,17 @@
                 <!---->
               </div>
             {/each}
+            {#if reviewInfo.isCompleteCrawl && reviewInfo.reviewCount > pageSize}
+              <div class="paginate">
+                {#each Array.from({length: Math.ceil(reviewInfo.reviewCount / pageSize)}, (_, index) => index + 1) as pageNum}
+                  <span
+                    on:click={() => getReviewsAction(pageNum)}
+                    class:bold={selectedPageNum === pageNum}
+                    >{convertPageString(pageNum)}</span
+                  >
+                {/each}
+              </div>
+            {/if}
           </div>
         </div>
       {/if}
@@ -641,5 +673,14 @@
   .review_item_inr {
     display: inline-flex;
     margin-bottom: 5px;
+    width: 100%;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .paginate span {
+    margin-right: 3px;
   }
 </style>
