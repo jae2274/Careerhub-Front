@@ -28,6 +28,7 @@
   $: companyName = postingDetail.companyName;
   $: scrapInfo = postingDetail.scrapInfo;
   $: reviewInfo = postingDetail.reviewInfo;
+  $: reviews = postingDetail.firstPageReviews || [];
   let isViewTagInput = false;
 
   async function switchScrapped() {
@@ -163,11 +164,39 @@
       </div>
       {#if reviewInfo}
         <div class="rating">
-          <span class="star"></span>
-          <span class="score"
-            >{scoreString(reviewInfo.score)}
-            <em class="num">({reviewInfo.reviewCount}개 리뷰)</em></span
-          >
+          <div>
+            <span class="star"></span>
+            <span class="score"
+              >{scoreString(reviewInfo.score)}
+              <em class="num">({reviewInfo.reviewCount}개 리뷰)</em></span
+            >
+          </div>
+          <div>
+            {#each reviews as review}
+              <div class="review_item_inr">
+                <div>
+                  <span class="star"></span>
+                  <span class="score">{scoreString(review.score)} </span>
+                </div>
+
+                <div class="auth">
+                  <h3 class="rvtit">
+                    {review.summary}
+                  </h3>
+                  <strong class=""
+                    ><span class="ico_vrf"
+                      ><i class="blind">Verified User</i></span
+                    >
+                    {#if review.employmentStatus}현직원{:else}전직원{/if}</strong
+                  >
+                  · {review.reviewUserId} · {review.jobType} - {review.date.split(
+                    "T"
+                  )[0]}
+                </div>
+                <!---->
+              </div>
+            {/each}
+          </div>
         </div>
       {/if}
       <ul class="position_tags">
@@ -576,6 +605,10 @@
     margin-top: 10px;
     margin-bottom: 10px;
   }
+  .rating > div {
+    display: inline-block;
+    margin-bottom: 20px;
+  }
   .rating .star {
     font-size: 16px;
     line-height: 1.3em;
@@ -586,7 +619,6 @@
     display: inline-block;
     width: 18px;
     height: 18px;
-    margin-right: 4px;
     vertical-align: top;
     content: "";
   }
@@ -604,5 +636,10 @@
     font-size: 14px;
     color: #94969b;
     font-style: normal;
+  }
+
+  .review_item_inr {
+    display: inline-flex;
+    margin-bottom: 5px;
   }
 </style>
