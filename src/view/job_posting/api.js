@@ -13,10 +13,10 @@ export async function findJobPostings(requestStr) {
   return await res.json();
 }
 
-export function createQuery(req, isPaging) {
+export function createQuery(req, page, isPaging) {
   const parts = [];
   if (isPaging) {
-    parts.push(`page=${req.page}&size=${req.size}`);
+    parts.push(`page=${page}&size=${req.size}`);
   }
 
   if (req.query) {

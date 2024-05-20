@@ -1,11 +1,9 @@
 import {writable} from "svelte/store";
 
-export const initPage = 0;
 export const request = setRequest();
 
 function setRequest() {
   const request = {
-    page: initPage,
     size: 16,
     query: {
       categories: [],
@@ -18,17 +16,16 @@ function setRequest() {
 
   const {subscribe, set, update} = writable(request);
 
-  const nextPage = () => {
-    update((request) => {
-      request.page = request.page + 1;
-      return request;
-    });
-  };
+  // const nextPage = () => {
+  //   update((request) => {
+  //     request.page = request.page + 1;
+  //     return request;
+  //   });
+  // };
 
   const setQuery = (query) => {
     update((request) => {
       request.query = query;
-      request.page = initPage;
       return request;
     });
   };
@@ -43,7 +40,6 @@ function setRequest() {
 
   return {
     initRequest,
-    nextPage,
     subscribe,
     setQuery,
   };
