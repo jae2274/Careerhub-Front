@@ -8,7 +8,7 @@
 <section class="sc-hgKiOD bPkSMN">
   {#if jobPostings && jobPostings.length !== 0}
     {#each jobPostings as jobPosting, index}
-      <JobPostingItem {jobPosting} delay={index * 200}></JobPostingItem>
+      <JobPostingItem {jobPosting} delay={200}></JobPostingItem>
       {#if index == jobPostings.length - 1}
         <div use:completeListCallback></div>
       {/if}

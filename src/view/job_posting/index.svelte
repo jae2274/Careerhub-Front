@@ -65,13 +65,12 @@
   onMount(() => {
     if (needToInitScrollAnchor) {
       listElement.scrollTop = $jobPostingInfo.scrollAnchor - 518; //TODO: SearchQuery 컴포넌트에 의한 틀어짐 교정. 이후 리팩토링 필요
-      console.log("set scrollAnchor", $jobPostingInfo.scrollAnchor);
       needToInitScrollAnchor = false;
     }
     listElement.addEventListener("scroll", () => {
       const scrollTop = listElement.scrollTop;
       jobPostingInfo.setScrollAnchor(scrollTop);
-      console.log("scrollTop", scrollTop);
+
       if (isScrollEnded() && !isWaitingTimeout) {
         // jobPostingInfo.setScrollAnchor();
 

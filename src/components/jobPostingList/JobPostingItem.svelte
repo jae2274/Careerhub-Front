@@ -94,7 +94,7 @@
   }
 </script>
 
-<div class="sc-bQtKYq dblCQy">
+<div class="sc-bQtKYq dblCQy" in:fade={{delay, duration: 500}}>
   <a target="_self" use:link href={`/job_posting/${site}/${postingId}`}
     ><div class="img_filter" />
     <div class="img_box">
