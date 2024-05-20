@@ -7,16 +7,18 @@
     findScrapJobs,
     findUntaggedScrapJobs,
   } from "~/view/my/scrap-job/api";
-  let promises = [];
-  promises = [...promises, findScrapJobs()];
+  let jobPostings = [];
+  findScrapJobs().then((res) => {
+    jobPostings = res;
+  });
   const scrapTagsPromise = findAllScrapTags();
 
-  function findScrapJobsAction(tag) {
-    promises = [findScrapJobs(tag)];
+  async function findScrapJobsAction(tag) {
+    jobPostings = await findScrapJobs(tag);
   }
 
-  function findUntaggedScrapJobsAction() {
-    promises = [findUntaggedScrapJobs()];
+  async function findUntaggedScrapJobsAction() {
+    jobPostings = await findUntaggedScrapJobs();
   }
 </script>
 
@@ -33,7 +35,7 @@
       {/await}
       <li on:click={findUntaggedScrapJobsAction}>그 외</li>
     </ul>
-    <JobPostingList {promises}></JobPostingList>
+    <JobPostingList {jobPostings}></JobPostingList>
   </div>
 </Layout>
 

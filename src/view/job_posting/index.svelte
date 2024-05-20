@@ -9,49 +9,46 @@
   import {query} from "~/components/query/store";
   import {parseQuery} from "~/components/query/utils";
   import {querystring, replace, location} from "svelte-spa-router";
-  import {initPage, promiseInfo} from "~/view/job_posting/promiseStore";
+  import {initPage, jobPostingInfo} from "~/view/job_posting/jobPostingStore";
 
   let listElement;
   let isWaitingTimeout = false;
   let needToInitScrollAnchor = true;
 
-  function completeListCallback() {
-    if (needToInitScrollAnchor) {
-      listElement.scrollTop = $promiseInfo.scrollAnchor;
-      console.log("set scrollAnchor", $promiseInfo.scrollAnchor);
-
-      needToInitScrollAnchor = false;
-    }
-  }
-  if ($promiseInfo.queryStr != $querystring) {
-    promiseInfo.init($querystring);
+  if ($jobPostingInfo.queryStr != $querystring) {
+    jobPostingInfo.init($querystring);
     query.initQuery(parseQuery($querystring));
   } else {
   }
 
+  let initialized = $jobPostingInfo.jobPostings.length == 0;
+  let page = $jobPostingInfo.page;
+
   $: setQuery($query);
-
-  let initialized = $promiseInfo.promises.length == 0;
-  let page = $promiseInfo.page;
-
   $: initialized ? callList($request, page) : (initialized = true);
 
   function setQuery(query) {
     request.setQuery(query);
-    page = 0;
+    if (initialized) {
+      page = 0;
+    }
   }
 
-  function callList(request, page) {
+  async function callList(request, page) {
     if (page == initPage) {
       const queryStr = createQuery(request, page, false);
       const url = `${$location}${queryStr}`;
       replace(url);
 
-      promiseInfo.init(!queryStr || queryStr.replace("?", ""));
+      jobPostingInfo.init(!queryStr || queryStr.replace("?", ""));
     }
-    promiseInfo.addPromise(callListApi(request, page));
-    promiseInfo.setPage(page);
-    return $promiseInfo.promises;
+    const resJobPostings = await callListApi(request, page);
+    if (resJobPostings.length == 0) {
+      return;
+    }
+    jobPostingInfo.addJobPostings(resJobPostings);
+    jobPostingInfo.setPage(page);
+    return $jobPostingInfo.jobPostings;
   }
 
   function callListApi(request, page) {
@@ -66,13 +63,17 @@
   }
 
   onMount(() => {
-    // 스크롤을 최하단까지 내렸을 때 페이지를 증가시키는 이벤트
+    if (needToInitScrollAnchor) {
+      listElement.scrollTop = $jobPostingInfo.scrollAnchor;
+      console.log("set scrollAnchor", $jobPostingInfo.scrollAnchor);
+      needToInitScrollAnchor = false;
+    }
     listElement.addEventListener("scroll", () => {
       const scrollTop = listElement.scrollTop;
-      promiseInfo.setScrollAnchor(scrollTop);
+      jobPostingInfo.setScrollAnchor(scrollTop);
       console.log("scrollTop", scrollTop);
       if (isScrollEnded() && !isWaitingTimeout) {
-        // promiseInfo.setScrollAnchor();
+        // jobPostingInfo.setScrollAnchor();
 
         isWaitingTimeout = true;
 
@@ -91,7 +92,7 @@
 <div class="hdErFU">
   <SearchQuery></SearchQuery>
   <div class="jobPostingList" bind:this={listElement}>
-    <JobPostingList promises={$promiseInfo.promises} {completeListCallback} />
+    <JobPostingList jobPostings={$jobPostingInfo.jobPostings} />
   </div>
 </div>
 
