@@ -9,13 +9,12 @@
   import {query} from "~/components/query/store";
   import {parseQuery} from "~/components/query/utils";
   import {querystring, replace, location} from "svelte-spa-router";
+  import {promiseInfo} from "~/view/job_posting/promiseStore";
 
   let listElement;
   let isWaitingTimeout = false;
   onMount(() => {
-    console.log("listElm is defined");
     listElement.addEventListener("scroll", () => {
-      console.log("scrolling...");
       if (isScrollEnded() && !isWaitingTimeout) {
         isWaitingTimeout = true;
 
@@ -34,8 +33,11 @@
     );
   }
 
-  let promises = [];
-  query.initQuery(parseQuery($querystring));
+  // if ($promiseInfo.queryStr != $querystring) {
+  //   promiseInfo.init($querystring);
+  //   query.initQuery(parseQuery($querystring));
+  // }
+
   $: request.setQuery($query);
   $: callList($request);
 
@@ -43,9 +45,9 @@
     if (request.page == initPage) {
       const url = `${$location}${createQuery(request, false)}`;
       replace(url);
-      promises = [];
+      promiseInfo.init($querystring);
     }
-    promises = [...promises, callListApi(request)];
+    promiseInfo.addPromise(callListApi(request));
   }
 
   function callListApi(request) {
@@ -56,7 +58,7 @@
 <Header />
 <div class="hdErFU" bind:this={listElement}>
   <SearchQuery></SearchQuery>
-  <JobPostingList {promises} />
+  <JobPostingList promises={$promiseInfo.promises} />
 </div>
 
 <style>
