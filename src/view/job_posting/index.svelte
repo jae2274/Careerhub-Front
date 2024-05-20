@@ -64,7 +64,7 @@
 
   onMount(() => {
     if (needToInitScrollAnchor) {
-      listElement.scrollTop = $jobPostingInfo.scrollAnchor;
+      listElement.scrollTop = $jobPostingInfo.scrollAnchor - 518; //TODO: SearchQuery 컴포넌트에 의한 틀어짐 교정. 이후 리팩토링 필요
       console.log("set scrollAnchor", $jobPostingInfo.scrollAnchor);
       needToInitScrollAnchor = false;
     }
@@ -89,22 +89,20 @@
 </script>
 
 <Header />
-<div class="hdErFU">
+<div class="hdErFU" bind:this={listElement}>
   <SearchQuery></SearchQuery>
-  <div class="jobPostingList" bind:this={listElement}>
+  <div class="jobPostingList">
     <JobPostingList jobPostings={$jobPostingInfo.jobPostings} />
   </div>
 </div>
 
 <style>
-  .hdErFU {
+  :global(.hdErFU) {
     background-color: rgb(255, 255, 255);
     font-size: 16px;
     padding-top: 120px;
     padding-bottom: 0.1px;
-  }
-  :global(.jobPostingList) {
     overflow-y: scroll;
-    height: 1024px;
+    height: 100%;
   }
 </style>
