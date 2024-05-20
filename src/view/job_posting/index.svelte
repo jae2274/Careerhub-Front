@@ -13,16 +13,33 @@
 
   let listElement;
   let isWaitingTimeout = false;
+  let needToInitScrollAnchor = true;
 
+  function completeListCallback() {
+    if (needToInitScrollAnchor) {
+      listElement.scrollTop = $promiseInfo.scrollAnchor;
+      console.log("set scrollAnchor", $promiseInfo.scrollAnchor);
+
+      needToInitScrollAnchor = false;
+    }
+  }
   if ($promiseInfo.queryStr != $querystring) {
     promiseInfo.init($querystring);
     query.initQuery(parseQuery($querystring));
+  } else {
   }
 
-  $: !request.setQuery($query) && promiseInfo.setPage(initPage);
+  $: setQuery($query);
 
   let initialized = $promiseInfo.promises.length == 0;
-  $: initialized ? callList($request, $promiseInfo.page) : (initialized = true);
+  let page = $promiseInfo.page;
+
+  $: initialized ? callList($request, page) : (initialized = true);
+
+  function setQuery(query) {
+    request.setQuery(query);
+    page = 0;
+  }
 
   function callList(request, page) {
     if (page == initPage) {
@@ -33,7 +50,7 @@
       promiseInfo.init(!queryStr || queryStr.replace("?", ""));
     }
     promiseInfo.addPromise(callListApi(request, page));
-
+    promiseInfo.setPage(page);
     return $promiseInfo.promises;
   }
 
@@ -41,43 +58,52 @@
     return findJobPostings(createQuery(request, page, true));
   }
 
-  // 스크롤을 최하단까지 내렸을 때 페이지를 증가시키는 이벤트
-  onMount(() => {
-    listElement.addEventListener("scroll", () => {
-      if (isScrollEnded() && !isWaitingTimeout) {
-        isWaitingTimeout = true;
-
-        setTimeout(() => {
-          isWaitingTimeout = false;
-          if (isScrollEnded()) {
-            promiseInfo.setPage($promiseInfo.page + 1);
-          }
-        }, 250);
-      }
-    });
-  });
-
   function isScrollEnded() {
     return (
       listElement.scrollTop + listElement.clientHeight + 1 >=
       listElement.scrollHeight
     );
   }
+
+  onMount(() => {
+    // 스크롤을 최하단까지 내렸을 때 페이지를 증가시키는 이벤트
+    listElement.addEventListener("scroll", () => {
+      const scrollTop = listElement.scrollTop;
+      promiseInfo.setScrollAnchor(scrollTop);
+      console.log("scrollTop", scrollTop);
+      if (isScrollEnded() && !isWaitingTimeout) {
+        // promiseInfo.setScrollAnchor();
+
+        isWaitingTimeout = true;
+
+        setTimeout(() => {
+          isWaitingTimeout = false;
+          if (isScrollEnded()) {
+            page += 1;
+          }
+        }, 250);
+      }
+    });
+  });
 </script>
 
 <Header />
-<div class="hdErFU" bind:this={listElement}>
+<div class="hdErFU">
   <SearchQuery></SearchQuery>
-  <JobPostingList promises={$promiseInfo.promises} />
+  <div class="jobPostingList" bind:this={listElement}>
+    <JobPostingList promises={$promiseInfo.promises} {completeListCallback} />
+  </div>
 </div>
 
 <style>
-  :global(.hdErFU) {
+  .hdErFU {
     background-color: rgb(255, 255, 255);
     font-size: 16px;
     padding-top: 120px;
     padding-bottom: 0.1px;
+  }
+  :global(.jobPostingList) {
     overflow-y: scroll;
-    height: 100%;
+    height: 1024px;
   }
 </style>

@@ -2,10 +2,11 @@
   import JobPostingItem from "~/components/jobPostingList/JobPostingItem.svelte";
 
   export let promises = [];
+  export let completeListCallback;
 </script>
 
 <section class="sc-hgKiOD bPkSMN">
-  {#each promises as promiseJobPostings}
+  {#each promises as promiseJobPostings, index}
     {#await promiseJobPostings}
       <div class="loading">Loading...</div>
     {:then jobPostings}
@@ -13,6 +14,9 @@
         {#each jobPostings as jobPosting, index}
           <JobPostingItem {jobPosting} delay={index * 200}></JobPostingItem>
         {/each}
+        {#if index == promises.length - 1}
+          <div use:completeListCallback></div>
+        {/if}
       {/if}
     {/await}
   {/each}
