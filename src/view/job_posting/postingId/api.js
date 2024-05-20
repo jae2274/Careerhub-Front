@@ -13,9 +13,9 @@ export async function getPostingDetail(site, postingId) {
 export async function getReviews(companyName, page, size) {
   const headers = setAccessTokenToHeader();
   const res = await fetch(
-    `${backendUrl}/company-review/${companyName}/reviews?page=${
+    `${backendUrl}/company-review/reviews?page=${
       page - 1
-    }&size=${size}`,
+    }&size=${size}&companyName=${encodeURIComponent(companyName)}`,
     {
       headers,
     }
