@@ -26,10 +26,14 @@
   $: count = 0;
   $: getCount($query);
   $: jobPostings = [];
-  $: $query, (currentPage = 1);
+
+  let isQueryInitialized = false;
+  $: $query && isQueryInitialized
+    ? (currentPage = 1)
+    : (isQueryInitialized = true);
   $: pageCount = Math.ceil(count / pageSize);
   $: pageNumbers = setPagenation(pageCount, currentPage);
-  $: getJobPostings(currentPage, pageSize);
+  $: getJobPostings(currentPage, pageSize, $query);
 
   function setPagenation(pageCount, currentPage = 1) {
     const minPageNum = Math.max(1, currentPage - 7);
@@ -45,8 +49,8 @@
     currentPage = page;
   }
 
-  async function getJobPostings(page, size) {
-    const queryStr = createUrlParams({page: page, size, query: $query});
+  async function getJobPostings(page, size, query) {
+    const queryStr = createUrlParams({page: page, size, query});
 
     const url = `${$location}${queryStr}`;
     push(url);
