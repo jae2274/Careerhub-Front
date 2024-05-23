@@ -28,7 +28,7 @@ export function parseQuery(queryString) {
     : {};
 }
 
-export function parsePagination(queryString, page = 0, size = 16) {
+export function parsePagination(queryString, page = 1, size = 16) {
   const queryParams = new URLSearchParams(queryString);
 
   return {
