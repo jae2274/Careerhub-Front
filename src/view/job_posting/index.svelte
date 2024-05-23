@@ -28,11 +28,11 @@
   $: pageNumbers = setPagenation(pageCount, currentPage);
   $: getCount($query);
   $: jobPostings = [];
-  $: getJobPostings(currentPage, pageSize, query);
+  $: getJobPostings(currentPage, pageSize, $query);
 
-  function setPagenation(pageCount, currentPage = 0) {
-    const minPageNum = Math.max(0, currentPage - 7);
-    const maxPageNum = Math.min(minPageNum + 14, pageCount - 1);
+  function setPagenation(pageCount, currentPage = 1) {
+    const minPageNum = Math.max(1, currentPage - 7);
+    const maxPageNum = Math.min(minPageNum + 14, pageCount);
 
     return Array.from(
       {length: maxPageNum - minPageNum + 1},
@@ -58,7 +58,6 @@
   }
 
   function convertPageString(pageNum) {
-    pageNum += 1;
     if (pageNum < 10) {
       return `0${pageNum}`;
     }
@@ -74,7 +73,7 @@
   </div>
   <div class="paginate">
     {#if pageCount > 1}
-      <span on:click={() => getPageJobPostings(0)}>first</span>
+      <span on:click={() => getPageJobPostings(1)}>first</span>
     {/if}
     {#each pageNumbers as pageNum}
       <span
@@ -84,7 +83,7 @@
     {/each}
 
     {#if pageCount > 1}
-      <span on:click={() => getPageJobPostings(pageCount - 1)}>last</span>
+      <span on:click={() => getPageJobPostings(pageCount)}>last</span>
     {/if}
   </div>
 </div>
