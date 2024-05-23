@@ -27,3 +27,12 @@ export function parseQuery(queryString) {
     ? decodeQuery(encodedQuery)
     : {};
 }
+
+export function parsePagination(queryString, page = 0, size = 16) {
+  const queryParams = new URLSearchParams(queryString);
+
+  return {
+    page: parseInt(queryParams.get("page")) || page,
+    size: parseInt(queryParams.get("size")) || size,
+  };
+}

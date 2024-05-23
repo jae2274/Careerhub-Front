@@ -2,16 +2,12 @@
   import JobPostingItem from "~/components/jobPostingList/JobPostingItem.svelte";
 
   export let jobPostings = [];
-  export let completeListCallback = () => {};
 </script>
 
 <section class="sc-hgKiOD bPkSMN">
   {#if jobPostings && jobPostings.length !== 0}
     {#each jobPostings as jobPosting, index}
       <JobPostingItem {jobPosting} delay={200}></JobPostingItem>
-      {#if index == jobPostings.length - 1}
-        <div use:completeListCallback></div>
-      {/if}
     {/each}
   {/if}
 </section>

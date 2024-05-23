@@ -13,11 +13,22 @@ export async function findJobPostings(requestStr) {
   return await res.json();
 }
 
-export function createQuery(req, page, isPaging) {
+export async function countJobPostings(requestStr) {
+  const headers = setAccessTokenToHeader();
+  const res = await fetch(
+    `${backendUrl}/job_postings/count${requestStr || ""}`,
+    {
+      headers,
+    }
+  );
+  checkHttpStatus(res);
+
+  return await res.json();
+}
+
+export function createUrlParams(req) {
   const parts = [];
-  if (isPaging) {
-    parts.push(`page=${page}&size=${req.size}`);
-  }
+  parts.push(`page=${req.page}&size=${req.size}`);
 
   if (req.query) {
     parts.push(`encoded_query=${createEncodedQueryParam(req.query)}`);
@@ -26,4 +37,12 @@ export function createQuery(req, page, isPaging) {
   const query = parts.join("&");
 
   return query ? `?${query}` : "";
+}
+
+export function createUrlParamsForCount(query) {
+  if (query) {
+    return `?encoded_query=${createEncodedQueryParam(query)}`;
+  }
+
+  return "";
 }
