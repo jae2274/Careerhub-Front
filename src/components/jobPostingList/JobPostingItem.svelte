@@ -23,6 +23,7 @@
   $: viewCareer = createViewCareer(jobPosting.minCareer, jobPosting.maxCareer);
   $: scrapInfo = jobPosting.scrapInfo;
   $: reviewInfo = jobPosting.reviewInfo;
+  $: status = jobPosting.status;
 
   function createViewAddress(addresses) {
     const address = addresses[0];
@@ -94,11 +95,21 @@
   }
 </script>
 
-<div class="sc-bQtKYq dblCQy" in:fade={{delay, duration: 500}}>
+<div
+  class="sc-bQtKYq dblCQy"
+  class:hiring={status == "hiring"}
+  class:closed={status == "closed"}
+  in:fade={{delay, duration: 500}}
+>
   <a target="_self" use:link href={`/job_posting/${site}/${postingId}`}
     ><div class="img_filter" />
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />
+      <div class="bKGmxJ">
+        {#if status === "closed"}
+          <span class="sc-f53de664-0 DSJqR">마감</span>
+        {/if}
+      </div>
       {#if scrapInfo}
         <div class="counts">
           <button
@@ -231,8 +242,31 @@
 </div>
 
 <style>
-  .dblCQy {
+  .hiring {
     opacity: initial;
+  }
+  .closed {
+    opacity: 0.6;
+  }
+  .DSJqR {
+    background-color: rgb(0, 0, 0);
+    border-radius: 4px;
+    color: rgb(255, 255, 255);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+  }
+  .bKGmxJ {
+    position: absolute;
+    gap: 4px;
+    display: flex;
+    top: 12px;
+    left: 12px;
+    z-index: 1;
+  }
+  .dblCQy {
     position: relative;
     width: calc(25% - 20px);
     flex: 1 1 22%;
