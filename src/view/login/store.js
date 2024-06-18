@@ -36,3 +36,64 @@ function setAgreements() {
     switchTotalAgreements,
   };
 }
+
+export const loginStore = setLoginStore();
+
+function setLoginStore() {
+  const loginStore = {
+    status: "sign_in",
+    authToken: "",
+    email: "",
+    username: "",
+  };
+
+  const {subscribe, set, update} = writable(loginStore);
+
+  const setAuthToken = (authToken) => {
+    update((loginStore) => {
+      loginStore.authToken = authToken;
+      return loginStore;
+    });
+  };
+
+  const setEmail = (email) => {
+    update((loginStore) => {
+      loginStore.email = email;
+      return loginStore;
+    });
+  };
+
+  const setUsername = (username) => {
+    update((loginStore) => {
+      loginStore.username = username;
+      return loginStore;
+    });
+  };
+
+  const setStatus = (status) => {
+    update((loginStore) => {
+      loginStore.status = status;
+      return loginStore;
+    });
+  };
+
+  const reset = () => {
+    update((loginStore) => {
+      loginStore.status = "sign_in";
+      loginStore.authToken = "";
+      loginStore.email = "";
+      loginStore.username = "";
+      return loginStore;
+    });
+  };
+
+  return {
+    subscribe,
+    set,
+    setAuthToken,
+    setEmail,
+    setUsername,
+    setStatus,
+    reset,
+  };
+}

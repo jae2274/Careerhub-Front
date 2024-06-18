@@ -10,43 +10,49 @@
   import SignIn from "~/view/login/SignIn.svelte";
   import SignUp from "~/view/login/SignUp.svelte";
   import RequireAgreement from "~/view/login/RequireAgreement.svelte";
-  import {agreements} from "~/view/login/store";
+  import {agreements, loginStore} from "~/view/login/store";
 
   import {pop} from "svelte-spa-router";
+  import {getIsInitEvent, initEvent} from "~/view/login/initEvent";
 
-  $: status = "sign_in";
-  $: authToken = "";
-  $: email = "";
-  $: username = "";
-
+  loginStore.reset();
   const apiResProms = getAuthCodeUrls();
 
-  window.addEventListener("message", async function (e) {
-    authToken = e.data.authToken;
-    const additionalAgreements = e.data.additionalAgreements || [];
-    const res = await signIn(authToken, additionalAgreements);
+  if (!getIsInitEvent()) {
+    window.addEventListener("message", async function (e) {
+      loginStore.setAuthToken(e.data.authToken);
+      const additionalAgreements = e.data.additionalAgreements || [];
+      const res = await signIn($loginStore.authToken, additionalAgreements);
+      loginStore.setStatus(res.signInStatus);
 
-    if (res.signInStatus == "success") {
-      setGrantTypeToCookie(res.successRes.grantType);
-      setAccessTokenToCookie(res.successRes.accessToken);
-      setRefreshTokenToCookie(res.successRes.refreshToken);
-      setUsernameToCookie(res.successRes.username);
-      setRolesToCookie(res.successRes.roles);
+      switch ($loginStore.status) {
+        case "success":
+          setGrantTypeToCookie(res.successRes.grantType);
+          setAccessTokenToCookie(res.successRes.accessToken);
+          setRefreshTokenToCookie(res.successRes.refreshToken);
+          setUsernameToCookie(res.successRes.username);
+          setRolesToCookie(res.successRes.roles);
 
-      pop();
-    } else if (res.signInStatus == "new_user") {
-      email = res.newUserRes.email;
-      username = res.newUserRes.username;
+          pop();
+          break;
+        case "new_user":
+          loginStore.setEmail(res.newUserRes.email);
+          loginStore.setUsername(res.newUserRes.username);
 
-      agreements.set(res.newUserRes.agreements);
-      status = "new_user";
-    } else if (res.signInStatus == "necessary_agreements") {
-      agreements.set(res.necessaryAgreementsRes.agreements);
-      status = "necessary_agreements";
-    }
+          agreements.set(res.newUserRes.agreements);
+          break;
+        case "necessary_agreements":
+          agreements.set(res.necessaryAgreementsRes.agreements);
+          break;
+      }
+    });
+    initEvent();
+  }
 
-    console.log(res);
-  });
+  $: authToken = $loginStore.authToken;
+  $: email = $loginStore.email;
+  $: status = $loginStore.status;
+  $: username = $loginStore.username;
 </script>
 
 {#await apiResProms}
