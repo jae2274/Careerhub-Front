@@ -26,21 +26,6 @@ export async function signIn(authToken, additionalAgreements = []) {
   return await res.json();
 }
 
-export async function getUserInfo(authToken) {
-  const res = await fetch(`${authUrl}/auth/user-info`, {
-    body: JSON.stringify({authToken}),
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    mode: "cors",
-    credentials: "include",
-  });
-  checkHttpStatus(res);
-
-  return await res.json();
-}
-
 export async function signUp(authToken, username, agreements) {
   const res = await fetch(`${authUrl}/auth/sign-up`, {
     method: "POST",

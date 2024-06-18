@@ -1,25 +1,14 @@
 import {backendUrl} from "~/const";
-import {setAccessTokenToHeader, checkHttpStatus} from "~/httputils";
+import {withAccessToken} from "~/httputils";
 
 export async function getPostingDetail(site, postingId) {
-  const headers = setAccessTokenToHeader();
-  const res = await fetch(`${backendUrl}/job_postings/${site}/${postingId}`, {
-    headers,
-  });
-  checkHttpStatus(res);
-  return await res.json();
+  return withAccessToken(`${backendUrl}/job_postings/${site}/${postingId}`);
 }
 
 export async function getReviews(companyName, page, size) {
-  const headers = setAccessTokenToHeader();
-  const res = await fetch(
+  return withAccessToken(
     `${backendUrl}/company-review/reviews?page=${
       page - 1
-    }&size=${size}&companyName=${encodeURIComponent(companyName)}`,
-    {
-      headers,
-    }
+    }&size=${size}&companyName=${encodeURIComponent(companyName)}`
   );
-  checkHttpStatus(res);
-  return await res.json();
 }
