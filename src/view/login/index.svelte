@@ -31,7 +31,7 @@
           setAccessTokenToCookie(res.successRes.accessToken);
           setRefreshTokenToCookie(res.successRes.refreshToken);
           setUsernameToCookie(res.successRes.username);
-          setRolesToCookie(res.successRes.roles);
+          setRolesToCookie(res.successRes.authorities);
 
           pop();
           break;

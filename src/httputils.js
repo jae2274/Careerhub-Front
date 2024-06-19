@@ -14,12 +14,12 @@ export function getUsernameFromCookie() {
   return getCookie("username");
 }
 
-export function setRolesToCookie(roles) {
-  setCookie("roles", roles.join(","));
+export function setRolesToCookie(authorities) {
+  setCookie("authorities", authorities.join(","));
 }
 
 export function getRolesFromCookie() {
-  return getCookie("roles").split(",");
+  return getCookie("authorities").split(",");
 }
 
 export function setGrantTypeToCookie(grantType) {
