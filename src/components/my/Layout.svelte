@@ -36,6 +36,9 @@
               <li class="sc-4cabea4e-2 cdjpus">
                 <a use:link href="/my/match-job">알림 설정</a>
               </li>
+              <li class="sc-4cabea4e-2 cdjpus">
+                <a use:link href="/my/authority">권한</a>
+              </li>
             </ul>
           </div>
         </div>
