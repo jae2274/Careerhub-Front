@@ -1,5 +1,9 @@
 import {authUrl} from "~/const";
-import {withAccessToken, setAccessTokenToCookie} from "~/httputils";
+import {
+  withAccessToken,
+  setAccessTokenToCookie,
+  setAuthoritiesToCookie,
+} from "~/httputils";
 
 export async function getAuthorities() {
   return withAccessToken(`${authUrl}/auth/authority`);
@@ -20,5 +24,6 @@ export async function useTicket(ticketCode) {
 
   if (resBody) {
     setAccessTokenToCookie(resBody.accessToken);
+    setAuthoritiesToCookie(resBody.authorities);
   }
 }

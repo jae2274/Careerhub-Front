@@ -1,5 +1,8 @@
 <script>
-  import {getUsernameFromCookie} from "~/httputils.js";
+  import {
+    getUsernameFromCookie,
+    getAuthoritiesFromCookie,
+  } from "~/httputils.js";
   import {link} from "svelte-spa-router";
   import Header from "~/components/Header.svelte";
 </script>
@@ -30,12 +33,16 @@
           </h2>
           <div class="sc-4cabea4e-0 heJQkf">
             <ul class="sc-4cabea4e-1 fqgxdW">
-              <li class="sc-4cabea4e-2 cdjpus">
-                <a use:link href="/my/scrap-job">포지션 스크랩 리스트</a>
-              </li>
-              <li class="sc-4cabea4e-2 cdjpus">
-                <a use:link href="/my/match-job">알림 설정</a>
-              </li>
+              {#if getAuthoritiesFromCookie().indexOf("AUTHORITY_SCRAP_JOB") !== -1}
+                <li class="sc-4cabea4e-2 cdjpus">
+                  <a use:link href="/my/scrap-job">포지션 스크랩 리스트</a>
+                </li>
+              {/if}
+              {#if getAuthoritiesFromCookie().indexOf("AUTHORITY_MATCH_JOB") !== -1}
+                <li class="sc-4cabea4e-2 cdjpus">
+                  <a use:link href="/my/match-job">알림 설정</a>
+                </li>
+              {/if}
               <li class="sc-4cabea4e-2 cdjpus">
                 <a use:link href="/my/authority">권한</a>
               </li>

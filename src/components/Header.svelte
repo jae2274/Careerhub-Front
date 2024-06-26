@@ -57,7 +57,7 @@
             </div>
             <div class="sc-e0579984-8 fUNPNd" class:hide={isHidedProfile}>
               <ul>
-                <li><a use:link href="/my/match-job">마이페이지</a></li>
+                <li><a use:link href="/my/authority">마이페이지</a></li>
                 {#if getAuthoritiesFromCookie().indexOf("AUTHORITY_ADMIN") !== -1}
                   <li>
                     <a use:link href="/admin/ticket/create" rel="referrer"
