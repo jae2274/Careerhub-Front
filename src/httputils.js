@@ -79,6 +79,13 @@ export async function withAccessToken(url, retryForfail = true, req = {}) {
         alert("알수없는 에러가 발생했습니다. httpStatus: " + httpStatus);
       }
     }
+  } else if (res.status === 403) {
+    if (window.location.href.includes("/#/my/authority")) {
+      return;
+    }
+
+    alert("권한이 없습니다.");
+    window.location.href = "/#/my/authority";
   } else if (res.status === 500) {
     alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
   }
