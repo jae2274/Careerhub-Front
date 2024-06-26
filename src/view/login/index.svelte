@@ -5,7 +5,7 @@
     setAccessTokenToCookie,
     setRefreshTokenToCookie,
     setUsernameToCookie,
-    setRolesToCookie,
+    setAuthoritiesToCookie,
   } from "~/httputils";
   import SignIn from "~/view/login/SignIn.svelte";
   import SignUp from "~/view/login/SignUp.svelte";
@@ -31,7 +31,7 @@
           setAccessTokenToCookie(res.successRes.accessToken);
           setRefreshTokenToCookie(res.successRes.refreshToken);
           setUsernameToCookie(res.successRes.username);
-          setRolesToCookie(res.successRes.authorities);
+          setAuthoritiesToCookie(res.successRes.authorities);
 
           pop();
           break;

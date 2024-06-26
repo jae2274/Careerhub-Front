@@ -6,7 +6,8 @@ import MatchJob from "~/view/my/match-job/index.svelte";
 import AddMatchJob from "~/view/my/match-job/add/index.svelte";
 import EditCondition from "~/view/my/match-job/edit/index.svelte";
 import Authority from "~/view/my/authority/index.svelte";
-
+import CreateTicket from "~/view/admin/ticket/create/index.svelte";
+import Tickets from "~/view/admin/ticket/index.svelte";
 import ScrapJob from "~/view/my/scrap-job/index.svelte";
 
 export default {
@@ -19,4 +20,6 @@ export default {
   "/my/match-job/edit/:conditionId": EditCondition,
   "/my/scrap-job": ScrapJob,
   "/my/authority": Authority,
+  "/admin/ticket/create": CreateTicket,
+  "/admin/ticket": Tickets,
 };

@@ -14,11 +14,11 @@ export function getUsernameFromCookie() {
   return getCookie("username");
 }
 
-export function setRolesToCookie(authorities) {
+export function setAuthoritiesToCookie(authorities) {
   setCookie("authorities", authorities.join(","));
 }
 
-export function getRolesFromCookie() {
+export function getAuthoritiesFromCookie() {
   return getCookie("authorities").split(",");
 }
 
@@ -83,7 +83,11 @@ export async function withAccessToken(url, retryForfail = true, req = {}) {
     alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
   }
 
-  return await res.json();
+  try {
+    return await res.json();
+  } catch (e) {
+    return;
+  }
 }
 
 let isRefreshingToken = false;

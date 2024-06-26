@@ -1,7 +1,11 @@
 <script>
   import {link} from "svelte-spa-router";
   import {getCookie, deleteAllCookies} from "~/cookie.js";
-  import {isLogin, getUsernameFromCookie} from "~/httputils.js";
+  import {
+    isLogin,
+    getUsernameFromCookie,
+    getAuthoritiesFromCookie,
+  } from "~/httputils.js";
 
   let isLoginValue = isLogin();
   let username = getUsernameFromCookie();
@@ -54,6 +58,13 @@
             <div class="sc-e0579984-8 fUNPNd" class:hide={isHidedProfile}>
               <ul>
                 <li><a use:link href="/my/match-job">마이페이지</a></li>
+                {#if getAuthoritiesFromCookie().indexOf("AUTHORITY_ADMIN") !== -1}
+                  <li>
+                    <a use:link href="/admin/ticket/create" rel="referrer"
+                      >관리자 페이지</a
+                    >
+                  </li>
+                {/if}
                 <li>
                   <button type="button" on:click={logout}>로그아웃</button>
                 </li>
