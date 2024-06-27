@@ -127,7 +127,7 @@
     text-decoration: none;
   }
   .jEzXte {
-    width: 790px;
+    width: 900px;
     position: relative;
   }
 </style>

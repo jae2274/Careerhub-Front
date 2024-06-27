@@ -64,8 +64,8 @@
     <button on:click={createTicketAction}>티켓 생성</button>
     <table>
       <tr>
-        <th>권한 이름</th>
-        <th>추가기한</th>
+        <th class="authority_name">권한 이름</th>
+        <th class="expiry_duration">추가기한</th>
         <th>삭제</th>
       </tr>
       {#each ticketAuthorities as ticketAuthority, index}
@@ -115,5 +115,24 @@
 <style>
   input[type="number"] {
     width: 50px;
+  }
+
+  table {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    border-collapse: collapse; /* 테두리 중복 제거 */
+  }
+  table > tr > td,
+  table > tr > th {
+    text-align: left; /* 텍스트 정렬 */
+    border-bottom: 1px solid black; /* 오른쪽 세로줄 추가 */
+  }
+
+  .authority_name {
+    width: 180px;
+  }
+
+  .expiry_duration {
+    width: 120px;
   }
 </style>

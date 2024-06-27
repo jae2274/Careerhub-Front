@@ -7,7 +7,9 @@
   } from "~/view/my/authority/api";
 
   $: authorities = [];
+  $: now = new Date().getTime();
   getAuthorities().then((res) => {
+    now = new Date().getTime();
     authorities = res.authorities;
   });
   $: ticketCode = "";
@@ -82,14 +84,14 @@
           <table>
             <tr>
               <th class="authority_name">추가될 권한명</th>
-              <th class="summary">설명</th>
+              <th>설명</th>
               <th class="expiry_duration">추가 기한</th>
             </tr>
             {#each ticketInfo.ticketAuthorities as authority}
               <tr>
-                <td class="authority_name">{authority.authorityName}</td>
-                <td class="summary">{authority.summary}</td>
-                <td class="expiry_duration">
+                <td>{authority.authorityName}</td>
+                <td>{authority.summary}</td>
+                <td>
                   {#if authority.expiryDurationMS}
                     {convertMS(authority.expiryDurationMS)}
                   {:else}
@@ -117,18 +119,25 @@
       </p>
       <table>
         <tr>
-          <th>권한명</th>
+          <th class="authority_name">권한명</th>
           <th>설명</th>
-          <th>만료일</th>
+          <th class="expiry_date">만료일</th>
         </tr>
         {#each authorities as authority}
           <tr>
             <td>{authority.authorityName}</td>
             <td>{authority.summary}</td>
-            <td
-              >{authority.expiryUnixMilli
-                ? new Date(authority.expiryUnixMilli).toLocaleString()
-                : "무기한"}</td
+            <td>
+              <span
+                class={now < authority.expiryUnixMilli ||
+                !authority.expiryUnixMilli
+                  ? "green"
+                  : "red"}
+              >
+                {authority.expiryUnixMilli
+                  ? new Date(authority.expiryUnixMilli).toLocaleString()
+                  : "무기한"}</span
+              ></td
             >
           </tr>
         {/each}
@@ -153,7 +162,28 @@
     width: 120px;
   }
 
+  .expiry_date {
+    width: 180px;
+  }
+
   .is_used {
     width: 60px;
+  }
+
+  .red {
+    color: red;
+  }
+
+  .green {
+    color: green;
+  }
+
+  table {
+    border-collapse: collapse; /* 테두리 중복 제거 */
+    width: 100%;
+  }
+  table > tr {
+    text-align: left; /* 텍스트 정렬 */
+    border-bottom: 1px solid black; /* 오른쪽 세로줄 추가 */
   }
 </style>

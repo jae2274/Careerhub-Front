@@ -5,7 +5,7 @@
   import {getTickets} from "~/view/admin/ticket/api";
 
   $: tickets = [];
-  $: filteredStatus = "all";
+  $: filteredStatus = "unused";
   $: filteredTickets = tickets.filter((ticket) => {
     if (filteredStatus === "all") {
       return true;
@@ -60,37 +60,68 @@
         <option value="unused">미사용</option>
       </select>
     </div>
-    <table>
+    <table class="ticketTable">
       <tr>
-        <th class="authority_name">권한명</th>
-        <th class="expiry_duration">추가기한</th>
-        <th class="is_used">사용여부</th>
-        <th class="created_at">생성일</th>
+        <th>티켓 코드</th>
+        <th>생성일</th>
+        <th>사용여부</th>
+        <th>권한 목록</th>
       </tr>
+      {#each filteredTickets as ticket}
+        <tr>
+          <td class="ticket_id">{ticket.ticketId}</td>
+          <td class="created_at">
+            {new Date(ticket.createUnixMilli).toLocaleString()}
+          </td>
+          <td class="is_used">
+            <span class={ticket.isUsed ? "red" : "green"}>
+              {ticket.isUsed ? "사용됨" : "미사용"}
+            </span>
+          </td>
+          <td>
+            <table class="authorities">
+              {#each ticket.ticketAuthorities as authority}
+                <tr>
+                  <td class="authority_name">{authority.authorityName}</td>
+                  <td class="expiry_duration">
+                    {#if authority.expiryDurationMS}
+                      {convertMS(authority.expiryDurationMS)}
+                    {:else}
+                      기한 없음
+                    {/if}
+                  </td>
+                </tr>
+              {/each}
+            </table>
+          </td>
+        </tr>
+      {/each}
     </table>
-    {#each filteredTickets as ticket}
-      <div class="ticketInfo">
+    <!-- <div class="ticketInfo">
         <h4>{ticket.ticketId}</h4>
-        <table>
-          {#each ticket.ticketAuthorities as authority}
-            <tr>
-              <td class="authority_name">{authority.authorityName}</td>
-              <td class="expiry_duration">
-                {#if authority.expiryDurationMS}
-                  {convertMS(authority.expiryDurationMS)}
-                {:else}
-                  기한 없음
-                {/if}
-              </td>
-              <td class="is_used">{ticket.isUsed ? "사용됨" : "미사용"}</td>
-              <td class="created_at"
-                >{new Date(ticket.createUnixMilli).toLocaleString()}</td
-              >
-            </tr>
-          {/each}
-        </table>
-      </div>
-    {/each}
+        <p>
+          <strong>생성일:</strong>
+          {new Date(ticket.createUnixMilli).toLocaleString()}
+        </p>
+        <p><strong>사용여부:</strong> {ticket.isUsed ? "사용됨" : "미사용"}</p>
+        <div class="ticketAuthorities">
+          <div style="width: 100px;"><strong>권한 목록:</strong></div>
+          <table>
+            {#each ticket.ticketAuthorities as authority}
+              <tr>
+                <td class="authority_name">{authority.authorityName}</td>
+                <td class="expiry_duration">
+                  {#if authority.expiryDurationMS}
+                    {convertMS(authority.expiryDurationMS)}
+                  {:else}
+                    기한 없음
+                  {/if}
+                </td>
+              </tr>
+            {/each}
+          </table>
+        </div>
+      </div> -->
   </div>
 </Layout>
 
@@ -106,6 +137,9 @@
     margin-top: 10px;
   }
 
+  .ticket_id {
+    width: 310px;
+  }
   .authority_name {
     width: 180px;
   }
@@ -120,5 +154,24 @@
 
   .created_at {
     width: 180px;
+  }
+
+  table {
+    border-collapse: collapse; /* 테두리 중복 제거 */
+  }
+  table > tr {
+    text-align: left; /* 텍스트 정렬 */
+    border-bottom: 1px solid black; /* 오른쪽 세로줄 추가 */
+  }
+
+  table.authorities > tr:last-child {
+    border-bottom: none; /* 마지막 열의 세로줄 제거 */
+  }
+  .red {
+    color: red;
+  }
+
+  .green {
+    color: green;
   }
 </style>
