@@ -60,7 +60,7 @@
                 <li><a use:link href="/my/authority">마이페이지</a></li>
                 {#if getAuthoritiesFromCookie().indexOf("AUTHORITY_ADMIN") !== -1}
                   <li>
-                    <a use:link href="/admin/ticket/create" rel="referrer"
+                    <a use:link href="/admin/user" rel="referrer"
                       >관리자 페이지</a
                     >
                   </li>

@@ -8,6 +8,7 @@ import EditCondition from "~/view/my/match-job/edit/index.svelte";
 import Authority from "~/view/my/authority/index.svelte";
 import CreateTicket from "~/view/admin/ticket/create/index.svelte";
 import Tickets from "~/view/admin/ticket/index.svelte";
+import Users from "~/view/admin/user/index.svelte";
 import ScrapJob from "~/view/my/scrap-job/index.svelte";
 
 export default {
@@ -22,4 +23,5 @@ export default {
   "/my/authority": Authority,
   "/admin/ticket/create": CreateTicket,
   "/admin/ticket": Tickets,
+  "/admin/user": Users,
 };

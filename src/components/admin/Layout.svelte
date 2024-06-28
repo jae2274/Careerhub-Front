@@ -31,6 +31,9 @@
           <div class="sc-4cabea4e-0 heJQkf">
             <ul class="sc-4cabea4e-1 fqgxdW">
               <li class="sc-4cabea4e-2 cdjpus">
+                <a use:link href="/admin/user">유저</a>
+              </li>
+              <li class="sc-4cabea4e-2 cdjpus">
                 <a use:link href="/admin/ticket">티켓</a>
               </li>
             </ul>
