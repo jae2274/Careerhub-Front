@@ -1,10 +1,6 @@
 import {authUrl} from "~/const";
 import {withAccessToken} from "~/httputils";
 
-export async function getAllAuthorities() {
-  return withAccessToken(`${authUrl}/auth/admin/authority`);
-}
-
 export async function createTicket(authorities) {
   const reqBody = {
     ticketAuthorities: authorities,

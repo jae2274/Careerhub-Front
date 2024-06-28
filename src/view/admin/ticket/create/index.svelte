@@ -1,59 +1,19 @@
 <script>
   import Layout from "~/components/admin/Layout.svelte";
-  import {getAllAuthorities, createTicket} from "~/view/admin/ticket/api";
-  import {} from "svelte-spa-router";
+  import {createTicket} from "~/view/admin/ticket/api";
 
-  $: authorities = [];
-  getAllAuthorities().then((res) => {
-    authorities = res.authorities;
-  });
+  import AddAuthority from "~/components/admin/authority/AddAuthority.svelte";
+  import {addedAuthorities} from "~/components/admin/authority/addAuthorityStore";
 
-  $: ticketAuthorities = [];
-
-  let selectedAuthorityCode = "";
-  let checkedExpiry = false;
-  let expiryDay = 0;
-  let expiryHour = 0;
-  let expiryMinute = 0;
-
-  function clear() {
-    selectedAuthorityCode = "";
-    checkedExpiry = false;
-    expiryDay = 0;
-    expiryHour = 0;
-    expiryMinute = 0;
-  }
-
-  function addAuthority() {
-    const selectedAuthority = authorities.find(
-      (authority) => authority.authorityCode === selectedAuthorityCode
-    );
-    if (!selectedAuthority) {
-      return;
-    }
-    const ticketAuthority = {
-      authorityCode: selectedAuthority.authorityCode,
-      authorityName: selectedAuthority.authorityName,
-    };
-    if (checkedExpiry) {
-      ticketAuthority.expiryDay = expiryDay;
-      ticketAuthority.expiryHour = expiryHour;
-      ticketAuthority.expiryMinute = expiryMinute;
-      ticketAuthority.expiryDurationMS =
-        expiryDay * 24 * 60 * 60 * 1000 +
-        expiryHour * 60 * 60 * 1000 +
-        expiryMinute * 60 * 1000;
-    }
-    ticketAuthorities = [...ticketAuthorities, ticketAuthority];
-    clear();
-  }
-
-  function deleteAuthority(index) {
-    ticketAuthorities = ticketAuthorities.filter((_, i) => i !== index);
-  }
+  // $: addedAuthorities = [];
 
   function createTicketAction() {
-    createTicket(ticketAuthorities).then((res) => {
+    if ($addedAuthorities.length === 0) {
+      alert("권한을 추가해주세요.");
+      return;
+    }
+    createTicket($addedAuthorities).then((res) => {
+      addedAuthorities.clear();
       window.location.href = "/#/admin/ticket";
     });
   }
@@ -62,77 +22,6 @@
 <Layout>
   <div slot="content">
     <button on:click={createTicketAction}>티켓 생성</button>
-    <table>
-      <tr>
-        <th class="authority_name">권한 이름</th>
-        <th class="expiry_duration">추가기한</th>
-        <th>삭제</th>
-      </tr>
-      {#each ticketAuthorities as ticketAuthority, index}
-        <tr>
-          <td>{ticketAuthority.authorityName}</td>
-          <td
-            >{#if ticketAuthority.expiryDurationMS}
-              {Math.floor(
-                ticketAuthority.expiryDurationMS / (24 * 60 * 60 * 1000)
-              )}일
-              {Math.floor(
-                (ticketAuthority.expiryDurationMS % (24 * 60 * 60 * 1000)) /
-                  (60 * 60 * 1000)
-              )}시간
-              {Math.floor(
-                (ticketAuthority.expiryDurationMS % (60 * 60 * 1000)) /
-                  (60 * 1000)
-              )}분
-            {/if}
-          </td>
-          <td>
-            <button on:click={() => deleteAuthority(index)}>삭제</button>
-          </td>
-        </tr>
-      {/each}
-    </table>
-    <div>
-      <select bind:value={selectedAuthorityCode}>
-        {#each authorities as authority}
-          <option value={authority.authorityCode}
-            >{authority.authorityName}</option
-          >
-        {/each}
-      </select>
-      <input type="checkbox" bind:checked={checkedExpiry} />추가기한 설정
-
-      {#if checkedExpiry}
-        <input type="number" bind:value={expiryDay} />일
-        <input type="number" bind:value={expiryHour} />시간
-        <input type="number" bind:value={expiryMinute} />분
-      {/if}
-      <button on:click={addAuthority}> 권한 추가 </button>
-    </div>
+    <AddAuthority />
   </div>
 </Layout>
-
-<style>
-  input[type="number"] {
-    width: 50px;
-  }
-
-  table {
-    margin-top: 10px;
-    margin-bottom: 30px;
-    border-collapse: collapse; /* 테두리 중복 제거 */
-  }
-  table > tr > td,
-  table > tr > th {
-    text-align: left; /* 텍스트 정렬 */
-    border-bottom: 1px solid black; /* 오른쪽 세로줄 추가 */
-  }
-
-  .authority_name {
-    width: 180px;
-  }
-
-  .expiry_duration {
-    width: 120px;
-  }
-</style>
