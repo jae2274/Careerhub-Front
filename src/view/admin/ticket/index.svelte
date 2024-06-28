@@ -1,7 +1,6 @@
 <script>
   import Layout from "~/components/admin/Layout.svelte";
-  import {link} from "svelte-spa-router";
-
+  import CreateTicket from "~/view/admin/ticket/create/index.svelte";
   import {getTickets} from "~/view/admin/ticket/api";
 
   $: tickets = [];
@@ -45,13 +44,26 @@
 
     return dateStr.join(" ");
   }
+
+  $: isCreatingTicket = false;
+  function afterCreateTicket() {
+    isCreatingTicket = false;
+    getTickets().then((res) => {
+      tickets = res.tickets;
+    });
+  }
 </script>
 
 <Layout>
   <div slot="content">
-    <button class="linkCreate">
-      <a use:link href="/admin/ticket/create">티켓 생성</a>
-    </button>
+    {#if isCreatingTicket}
+      <CreateTicket {afterCreateTicket} />
+      <button on:click={() => (isCreatingTicket = false)}>생성 취소</button>
+    {:else}
+      <button class="linkCreate" on:click={() => (isCreatingTicket = true)}>
+        티켓 생성
+      </button>
+    {/if}
 
     <div class="filteredStatus">
       <select bind:value={filteredStatus}>

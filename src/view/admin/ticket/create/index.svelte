@@ -6,6 +6,7 @@
   import {addedAuthorities} from "~/components/admin/authority/addAuthorityStore";
 
   // $: addedAuthorities = [];
+  export let afterCreateTicket = () => {};
 
   function createTicketAction() {
     if ($addedAuthorities.length === 0) {
@@ -14,14 +15,12 @@
     }
     createTicket($addedAuthorities).then((res) => {
       addedAuthorities.clear();
-      window.location.href = "/#/admin/ticket";
+      afterCreateTicket();
     });
   }
 </script>
 
-<Layout>
-  <div slot="content">
-    <button on:click={createTicketAction}>티켓 생성</button>
-    <AddAuthority />
-  </div>
-</Layout>
+<div>
+  <button on:click={createTicketAction}>티켓 생성</button>
+  <AddAuthority />
+</div>
