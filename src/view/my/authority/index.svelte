@@ -105,7 +105,7 @@
             {/each}
           </table>
         </div>
-        {#if !ticketInfo.isUsed}
+        {#if !ticketInfo.usedUnixMilli}
           <button on:click={useTicketAction}>티켓 사용하기</button>
           <button on:click={removeTicketInfoAction}>취소</button>
         {:else}

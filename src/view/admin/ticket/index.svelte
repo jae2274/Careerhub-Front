@@ -12,11 +12,11 @@
     }
 
     if (filteredStatus === "used") {
-      return ticket.isUsed;
+      return ticket.usedUnixMilli;
     }
 
     if (filteredStatus === "unused") {
-      return !ticket.isUsed;
+      return !ticket.usedUnixMilli;
     }
   });
   getTickets().then((res) => {
@@ -89,8 +89,10 @@
             {convertDateTimeFormat(ticket.createUnixMilli)}
           </td>
           <td class="is_used">
-            <span class={ticket.isUsed ? "red" : "green"}>
-              {ticket.isUsed ? "사용됨" : "미사용"}
+            <span class={ticket.usedUnixMilli ? "red" : "green"}>
+              {ticket.usedUnixMilli
+                ? convertDateTimeFormat(ticket.usedUnixMilli)
+                : "미사용"}
             </span>
           </td>
           <td>
