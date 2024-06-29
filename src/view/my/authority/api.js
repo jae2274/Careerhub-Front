@@ -10,7 +10,7 @@ export async function getAuthorities() {
 }
 
 export async function getTicketInfo(ticketCode) {
-  return withAccessToken(`${authUrl}/auth/ticket/${ticketCode}`);
+  return withAccessToken(`${authUrl}/auth/ticket?ticket_code=${ticketCode}`);
 }
 
 export async function useTicket(ticketCode) {

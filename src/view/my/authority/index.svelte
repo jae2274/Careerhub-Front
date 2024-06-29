@@ -69,7 +69,7 @@
         <div>
           <input
             type="text"
-            placeholder="티켓 코드를 입력하세요"
+            placeholder="티켓 이름 또는 티켓 코드를 입력하세요"
             bind:value={ticketCode}
             on:keydown={(e) => {
               if (e.key === "Enter") {
