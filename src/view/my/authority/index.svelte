@@ -5,6 +5,7 @@
     getTicketInfo,
     useTicket,
   } from "~/view/my/authority/api";
+  import {convertDateTimeFormat} from "~/utils";
 
   $: authorities = [];
   $: now = new Date().getTime();
@@ -135,7 +136,7 @@
                   : "red"}
               >
                 {authority.expiryUnixMilli
-                  ? new Date(authority.expiryUnixMilli).toLocaleString()
+                  ? convertDateTimeFormat(authority.expiryUnixMilli)
                   : "무기한"}</span
               ></td
             >
@@ -163,7 +164,7 @@
   }
 
   .expiry_date {
-    width: 180px;
+    width: 150px;
   }
 
   .is_used {

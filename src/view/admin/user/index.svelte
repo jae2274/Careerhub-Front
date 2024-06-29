@@ -1,8 +1,8 @@
 <script>
   import Layout from "~/components/admin/Layout.svelte";
-  import {getAllUsers} from "~/view/admin/user/api";
+  import {getAllUsers, removeAuthority} from "~/view/admin/user/api";
   import AddAuthorities from "~/view/admin/user/add_authority/index.svelte";
-
+  import {convertDateTimeFormat} from "~/utils";
   const now = new Date().getTime();
   $: users = [];
   getAllUsers().then((res) => {
@@ -16,6 +16,20 @@
     getAllUsers().then((res) => {
       users = res.users;
     });
+  }
+
+  function removeAuthorityAction(user, authority) {
+    if (
+      confirm(
+        `${user.userName}님의 ${authority.authorityName} 권한을 제거하시겠습니까?`
+      )
+    ) {
+      removeAuthority(user.userId, authority.authorityCode).then(() => {
+        getAllUsers().then((res) => {
+          users = res.users;
+        });
+      });
+    }
   }
 </script>
 
@@ -32,7 +46,6 @@
         <th class="username">아이디</th>
         <th>이메일</th>
         <th>권한</th>
-        <th class="startAddAuthority"></th>
         <th>가입일</th>
       </tr>
       {#each users as user}
@@ -42,28 +55,40 @@
           <td>{user.email}</td>
           <td>
             <table class="authorities">
-              {#each user.authorities as { authorityName, expiryUnixMilli }}
+              {#each user.authorities as authority}
                 <tr>
-                  <td class="authority_name">{authorityName}</td>
+                  <td class="authority_name">{authority.authorityName}</td>
                   <td>
                     <span
-                      class={now < expiryUnixMilli || !expiryUnixMilli
+                      class={now < authority.expiryUnixMilli ||
+                      !authority.expiryUnixMilli
                         ? "green"
                         : "red"}
                     >
-                      {expiryUnixMilli
-                        ? new Date(expiryUnixMilli).toLocaleString()
+                      {authority.expiryUnixMilli
+                        ? convertDateTimeFormat(authority.expiryUnixMilli)
                         : "무기한"}
                     </span>
                   </td>
+                  <td class="authorityButton"
+                    ><button
+                      on:click={() => removeAuthorityAction(user, authority)}
+                      >권한 제거</button
+                    ></td
+                  >
                 </tr>
               {/each}
+              <tr>
+                <td
+                  ><button on:click={() => (targetUser = user)}
+                    >권한 부여</button
+                  ></td
+                >
+              </tr>
             </table>
           </td>
-          <td
-            ><button on:click={() => (targetUser = user)}>권한 부여</button></td
-          >
-          <td>{new Date(user.createdUnixMilli).toLocaleString()}</td>
+
+          <td>{convertDateTimeFormat(user.createdUnixMilli)}</td>
         </tr>
       {/each}
     </table>
@@ -79,7 +104,7 @@
     width: 180px;
   }
 
-  .startAddAuthority {
+  .authorityButton {
     width: 60px;
   }
   table {

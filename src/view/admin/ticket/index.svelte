@@ -2,6 +2,7 @@
   import Layout from "~/components/admin/Layout.svelte";
   import CreateTicket from "~/view/admin/ticket/create/index.svelte";
   import {getTickets} from "~/view/admin/ticket/api";
+  import {convertDateTimeFormat} from "~/utils";
 
   $: tickets = [];
   $: filteredStatus = "unused";
@@ -83,7 +84,7 @@
         <tr>
           <td class="ticket_id">{ticket.ticketId}</td>
           <td class="created_at">
-            {new Date(ticket.createUnixMilli).toLocaleString()}
+            {convertDateTimeFormat(ticket.createUnixMilli)}
           </td>
           <td class="is_used">
             <span class={ticket.isUsed ? "red" : "green"}>
@@ -109,31 +110,6 @@
         </tr>
       {/each}
     </table>
-    <!-- <div class="ticketInfo">
-        <h4>{ticket.ticketId}</h4>
-        <p>
-          <strong>생성일:</strong>
-          {new Date(ticket.createUnixMilli).toLocaleString()}
-        </p>
-        <p><strong>사용여부:</strong> {ticket.isUsed ? "사용됨" : "미사용"}</p>
-        <div class="ticketAuthorities">
-          <div style="width: 100px;"><strong>권한 목록:</strong></div>
-          <table>
-            {#each ticket.ticketAuthorities as authority}
-              <tr>
-                <td class="authority_name">{authority.authorityName}</td>
-                <td class="expiry_duration">
-                  {#if authority.expiryDurationMS}
-                    {convertMS(authority.expiryDurationMS)}
-                  {:else}
-                    기한 없음
-                  {/if}
-                </td>
-              </tr>
-            {/each}
-          </table>
-        </div>
-      </div> -->
   </div>
 </Layout>
 
@@ -165,7 +141,7 @@
   }
 
   .created_at {
-    width: 180px;
+    width: 150px;
   }
 
   table {

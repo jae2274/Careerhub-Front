@@ -14,3 +14,13 @@ export async function addAuthorities(userId, authorities) {
     }),
   });
 }
+
+export async function removeAuthority(userId, authorityCode) {
+  return withAccessToken(`${authUrl}/auth/admin/authority`, true, {
+    method: "DELETE",
+    body: JSON.stringify({
+      userId: userId,
+      authorityCode: authorityCode,
+    }),
+  });
+}
