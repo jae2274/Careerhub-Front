@@ -90,9 +90,12 @@
           </td>
           <td class="is_used">
             <span class={ticket.usedUnixMilli ? "red" : "green"}>
-              {ticket.usedUnixMilli
-                ? convertDateTimeFormat(ticket.usedUnixMilli)
-                : "미사용"}
+              {#if ticket.isUsed}
+                {convertDateTimeFormat(ticket.usedUnixMilli)}<br />
+                {ticket.usedUserName}
+              {:else}
+                미사용
+              {/if}
             </span>
           </td>
           <td>
