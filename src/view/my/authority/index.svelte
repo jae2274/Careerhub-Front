@@ -82,6 +82,8 @@
       {:else}
         <div>
           <h4>{ticketInfo.ticketId}</h4>
+          <br />
+          <span><strong>티켓 이름:</strong> {ticketInfo.ticketName}</span>
           <table>
             <tr>
               <th class="authority_name">추가될 권한명</th>

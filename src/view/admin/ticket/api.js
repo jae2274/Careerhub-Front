@@ -1,8 +1,9 @@
 import {authUrl} from "~/const";
 import {withAccessToken} from "~/httputils";
 
-export async function createTicket(authorities) {
+export async function createTicket(ticketName, authorities) {
   const reqBody = {
+    ticketName,
     ticketAuthorities: authorities,
   };
   return withAccessToken(`${authUrl}/auth/admin/ticket`, true, {

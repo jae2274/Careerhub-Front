@@ -61,7 +61,7 @@
   .clYeIU {
     display: flex;
     justify-content: space-between;
-    max-width: 1060px;
+    max-width: 1440px;
     margin: 0px auto;
     padding: 48px 0px 120px;
   }
@@ -130,7 +130,7 @@
     text-decoration: none;
   }
   .jEzXte {
-    width: 900px;
+    width: 1440px;
     position: relative;
   }
 </style>

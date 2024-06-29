@@ -75,6 +75,7 @@
     </div>
     <table class="ticketTable">
       <tr>
+        <th>티켓명</th>
         <th>티켓 코드</th>
         <th>생성일</th>
         <th>사용여부</th>
@@ -82,6 +83,7 @@
       </tr>
       {#each filteredTickets as ticket}
         <tr>
+          <td class="ticket_name">{ticket.ticketName}</td>
           <td class="ticket_id">{ticket.ticketId}</td>
           <td class="created_at">
             {convertDateTimeFormat(ticket.createUnixMilli)}
@@ -125,6 +127,9 @@
     margin-top: 10px;
   }
 
+  .ticket_name {
+    width: 150px;
+  }
   .ticket_id {
     width: 310px;
   }
