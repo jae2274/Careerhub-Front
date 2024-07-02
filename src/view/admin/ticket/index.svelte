@@ -5,18 +5,18 @@
   import {convertDateTimeFormat} from "~/utils";
 
   $: tickets = [];
-  $: filteredStatus = "unused";
+  $: filteredStatus = "all";
   $: filteredTickets = tickets.filter((ticket) => {
     if (filteredStatus === "all") {
       return true;
     }
 
     if (filteredStatus === "used") {
-      return ticket.usedUnixMilli;
+      return ticket.usedCount >= ticket.useableCount;
     }
 
     if (filteredStatus === "unused") {
-      return !ticket.usedUnixMilli;
+      return !(ticket.usedCount >= ticket.useableCount);
     }
   });
   getTickets().then((res) => {
@@ -75,28 +75,36 @@
     </div>
     <table class="ticketTable">
       <tr>
-        <th>티켓명</th>
-        <th>티켓 코드</th>
-        <th>생성일</th>
-        <th>사용여부</th>
+        <th class="ticket_name">티켓명</th>
+        <!-- <th>티켓 코드</th> -->
+        <th class="created_at">생성일</th>
+        <th class="used_count">사용 횟수</th>
+        <th class="used_user">사용자 명단</th>
         <th>권한 목록</th>
       </tr>
       {#each filteredTickets as ticket}
         <tr>
-          <td class="ticket_name">{ticket.ticketName}</td>
-          <td class="ticket_id">{ticket.ticketId}</td>
-          <td class="created_at">
+          <td>{ticket.ticketName}</td>
+          <!-- <td class="ticket_id">{ticket.ticketId}</td> -->
+          <td>
             {convertDateTimeFormat(ticket.createUnixMilli)}
           </td>
-          <td class="is_used">
-            <span class={ticket.usedUnixMilli ? "red" : "green"}>
-              {#if ticket.isUsed}
-                {convertDateTimeFormat(ticket.usedUnixMilli)}<br />
-                {ticket.usedUserName}
-              {:else}
-                미사용
-              {/if}
+          <td>
+            <span
+              class={ticket.useableCount <= ticket.usedCount ? "red" : "green"}
+            >
+              {ticket.usedCount}/{ticket.useableCount}
             </span>
+          </td>
+          <td>
+            <table class="used_info">
+              {#each ticket.usedInfos as usedInfo}
+                <tr>
+                  <td>{usedInfo.usedUserName}</td>
+                  <td>{convertDateTimeFormat(usedInfo.usedUnixMilli)}</td>
+                </tr>
+              {/each}
+            </table>
           </td>
           <td>
             <table class="authorities">
@@ -146,8 +154,12 @@
     width: 120px;
   }
 
-  .is_used {
-    width: 60px;
+  .used_count {
+    width: 70px;
+  }
+
+  .used_user {
+    width: 200px;
   }
 
   .created_at {
@@ -162,7 +174,8 @@
     border-bottom: 1px solid black; /* 오른쪽 세로줄 추가 */
   }
 
-  table.authorities > tr:last-child {
+  table.authorities > tr:last-child,
+  table.used_info > tr:last-child {
     border-bottom: none; /* 마지막 열의 세로줄 제거 */
   }
   .red {

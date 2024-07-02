@@ -84,6 +84,10 @@
           <h4>{ticketInfo.ticketId}</h4>
           <br />
           <span><strong>티켓 이름:</strong> {ticketInfo.ticketName}</span>
+          <br />
+          <span><strong>총 티켓 갯수:</strong> {ticketInfo.useableCount}</span>
+          <br />
+          <span><strong>사용된 티켓 갯수:</strong> {ticketInfo.usedCount}</span>
           <table>
             <tr>
               <th class="authority_name">추가될 권한명</th>
@@ -105,13 +109,17 @@
             {/each}
           </table>
         </div>
-        {#if !ticketInfo.usedUnixMilli}
-          <button on:click={useTicketAction}>티켓 사용하기</button>
-          <button on:click={removeTicketInfoAction}>취소</button>
-        {:else}
+        {#if ticketInfo.alreadyUsed}
           <button on:click={removeTicketInfoAction}
             >이미 사용된 티켓입니다. (다시 조회하기)</button
           >
+        {:else if ticketInfo.useableCount <= ticketInfo.usedCount}
+          <button on:click={removeTicketInfoAction}
+            >사용 가능한 티켓이 없습니다.</button
+          >
+        {:else}
+          <button on:click={useTicketAction}>티켓 사용하기</button>
+          <button on:click={removeTicketInfoAction}>취소</button>
         {/if}
       {/if}
     </div>

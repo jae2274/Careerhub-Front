@@ -7,6 +7,7 @@
 
   // $: addedAuthorities = [];
   $: ticketName = "";
+  $: useableCount = 1;
   $: ramdomSuffix = Math.random().toString(36).substring(2, 6);
   export let afterCreateTicket = () => {};
 
@@ -16,11 +17,13 @@
       return;
     }
 
-    createTicket(ticketName.trim(), $addedAuthorities).then((res) => {
-      addedAuthorities.clear();
-      ticketName = "";
-      afterCreateTicket();
-    });
+    createTicket(ticketName.trim(), $addedAuthorities, useableCount).then(
+      (res) => {
+        addedAuthorities.clear();
+        ticketName = "";
+        afterCreateTicket();
+      }
+    );
   }
 
   function attachRandomSuffix() {
@@ -36,7 +39,8 @@
   <button on:click={createTicketAction}>티켓 생성</button>
   <div>
     티켓 이름: <input type="text" bind:value={ticketName} />
-    <button on:click={attachRandomSuffix}>랜덤 접미사</button>
+    <button on:click={attachRandomSuffix}>랜덤 접미사</button><br />
+    사용 가능 횟수: <input type="number" bind:value={useableCount} /><br />
   </div>
   <AddAuthority />
 </div>
