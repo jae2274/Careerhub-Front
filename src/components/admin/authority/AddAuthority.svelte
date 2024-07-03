@@ -8,15 +8,15 @@
   });
 
   let selectedAuthorityCode = "";
-  let checkedExpiry = false;
-  let expiryDay = 0;
+  let checkedExpiry = true;
+  let expiryDay = 90;
   let expiryHour = 0;
   let expiryMinute = 0;
 
   function clear() {
     selectedAuthorityCode = "";
-    checkedExpiry = false;
-    expiryDay = 0;
+    checkedExpiry = true;
+    expiryDay = 90;
     expiryHour = 0;
     expiryMinute = 0;
   }
