@@ -16,6 +16,7 @@ export async function createTicket(ticketName, authorities, useableCount) {
   });
 }
 
-export async function getTickets() {
-  return withAccessToken(`${authUrl}/auth/admin/ticket`);
+export async function getTickets(byMe = false) {
+  const queryStr = byMe ? "?by_me=true" : "";
+  return withAccessToken(`${authUrl}/auth/admin/ticket${queryStr}`);
 }

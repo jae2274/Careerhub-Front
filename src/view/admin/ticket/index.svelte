@@ -6,6 +6,10 @@
 
   $: tickets = [];
   $: filteredStatus = "all";
+  $: byMe = true;
+  $: getTickets(byMe).then((res) => {
+    tickets = res.tickets;
+  });
   $: filteredTickets = tickets.filter((ticket) => {
     if (filteredStatus === "all") {
       return true;
@@ -18,9 +22,6 @@
     if (filteredStatus === "unused") {
       return !(ticket.usedCount >= ticket.useableCount);
     }
-  });
-  getTickets().then((res) => {
-    tickets = res.tickets;
   });
 
   function convertMS(ms) {
@@ -49,7 +50,7 @@
   $: isCreatingTicket = false;
   function afterCreateTicket() {
     isCreatingTicket = false;
-    getTickets().then((res) => {
+    getTickets(byMe).then((res) => {
       tickets = res.tickets;
     });
   }
@@ -72,6 +73,10 @@
         <option value="used">사용됨</option>
         <option value="unused">미사용</option>
       </select>
+      <label for="byMe"
+        >내가 생성한 티켓만 보기
+        <input id="byMe" type="checkbox" bind:checked={byMe} />
+      </label>
     </div>
     <table class="ticketTable">
       <tr>
