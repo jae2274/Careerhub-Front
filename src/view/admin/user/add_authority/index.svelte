@@ -17,5 +17,6 @@
 <div>
   <p>{user.userName} 대상 권한 조정</p>
   <AddAuthority />
+  <p>권한 부여 이후 사용자에게 재로그인을 요청해주세요</p>
   <button on:click={addAuthoritiesAction}>권한 부여</button>
 </div>
