@@ -1,5 +1,5 @@
 <script>
-  import Header from "~/components/Header.svelte";
-</script>
+  import {replace} from "svelte-spa-router";
 
-<Header />
+  replace("/job_posting");
+</script>

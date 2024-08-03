@@ -6,7 +6,7 @@
     removeTag,
   } from "~/components/jobPostingList/api";
   import {fade} from "svelte/transition";
-  import {link} from "svelte-spa-router";
+  // import {link} from "svelte-spa-router";
   import {isLogin} from "~/httputils.js";
 
   export let delay;
@@ -101,7 +101,7 @@
   class:closed={status == "closed"}
   in:fade={{delay, duration: 500}}
 >
-  <a target="_self" use:link href={`/job_posting/${site}/${postingId}`}
+  <a href={`#/job_posting/${site}/${postingId}`} target="_blank"
     ><div class="img_filter" />
     <div class="img_box">
       <img class="img" alt="지바이크" src={imageUrl} />

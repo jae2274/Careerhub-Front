@@ -17,10 +17,10 @@
 
   let listElement;
 
-  const pageObj = parsePagination($querystring);
+  $: pageObj = parsePagination($querystring);
 
-  let currentPage = pageObj.page;
-  let pageSize = pageObj.size;
+  $: currentPage = pageObj.page;
+  $: pageSize = pageObj.size;
   query.initQuery(parseQuery($querystring));
 
   $: count = 0;

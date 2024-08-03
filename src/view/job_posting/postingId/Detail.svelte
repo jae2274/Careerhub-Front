@@ -32,6 +32,9 @@
   $: scrapInfo = postingDetail.scrapInfo;
   $: reviewInfo = postingDetail.reviewInfo;
   $: reviews = postingDetail.firstPageReviews || [];
+  $: postUrl = postingDetail.postUrl;
+  $: companyUrl = postingDetail.companyUrl;
+  $: companyLogo = postingDetail.companyLogo;
   let isViewTagInput = false;
 
   async function switchScrapped() {
@@ -79,6 +82,10 @@
       return `0${pageNum}`;
     }
     return `${pageNum}`;
+  }
+
+  function openNewTab(url) {
+    window.open(url, "_blank");
   }
 </script>
 
@@ -342,6 +349,89 @@
     </section>
   </div>
 </div>
+<aside aria-label="포지션정보 우측 메뉴" class="sc-dcfb16a1-1 iOyFJs">
+  <div class="wrap">
+    <div class="contents">
+      <a
+        class="company"
+        target="_blank"
+        title="이글루코퍼레이션 기업정보"
+        href="/company/123?company_nm=이글루코퍼레이션"
+        ><img
+          alt="{companyName} 로고"
+          height="70"
+          src={companyLogo}
+          width="70"
+        />
+        <div class="name">
+          <h2>{companyName}</h2>
+          <span
+            >기업정보 보기 <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              fill="none"
+              viewBox="0 0 12 12"
+              ><path
+                fill="#222"
+                fill-rule="evenodd"
+                d="M4.146 1.896a.5.5 0 0 1 .708 0l3.75 3.75a.5.5 0 0 1 0 .708l-3.75 3.75a.5.5 0 0 1-.708-.708L7.543 6 4.146 2.604a.5.5 0 0 1 0-.708Z"
+                clip-rule="evenodd"
+              ></path></svg
+            ></span
+          >
+        </div></a
+      >
+      <dl class="details">
+        <!-- <div>
+          <dt>업력</dt>
+          <dd>
+            <strong
+              >26년차<span>(1999년 11월 설립)</span
+              ></strong
+            >
+          </dd>
+        </div> -->
+        {#if companyUrl}
+          <div>
+            <dt>홈페이지</dt>
+            <dd>
+              <a
+                target="_blank"
+                href={companyUrl.includes("https://")
+                  ? companyUrl
+                  : `https://${companyUrl}`}
+                ><span>{companyUrl}</span><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  ><path
+                    fill="#222"
+                    fill-rule="evenodd"
+                    d="M14.5 3a1 1 0 1 0 0 2h3.586l-4.793 4.793a1 1 0 0 0 1.414 1.414L19.5 6.414V10a1 1 0 1 0 2 0V5a2 2 0 0 0-2-2h-5Zm-9 3.5a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1V14a1 1 0 1 1 2 0v4.5a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3v-11a3 3 0 0 1 3-3H10a1 1 0 1 1 0 2H5.5Z"
+                    clip-rule="evenodd"
+                  ></path></svg
+                ></a
+              >
+            </dd>
+          </div>
+        {/if}
+      </dl>
+      {#if postUrl}
+        <div class="sc-190507ae-0 jubIHb">
+          <button
+            type="button"
+            class="sc-b0913d02-0 sc-b0913d02-2 heyaGD kPJGoV"
+            on:click={() => openNewTab(postUrl)}>지원하러 가기</button
+          >
+        </div>
+      {/if}
+    </div>
+  </div>
+</aside>
 
 <style>
   .title h1 {
@@ -686,5 +776,159 @@
 
   .paginate span {
     margin-right: 5px;
+  }
+
+  .iOyFJs {
+    width: 340px;
+    height: calc(100% - 100px);
+    position: absolute;
+    top: 60px;
+    right: calc(50% - 530px);
+  }
+
+  .iOyFJs .wrap {
+    position: sticky;
+    top: 180px;
+  }
+  .iOyFJs .contents {
+    display: flex;
+    flex-direction: column;
+    padding: 32px 32px 40px;
+    border: 1px solid rgb(228, 228, 228);
+    border-image: initial;
+    box-sizing: border-box;
+    border-radius: 0px 0px 4px 4px;
+  }
+  .iOyFJs .contents .company {
+    display: flex;
+    gap: 18px;
+  }
+
+  .iOyFJs .contents .company > img {
+    border-radius: 100px;
+    border: 1px solid rgb(228, 228, 228);
+  }
+
+  .iOyFJs .contents .company .name {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .iOyFJs .contents .company .name > h2 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    color: rgb(0, 0, 0);
+  }
+
+  .iOyFJs .contents .company .name > span {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 22px;
+    color: rgb(68, 68, 68);
+  }
+
+  .iOyFJs .contents .company .name > span svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .iOyFJs .contents .details {
+    margin: 24px 0px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .iOyFJs .contents .details {
+    margin: 24px 0px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .iOyFJs .contents .details > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px 14px;
+  }
+
+  .iOyFJs .contents .details > div dt {
+    width: 76px;
+    min-width: 76px;
+    color: rgb(102, 102, 102);
+  }
+  .iOyFJs .contents .details > div dd > strong {
+    font-weight: 500;
+    color: rgb(68, 68, 68);
+  }
+  .iOyFJs .contents .details > div dd > strong > span {
+    margin-left: 2px;
+    font-size: 15px;
+    line-height: 22px;
+    color: rgb(136, 136, 136);
+  }
+  .iOyFJs .contents .details > div dt {
+    width: 76px;
+    min-width: 76px;
+    color: rgb(102, 102, 102);
+  }
+  .iOyFJs .contents .details > div dd > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+    color: rgb(0, 221, 109);
+    text-decoration-line: underline;
+  }
+  .iOyFJs .contents .details > div dd > a > span {
+    max-width: 160px;
+    overflow-wrap: break-word;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .iOyFJs .contents .details > div dd > a > svg {
+    width: 16px;
+    height: 16px;
+  }
+  .iOyFJs .contents .details > div dd > a > svg path {
+    fill: rgb(0, 221, 109);
+  }
+
+  .jubIHb {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .jubIHb > button {
+    font-size: 15px;
+    line-height: 22px;
+    width: 100%;
+    height: 48px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+
+  .kPJGoV {
+    background: rgb(0, 221, 109);
+    border: 1px solid rgb(0, 221, 109);
+    color: rgb(255, 255, 255);
+    padding: 0px 16px;
+    border-radius: 3px;
   }
 </style>
