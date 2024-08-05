@@ -41,7 +41,16 @@ function setQuery() {
   const addSkill = (skillNames) => {
     update((query) => {
       for (const querySkill of query.skillNames) {
-        if (querySkill == skillNames) return query;
+        if (querySkill.length == skillNames.length) {
+          let isSame = true;
+          for (let i = 0; i < skillNames.length; i++) {
+            if (querySkill[i] != skillNames[i]) {
+              isSame = false;
+              break;
+            }
+          }
+          if (isSame) return query;
+        }
       }
       query.skillNames.push(skillNames);
       return query;
@@ -70,7 +79,15 @@ function setQuery() {
   const addCompanies = (companies) => {
     update((query) => {
       for (const company of companies) {
-        if (!query.companies.includes(company)) query.companies.push(company);
+        if (
+          query.companies.find(
+            (comp) =>
+              comp.site == company.site &&
+              comp.companyName == company.companyName
+          )
+        )
+          return query;
+        query.companies.push(company);
       }
       return query;
     });

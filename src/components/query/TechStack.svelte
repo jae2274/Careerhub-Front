@@ -9,14 +9,14 @@
   getSkills(skillKeyword).then((res) => {
     skills = res.skills;
   });
-  $: searchedSkills = searchSkills(skills, skillKeyword);
+  $: searchedSkills = [];
 
   function searchSkills(skills, keywork) {
     if (keywork === "") {
       return [];
     }
 
-    return skills.filter((skill) => {
+    searchedSkills = skills.filter((skill) => {
       for (const skillName of skill.skillNames) {
         if (skillName.includes(keywork)) {
           return true;
@@ -29,6 +29,7 @@
   function addSkill(skillNames) {
     searchedSkills = [];
     query.addSkill(skillNames);
+    skillKeyword = "";
   }
 
   function removeSkill(skillName) {
@@ -41,149 +42,92 @@
 </script>
 
 <div class="sc-dkqQuH eYcCqs">
-  <button type="button" class="outlined btn_hover" on:click={switchHidedSkill}
-    ><span>기술스택 <mark /></span><svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      class="arrow"
-      class:arrow_up={!isSkillHided}
-      ><g fill="none" fill-rule="evenodd"
-        ><g
-          ><g
-            ><g
+  <div type="기술스택" class="sc-cVAmsi fKqAid">
+    <div class="sc-kHxTfl hfYXAq">
+      <div class="close_button_wrap">
+        <button
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            ><g fill="none" fill-rule="evenodd"
               ><g
-                ><path
-                  d="M0 0H16V16H0z"
-                  transform="translate(-316 -224) translate(20 216) translate(224) translate(72 8)"
-                /><path
-                  stroke="#CCC"
-                  stroke-width="1.2"
-                  d="M3 6L8 11 13 6"
-                  transform="translate(-316 -224) translate(20 216) translate(224) translate(72 8)"
-                /></g
-              ></g
-            ></g
-          ></g
-        ></g
-      ></svg
-    ></button
-  >
-  {#if !isSkillHided}
-    <div type="기술스택" class="sc-cVAmsi fKqAid">
-      <div class="sc-kHxTfl hfYXAq">
-        <div class="close_button_wrap">
-          <button
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              ><g fill="none" fill-rule="evenodd"
                 ><g
-                  ><g
+                  ><path
+                    d="M0 0H24V24H0z"
+                    transform="translate(-316 -20) translate(316 20)"
+                  /><g stroke="#000" stroke-width="2"
                     ><path
-                      d="M0 0H24V24H0z"
-                      transform="translate(-316 -20) translate(316 20)"
-                    /><g stroke="#000" stroke-width="2"
-                      ><path
-                        d="M16 0L0 16M0 0L16 16"
-                        transform="translate(-316 -20) translate(316 20) translate(4 4)"
-                      /></g
-                    ></g
+                      d="M16 0L0 16M0 0L16 16"
+                      transform="translate(-316 -20) translate(316 20) translate(4 4)"
+                    /></g
                   ></g
                 ></g
-              ></svg
-            ></button
-          >
-        </div>
-        <h1>기술스택</h1>
+              ></g
+            ></svg
+          ></button
+        >
       </div>
-      <div class="layer_contents">
-        <div>
-          <div class="sc-bGaVxB kgzeMx">
-            <div class="sc-fydGpi jTMKtk">
-              <input
-                type="text"
-                placeholder="ex) javascript"
-                bind:value={skillKeyword}
-              /><button type="button" class="sc-gnnDb dizmKV"
-                ><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-                  ><g fill="none" fill-rule="evenodd"
-                    ><circle
-                      stroke="#C4C4C4"
-                      stroke-width="1.2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      cx="11.111"
-                      cy="10.111"
-                      r="7.111"
-                    /><path
-                      stroke="#C4C4C4"
-                      stroke-width="1.2"
-                      d="m21 20-4.867-4.867"
-                    /></g
-                  ></svg
-                ></button
-              >
-            </div>
-            <div>
-              {#await searchedSkills}
-                <span>Finding...</span>
-              {:then skills}
-                <ul class="sc-igXgud fkcmCF">
-                  {#each skills as skill}
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <li
-                      class="sc-JEhMO hWoVqF"
-                      on:click={() => addSkill(skill.skillNames)}
-                    >
-                      <span>
-                        {#each skill.skillNames as skillName, i}
-                          {i !== 0 ? " / " : ""}{skillName}
-                        {/each}
-                      </span>
-                    </li>
-                  {/each}
-                </ul>
-              {:catch error}
-                <span>Fail!</span>
-              {/await}
-            </div>
-            {#if $query.skillNames && $query.skillNames.length !== 0}
-              <div class="bpaCoL">
-                <h4 class="title">선택한 기술 스택</h4>
-                <div class="lists">
-                  {#each $query.skillNames as skillNames}
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <div
-                      class="btn_stack cursor_default"
-                      on:click={() => removeSkill(skillNames)}
-                    >
-                      <span class="text">
-                        {#each skillNames as skillName, i}
-                          {i !== 0 ? " / " : ""}{skillName}
-                        {/each}
-                      </span><button class="delete_btn"
-                        ><span class="blind">삭제</span></button
-                      >
-                    </div>
-                  {/each}
-                </div>
-              </div>
-            {/if}
+      <h1>기술스택</h1>
+    </div>
+    <div class="layer_contents">
+      <div>
+        <div class="sc-bGaVxB kgzeMx">
+          <div class="sc-fydGpi jTMKtk">
+            <input
+              type="text"
+              placeholder="기술스택 검색 (ex. javascript)"
+              bind:value={skillKeyword}
+              on:keydown={(e) => {
+                if (e.key === "Enter") {
+                  searchSkills(skills, skillKeyword);
+                }
+              }}
+            /><button
+              type="button"
+              class="sc-gnnDb dizmKV"
+              on:click={() => searchSkills(skills, skillKeyword)}
+              ><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+                ><g fill="none" fill-rule="evenodd"
+                  ><circle
+                    stroke="#C4C4C4"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    cx="11.111"
+                    cy="10.111"
+                    r="7.111"
+                  /><path
+                    stroke="#C4C4C4"
+                    stroke-width="1.2"
+                    d="m21 20-4.867-4.867"
+                  /></g
+                ></svg
+              ></button
+            >
+          </div>
+          <div>
+            <ul class="sc-igXgud fkcmCF">
+              {#each searchedSkills as skill}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <li
+                  class="sc-JEhMO hWoVqF"
+                  on:click={() => addSkill(skill.skillNames)}
+                >
+                  <span>
+                    {#each skill.skillNames as skillName, i}
+                      {i !== 0 ? " / " : ""}{skillName}
+                    {/each}
+                  </span>
+                </li>
+              {/each}
+            </ul>
           </div>
         </div>
       </div>
-      <div class="layer_bottom">
-        <button type="button">초기화</button><button
-          type="button"
-          class="btn_apply">적용하기</button
-        >
-      </div>
     </div>
-  {/if}
+  </div>
 
   <div role="presentation" class="sc-ksHpcM jsSzDN">
     {#if $query.skillNames}
@@ -198,6 +142,8 @@
               {i !== 0 ? " / " : ""}{skillName}
             {/each}
           </span>
+
+          <button class="delete_btn"><span class="blind">삭제</span></button>
         </div>
       {/each}
     {/if}
@@ -252,20 +198,12 @@
   }
 
   .fKqAid {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 16px;
-    background-color: rgb(255, 255, 255);
-    position: absolute;
-    top: 44px;
-    left: 0px;
-    border: 1px solid rgb(228, 228, 228);
-    border-radius: 12px;
     z-index: 5;
     width: 360px;
   }
 
   .fKqAid .layer_contents {
     max-height: calc(100% - 56px);
-    height: 350px;
     padding: 0px;
   }
   .fKqAid .layer_bottom {
@@ -281,7 +219,7 @@
     position: relative;
     border-radius: 4px;
     height: 40px;
-    margin: 24px 24px 20px;
+    margin-right: 24px;
     display: flex;
     -webkit-box-align: center;
     align-items: center;
@@ -375,7 +313,6 @@
   }
   .delete_btn {
     position: relative;
-    top: -4px;
     width: 20px;
     height: 12px;
     color: rgb(255, 255, 255);

@@ -32,14 +32,17 @@
           <div class="sc-fydGpi jTMKtk">
             <input
               type="text"
-              placeholder="ex) javascript"
+              placeholder="기업명 검색 (ex. google)"
               bind:value={keyword}
               on:keydown={(e) => {
                 if (e.key === "Enter") {
                   searchCompany(keyword);
                 }
               }}
-            /><button type="button" class="sc-gnnDb dizmKV"
+            /><button
+              type="button"
+              class="sc-gnnDb dizmKV"
+              on:click={() => searchCompany(keyword)}
               ><svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
                 ><g fill="none" fill-rule="evenodd"
                   ><circle
@@ -153,6 +156,7 @@
     position: relative;
     border-radius: 4px;
     height: 40px;
+    margin-right: 24px;
     display: flex;
     -webkit-box-align: center;
     align-items: center;
@@ -246,7 +250,6 @@
   }
   .delete_btn {
     position: relative;
-    top: -4px;
     width: 20px;
     height: 12px;
     color: rgb(255, 255, 255);

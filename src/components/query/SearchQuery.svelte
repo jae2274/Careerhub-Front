@@ -45,7 +45,7 @@
 <style>
   .cCZWVz {
     max-width: 1060px;
-    margin: 32px auto 50px;
+    margin: 32px auto 20px;
   }
 
   .queryBox {

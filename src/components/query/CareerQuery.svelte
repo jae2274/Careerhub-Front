@@ -20,78 +20,42 @@
   function switchHidedCareer() {
     isCareerHided = !isCareerHided;
   }
+
+  function removeCareer() {
+    minCareer = null;
+    maxCareer = null;
+  }
 </script>
 
 <div class="sc-dkqQuH eYcCbP">
-  <button type="button" class="outlined btn_hover" on:click={switchHidedCareer}
-    ><span>경력 <mark /></span><svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      class="arrow"
-      class:arrow_up={!isCareerHided}
-      ><g fill="none" fill-rule="evenodd"
-        ><g
-          ><g
-            ><g
-              ><g
-                ><path
-                  d="M0 0H16V16H0z"
-                  transform="translate(-316 -224) translate(20 216) translate(224) translate(72 8)"
-                /><path
-                  stroke="#CCC"
-                  stroke-width="1.2"
-                  d="M3 6L8 11 13 6"
-                  transform="translate(-316 -224) translate(20 216) translate(224) translate(72 8)"
-                /></g
-              ></g
-            ></g
-          ></g
-        ></g
-      ></svg
-    ></button
-  >
-  {#if !isCareerHided}
-    <div type="경력" class="sc-cVAmsi fKqAid">
-      <div class="careerQueryBox">
-        <div class="sc-fydGpi careerInputBox">
-          <input type="number" bind:value={minCareer} />
-        </div>
-        <span>년 이상</span>
+  <div type="경력" class="sc-cVAmsi fKqAid">
+    <div class="careerQueryBox">
+      <div class="sc-fydGpi careerInputBox">
+        <input type="number" bind:value={minCareer} />
       </div>
-      <div class="careerQueryBox">
-        <div class="sc-fydGpi careerInputBox">
-          <input type="number" bind:value={maxCareer} />
-        </div>
-        <span>년 이하</span>
-      </div>
-      {#if minCareer || maxCareer}
-        <div class="layer_bottom">
-          <span>
-            {#if minCareer && maxCareer}
-              {minCareer}년 ~ {maxCareer}년
-            {:else if minCareer}
-              {minCareer}년 이상
-            {:else if maxCareer}
-              {maxCareer}년 이하
-            {/if}
-          </span>
-        </div>
-      {/if}
+      <span>년 이상</span>
     </div>
-  {/if}
+    <div class="careerQueryBox">
+      <div class="sc-fydGpi careerInputBox">
+        <input type="number" bind:value={maxCareer} />
+      </div>
+      <span>년 이하</span>
+    </div>
+  </div>
   <div role="presentation">
     {#if minCareer || maxCareer}
-      <span>
-        {#if minCareer && maxCareer}
-          {minCareer}년 ~ {maxCareer}년
-        {:else if minCareer}
-          {minCareer}년 이상
-        {:else if maxCareer}
-          {maxCareer}년 이하
-        {/if}
-      </span>
+      <div class="btn_stack cursor_default" on:click={() => removeCareer()}>
+        <span>
+          {#if minCareer && maxCareer}
+            {minCareer}년 ~ {maxCareer}년
+          {:else if minCareer}
+            {minCareer}년 이상
+          {:else if maxCareer}
+            {maxCareer}년 이하
+          {/if}
+        </span>
+        <button class="delete_btn"><span class="blind">삭제</span></button>
+      </div>
     {/if}
   </div>
 </div>
@@ -99,7 +63,7 @@
 <style>
   .eYcCbP {
     position: relative;
-    margin: 0px 0px 1px;
+    margin-right: 24px;
   }
   .eYcCbP .btn_hover {
     border: 1px solid rgb(0, 0, 0);
@@ -140,21 +104,14 @@
   }
 
   .fKqAid {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 16px;
-    background-color: rgb(255, 255, 255);
-    position: absolute;
-    top: 44px;
-    left: 0px;
-    border: 1px solid rgb(228, 228, 228);
-    border-radius: 12px;
     z-index: 5;
-    width: 160px;
+    width: 200px;
+    display: inline-flex;
   }
 
   .careerQueryBox {
     height: 40px;
-    width: 100%;
-    margin: 5px 5px;
+    margin: 0px 5px;
     display: flex;
   }
 
@@ -195,5 +152,63 @@
   }
   .layer_bottom span {
     margin: 6px;
+  }
+
+  .btn_stack {
+    display: inline-block;
+    cursor: pointer;
+    width: fit-content;
+    padding: 8px 16px;
+    background-color: rgb(244, 244, 244);
+    border-radius: 100px;
+    margin: 0px 8px 8px 0px;
+    font-size: 14px;
+    font-family:
+      Montserrat,
+      "Noto Sans KR",
+      -apple-system,
+      system-ui,
+      "Apple SD Gothic Neo",
+      "Malgun Gothic",
+      "Nanum Gothic",
+      sans-serif;
+    color: rgb(34, 34, 34);
+    line-height: 16px;
+    font-weight: 500;
+  }
+  .delete_btn {
+    position: relative;
+    width: 20px;
+    height: 12px;
+    color: rgb(255, 255, 255);
+    background-color: transparent;
+    padding: 0px;
+    border: none;
+  }
+  .delete_btn::before {
+    position: absolute;
+    left: 7px;
+    width: 12px;
+    height: 1.3px;
+    background-color: rgb(196, 196, 196);
+    transform: rotate(45deg);
+    content: "";
+  }
+  .delete_btn::after {
+    position: absolute;
+    left: 7px;
+    width: 12px;
+    height: 1.3px;
+    background-color: rgb(196, 196, 196);
+    transform: rotate(-45deg);
+    content: "";
+  }
+
+  .blind {
+    overflow: hidden;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip: rect(1px, 1px, 1px, 1px);
   }
 </style>
