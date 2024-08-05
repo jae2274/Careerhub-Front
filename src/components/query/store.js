@@ -9,6 +9,7 @@ function setQuery() {
     tagIds: [],
     minCareer: null,
     maxCareer: null,
+    companies: [],
   };
 
   const {subscribe, set, update} = writable(query);
@@ -66,6 +67,22 @@ function setQuery() {
     });
   };
 
+  const addCompanies = (companies) => {
+    update((query) => {
+      for (const company of companies) {
+        if (!query.companies.includes(company)) query.companies.push(company);
+      }
+      return query;
+    });
+  };
+
+  const removeCompany = (company) => {
+    update((query) => {
+      query.companies = query.companies.filter((comp) => comp != company);
+      return query;
+    });
+  };
+
   const setTag = (tags) => {
     update((query) => {
       query.tagIds = tags;
@@ -80,6 +97,7 @@ function setQuery() {
       query.tagIds = newQuery.tagIds || [];
       query.minCareer = newQuery.minCareer || null;
       query.maxCareer = newQuery.maxCareer || null;
+      query.companies = newQuery.companies || [];
       return query;
     });
   };
@@ -102,6 +120,8 @@ function setQuery() {
     addCategory,
     clearCategory,
     addSkill,
+    removeCompany,
+    setCompanies: addCompanies,
     removeSkill,
     setTag,
     clearQuery,

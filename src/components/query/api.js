@@ -8,3 +8,7 @@ export async function category() {
 export async function getSkills() {
   return withAccessToken(`${backendUrl}/skills`);
 }
+
+export async function findCompanies(keyword) {
+  return withAccessToken(`${backendUrl}/companies?keyword=${keyword}`);
+}

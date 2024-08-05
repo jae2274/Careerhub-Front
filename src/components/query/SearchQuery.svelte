@@ -2,6 +2,7 @@
   import CategoryList from "~/components/query/CategoryList.svelte";
   import TechStack from "~/components/query/TechStack.svelte";
   import CareerQuery from "~/components/query/CareerQuery.svelte";
+  import CompanyQuery from "~/components/query/CompanyQuery.svelte";
   import {category} from "~/components/query/api";
   import {query} from "~/components/query/store";
 
@@ -37,6 +38,7 @@
   <div class="queryBox">
     <TechStack />
     <CareerQuery />
+    <CompanyQuery />
   </div>
 </div>
 
