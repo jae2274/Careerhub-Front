@@ -13,7 +13,8 @@
 
   function searchSkills(skills, keywork) {
     if (keywork === "") {
-      return [];
+      searchedSkills = [];
+      return;
     }
 
     searchedSkills = skills.filter((skill) => {
@@ -83,6 +84,9 @@
                 if (e.key === "Enter") {
                   searchSkills(skills, skillKeyword);
                 }
+              }}
+              on:focusout={() => {
+                searchSkills(skills, skillKeyword);
               }}
             /><button
               type="button"

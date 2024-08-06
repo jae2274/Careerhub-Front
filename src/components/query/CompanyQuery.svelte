@@ -6,7 +6,8 @@
   $: findedCompanies = [];
 
   async function searchCompany(keyword) {
-    if (keyword.length < 2) {
+    if (keyword == "") {
+      findedCompanies = [];
       return;
     }
     const res = await findCompanies(keyword);
@@ -38,6 +39,9 @@
                 if (e.key === "Enter") {
                   searchCompany(keyword);
                 }
+              }}
+              on:focusout={() => {
+                searchCompany(keyword);
               }}
             /><button
               type="button"
