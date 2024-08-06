@@ -31,13 +31,13 @@
   <div type="경력" class="sc-cVAmsi fKqAid">
     <div class="careerQueryBox">
       <div class="sc-fydGpi careerInputBox">
-        <input type="number" bind:value={minCareer} />
+        <input type="number" bind:value={minCareer} min="0" />
       </div>
       <span>년 이상</span>
     </div>
     <div class="careerQueryBox">
       <div class="sc-fydGpi careerInputBox">
-        <input type="number" bind:value={maxCareer} />
+        <input type="number" bind:value={maxCareer} min={minCareer} />
       </div>
       <span>년 이하</span>
     </div>
