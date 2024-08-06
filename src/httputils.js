@@ -1,5 +1,6 @@
 import {getCookie, setCookie} from "~/cookie.js";
 import {authUrl} from "~/const";
+import {push} from "svelte-spa-router";
 
 //TODO: jwt token 및 유저정보 등의 정보 저장에 대한 다른 방법을 찾아보자.
 export function setUsernameToCookie(username) {
@@ -57,7 +58,7 @@ export function setAccessTokenToHeader(header = {}) {
 
 export function checkHttpStatus(res) {
   if (res.status === 401) {
-    window.location.href = "/#/login";
+    push("/login");
   } else if (res.status === 500) {
     alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
   }
@@ -68,15 +69,21 @@ export async function withAccessToken(url, retryForfail = true, req = {}) {
   const res = await fetch(url, req);
   if (res.status === 401) {
     if (retryForfail) {
-      const httpStatus = await refreshAccessTokenSync();
-      if (httpStatus === 200) {
-        return await withAccessToken(url, false);
-      } else if (httpStatus === 401) {
-        window.location.href = "/#/login";
-      } else if (httpStatus === 500) {
-        alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
-      } else {
-        alert("알수없는 에러가 발생했습니다. httpStatus: " + httpStatus);
+      try {
+        const httpStatus = await refreshAccessTokenSync();
+        if (httpStatus === 200) {
+          return await withAccessToken(url, false);
+        } else if (httpStatus === 401) {
+          push("/login");
+        } else if (httpStatus === 500) {
+          alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
+        } else {
+          alert("알수없는 에러가 발생했습니다. httpStatus: " + httpStatus);
+        }
+      } catch (e) {
+        if (e.message === "refreshToken이 없습니다.") {
+          push("/login");
+        }
       }
     }
   } else if (res.status === 403) {
@@ -85,7 +92,7 @@ export async function withAccessToken(url, retryForfail = true, req = {}) {
     }
 
     alert("권한이 없습니다.");
-    window.location.href = "/#/my/authority";
+    push("/my/authority");
   } else if (res.status === 500) {
     alert("서버에러가 발생했습니다. 관리자에게 문의하세요.");
   }
@@ -124,18 +131,23 @@ async function refreshAccessTokenSync() {
 
 async function refreshAccessToken() {
   const refreshToken = getRefreshTokenFromCookie();
-  const res = await fetch(`${authUrl}/auth/refresh`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({refreshToken}),
-  });
 
-  if (res.status === 200) {
-    const {accessToken} = await res.json();
-    setAccessTokenToCookie(accessToken);
+  if (refreshToken) {
+    const res = await fetch(`${authUrl}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({refreshToken}),
+    });
+
+    if (res.status === 200) {
+      const {accessToken} = await res.json();
+      setAccessTokenToCookie(accessToken);
+    }
+
+    return res.status;
+  } else {
+    throw new Error("refreshToken이 없습니다.");
   }
-
-  return res.status;
 }

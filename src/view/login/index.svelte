@@ -12,7 +12,7 @@
   import RequireAgreement from "~/view/login/RequireAgreement.svelte";
   import {agreements, loginStore} from "~/view/login/store";
 
-  import {pop} from "svelte-spa-router";
+  import {push} from "svelte-spa-router";
   import {getIsInitEvent, initEvent} from "~/view/login/initEvent";
 
   loginStore.reset();
@@ -33,7 +33,7 @@
           setUsernameToCookie(res.successRes.username);
           setAuthoritiesToCookie(res.successRes.authorities);
 
-          pop();
+          push("/");
           break;
         case "new_user":
           loginStore.setEmail(res.newUserRes.email);
