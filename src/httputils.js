@@ -129,7 +129,7 @@ async function refreshAccessTokenSync() {
   }
 }
 
-async function refreshAccessToken() {
+export async function refreshAccessToken() {
   const refreshToken = getRefreshTokenFromCookie();
 
   if (refreshToken) {
@@ -142,8 +142,9 @@ async function refreshAccessToken() {
     });
 
     if (res.status === 200) {
-      const {accessToken} = await res.json();
+      const {accessToken, authorities} = await res.json();
       setAccessTokenToCookie(accessToken);
+      setAuthoritiesToCookie(authorities);
     }
 
     return res.status;

@@ -14,16 +14,7 @@ export async function getTicketInfo(ticketCode) {
 }
 
 export async function useTicket(ticketCode) {
-  const resBody = await withAccessToken(
-    `${authUrl}/auth/ticket/${ticketCode}`,
-    true,
-    {
-      method: "PATCH",
-    }
-  );
-
-  if (resBody) {
-    setAccessTokenToCookie(resBody.accessToken);
-    setAuthoritiesToCookie(resBody.authorities);
-  }
+  return await withAccessToken(`${authUrl}/auth/ticket/${ticketCode}`, true, {
+    method: "PATCH",
+  });
 }

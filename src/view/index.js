@@ -3,6 +3,7 @@ import JobPostingDetail from "~/view/job_posting/postingId/index.svelte";
 import JobPostingList from "~/view/job_posting/index.svelte";
 import Login from "~/view/login/index.svelte";
 import MatchJob from "~/view/my/match-job/index.svelte";
+import Withdrawal from "~/view/my/withdrawal/index.svelte";
 import AddMatchJob from "~/view/my/match-job/add/index.svelte";
 import EditCondition from "~/view/my/match-job/edit/index.svelte";
 import Authority from "~/view/my/authority/index.svelte";
@@ -20,6 +21,7 @@ export default {
   "/my/match-job/edit/:conditionId": EditCondition,
   "/my/scrap-job": ScrapJob,
   "/my/authority": Authority,
+  "/my/withdrawal": Withdrawal,
   "/admin/ticket": Tickets,
   "/admin/user": Users,
 };

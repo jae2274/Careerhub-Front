@@ -46,6 +46,10 @@
               <li class="sc-4cabea4e-2 cdjpus">
                 <a use:link href="/my/authority">권한</a>
               </li>
+              <li class="sc-4cabea4e-2 separate"></li>
+              <li class="sc-4cabea4e-2 cdjpus">
+                <a use:link href="/my/withdrawal">계정 탈퇴</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -142,5 +146,10 @@
   .jEzXte {
     width: 790px;
     position: relative;
+  }
+  .separate {
+    padding-top: 24px;
+    cursor: none;
+    border-top: 1px solid rgb(228, 228, 228);
   }
 </style>

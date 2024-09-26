@@ -5,6 +5,7 @@
     getTicketInfo,
     useTicket,
   } from "~/view/my/authority/api";
+  import {refreshAccessToken} from "~/httputils";
   import {convertDateTimeFormat} from "~/utils";
 
   $: authorities = [];
@@ -50,13 +51,16 @@
     ticketInfo = null;
   }
 
-  function useTicketAction() {
-    useTicket(ticketInfo.ticketId).then((res) => {
-      alert("티켓 사용이 완료되었습니다.");
+  async function useTicketAction() {
+    const res = await useTicket(ticketInfo.ticketId);
+
+    if (res.ticketStatus == "successfully_used") {
+      refreshAccessToken();
+      alert("티켓 사용에 성공했습니다.");
       getAuthorities().then((res) => {
         authorities = res.authorities;
       });
-    });
+    } else alert("사용할 수 없는 티켓입니다.");
 
     ticketInfo = null;
   }
