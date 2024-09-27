@@ -1,7 +1,22 @@
 <script>
   import Layout from "../../../components/my/Layout.svelte";
-
+  import {withdraw} from "~/view/my/withdrawal/api";
+  import {deleteAllCookies} from "~/cookie.js";
+  import {getAuthoritiesFromCookie} from "~/httputils.js";
   let isAllow = false;
+
+  async function submitHandler(event) {
+    if (
+      getAuthoritiesFromCookie().includes("AUTHORITY_ADMIN") &&
+      !confirm("해당 계정은 관리자 계정입니다. 탈퇴하시겠습니까?")
+    ) {
+      return;
+    }
+    withdraw();
+    deleteAllCookies();
+    alert("탈퇴되었습니다.");
+    window.location.href = "#/login";
+  }
 </script>
 
 <Layout>
@@ -17,6 +32,10 @@
             <li>
               <dt>탈퇴 계정 복구 불가</dt>
               <dd>탈퇴 후에는 계정과 데이터 복구가 불가능합니다.</dd>
+            </li>
+            <li>
+              <dt>개인 정보 삭제</dt>
+              <dd>이메일, 전화번호 등의 개인정보는 탈퇴 즉시 삭제됩니다.</dd>
             </li>
           </ul>
           <div class="sc-68540173-1 gzzpXq">
@@ -37,7 +56,8 @@
               type="submit"
               class="sc-b0913d02-0 sc-b0913d02-3 heyaGD"
               class:allow_btn={isAllow}
-              class:disable_btn={!isAllow}>탈퇴하기</button
+              class:disable_btn={!isAllow}
+              on:click={submitHandler}>탈퇴하기</button
             >
           </div>
         </form>
