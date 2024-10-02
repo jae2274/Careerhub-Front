@@ -2,10 +2,12 @@
   import {findCompanies} from "~/components/query/api";
   import {query} from "~/components/query/store";
 
+  let typingKeyword;
   let keyword = "";
   $: findedCompanies = [];
 
-  async function searchCompany(keyword) {
+  async function searchCompany(input) {
+    keyword = input;
     if (keyword == "") {
       findedCompanies = [];
       return;
@@ -34,14 +36,19 @@
             <input
               type="text"
               placeholder="기업명 검색 (ex. google)"
-              bind:value={keyword}
+              bind:value={typingKeyword}
               on:keydown={(e) => {
                 if (e.key === "Enter") {
-                  searchCompany(keyword);
+                  searchCompany(typingKeyword);
+                } else {
+                  searchCompany("");
                 }
               }}
               on:focusout={() => {
-                searchCompany(keyword);
+                if (keyword === "") {
+                  typingKeyword = "";
+                  searchCompany("");
+                }
               }}
             /><button
               type="button"
@@ -68,17 +75,21 @@
           </div>
           <div>
             <ul class="sc-igXgud fkcmCF">
-              {#each findedCompanies as company}
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <li
-                  class="sc-JEhMO hWoVqF"
-                  on:click={() => selectCompany(company.siteCompanies)}
-                >
-                  <span>
-                    {company.defaultName}
-                  </span>
-                </li>
-              {/each}
+              {#if keyword && (!findedCompanies || findedCompanies.length === 0)}
+                <li class="sc-JEhMO hWoVqF">검색 결과가 없습니다.</li>
+              {:else}
+                {#each findedCompanies as company}
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <li
+                    class="sc-JEhMO hWoVqF"
+                    on:click={() => selectCompany(company.siteCompanies)}
+                  >
+                    <span>
+                      {company.defaultName}
+                    </span>
+                  </li>
+                {/each}
+              {/if}
             </ul>
           </div>
         </div>
