@@ -71,6 +71,7 @@
     <div class="ticketInfo">
       {#if !ticketInfo}
         <div>
+          <h3>제공받으신 티켓 코드가 있으신가요?</h3>
           <input
             type="text"
             placeholder="티켓 이름 또는 티켓 코드를 입력하세요"
